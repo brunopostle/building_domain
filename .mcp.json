@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ifc": {
+      "type": "stdio",
+      "command": "python3",
+      "args": ["-m", "ifcmcp"]
+    }
+  }
+}
