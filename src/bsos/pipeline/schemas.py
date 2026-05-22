@@ -63,3 +63,18 @@ class ExtractedSpatialRelation(BaseModel):
 class SpatialRelationExtractionResponse(BaseModel):
     """Pass 4 extraction result for one entity."""
     spatial_relations: list[ExtractedSpatialRelation]
+
+
+# Pass 5 schemas
+
+class ExtractedProcessRelation(BaseModel):
+    """One temporal ordering relationship between two activities."""
+    predecessor_name: str = Field(description="Activity that must happen first")
+    successor_name: str = Field(description="Activity that follows")
+    hard_constraint: bool = Field(default=True, description="True if ordering is physically required")
+    rationale: str = Field(description="Why this ordering is required (must be non-empty)")
+
+
+class ProcessRelationExtractionResponse(BaseModel):
+    """Pass 5 extraction result for one entity."""
+    process_relations: list[ExtractedProcessRelation]
