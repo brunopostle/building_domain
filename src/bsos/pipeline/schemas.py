@@ -78,3 +78,24 @@ class ExtractedProcessRelation(BaseModel):
 class ProcessRelationExtractionResponse(BaseModel):
     """Pass 5 extraction result for one entity."""
     process_relations: list[ExtractedProcessRelation]
+
+
+# Pass 6 schemas
+
+ConstraintTypeLiteral = Literal["must", "must_not"]
+
+
+class ExtractedConstraint(BaseModel):
+    """One binary design rule extracted for a single entity."""
+    rule: str = Field(description="The constraint rule text")
+    constraint_type: ConstraintTypeLiteral = Field(description="'must' or 'must_not'")
+    conditions: list[str] = Field(default_factory=list)
+    exceptions: list[str] = Field(default_factory=list)
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+    knowledge_origin: KnowledgeOriginLiteral = "engineering"
+    rationale: str = ""
+
+
+class ConstraintExtractionResponse(BaseModel):
+    """Pass 6 extraction result for one entity."""
+    constraints: list[ExtractedConstraint]
