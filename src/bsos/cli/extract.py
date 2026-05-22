@@ -21,7 +21,7 @@ def extract(
     from bsos.pipeline.lock import ExtractionLock
     from bsos.pipeline.run import start_run, complete_run
     from bsos.pipeline.pass1 import run_pass1
-    from bsos.llm.openai_provider import OpenAIProvider
+    from bsos.llm import make_provider
     from bsos.llm.cache import LLMResponseCache
 
     engine, session = open_db(db)
@@ -57,7 +57,7 @@ def extract(
     with ExtractionLock(db_path):
         for model_id in model_list:
             cache = LLMResponseCache(db_path)
-            provider = OpenAIProvider(model_id, cache=cache)
+            provider = make_provider(model_id, cache=cache)
 
             if requested_passes is None or "1" in requested_passes:
                 engine2, session2 = open_db(db)
@@ -116,7 +116,7 @@ def extract(
             engine3 = create_db_engine(resolve_db_path(db))
             for model_id in model_list:
                 cache = LLMResponseCache(db_path)
-                provider = OpenAIProvider(model_id, cache=cache)
+                provider = make_provider(model_id, cache=cache)
                 if dry_run:
                     result3 = run_pass3(engine3, provider, "__dry_run__", dry_run=True)
                     typer.echo(
