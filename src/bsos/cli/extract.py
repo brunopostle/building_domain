@@ -2,6 +2,7 @@
 import sys
 from pathlib import Path
 import typer
+from sqlmodel import Session
 
 app = typer.Typer()
 
@@ -107,3 +108,27 @@ def extract(
                         typer.echo(
                             f"Pass 2 complete: {result['entities_merged']} entities merged."
                         )
+
+        if requested_passes is None or "3" in requested_passes:
+            from bsos.pipeline.pass3 import run_pass3
+            from bsos.persistence.database import create_db_engine
+            from bsos.cli.db_context import resolve_db_path
+            engine3 = create_db_engine(resolve_db_path(db))
+            for model_id in model_list:
+                cache = LLMResponseCache(db_path)
+                provider = OpenAIProvider(model_id, cache=cache)
+                if dry_run:
+                    result3 = run_pass3(engine3, provider, "__dry_run__", dry_run=True)
+                    typer.echo(
+                        f"Pass 3 (dry-run): {result3['entities_processed']} entities would be processed"
+                    )
+                else:
+                    run_id = start_run(
+                        Session(engine3), [model_id], ["3"], seed_text
+                    )
+                    result3 = run_pass3(engine3, provider, run_id)
+                    complete_run(Session(engine3), run_id)
+                    typer.echo(
+                        f"Pass 3 complete for model {model_id}: "
+                        f"{result3['assertions_written']} assertions written."
+                    )
