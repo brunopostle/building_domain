@@ -47,3 +47,19 @@ class ExtractedAssertion(BaseModel):
 class AssertionExtractionResponse(BaseModel):
     """Pass 3 extraction result for one entity framing."""
     assertions: list[ExtractedAssertion]
+
+
+# Pass 4 schemas
+
+class ExtractedSpatialRelation(BaseModel):
+    """One spatial/topological relationship extracted for a single entity."""
+    relation: str = Field(description="Spatial relation type (from vocabulary or free-text if unknown)")
+    object_name: str = Field(description="Name of the related building entity")
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+    knowledge_origin: KnowledgeOriginLiteral = "architectural"
+    rationale: str = ""
+
+
+class SpatialRelationExtractionResponse(BaseModel):
+    """Pass 4 extraction result for one entity."""
+    spatial_relations: list[ExtractedSpatialRelation]

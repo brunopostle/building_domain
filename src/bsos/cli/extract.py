@@ -132,3 +132,27 @@ def extract(
                         f"Pass 3 complete for model {model_id}: "
                         f"{result3['assertions_written']} assertions written."
                     )
+
+        if requested_passes is None or "4" in requested_passes:
+            from bsos.pipeline.pass4 import run_pass4
+            from bsos.persistence.database import create_db_engine
+            from bsos.cli.db_context import resolve_db_path
+            engine4 = create_db_engine(resolve_db_path(db))
+            for model_id in model_list:
+                cache = LLMResponseCache(db_path)
+                provider = make_provider(model_id, cache=cache)
+                if dry_run:
+                    result4 = run_pass4(engine4, provider, "__dry_run__", dry_run=True)
+                    typer.echo(
+                        f"Pass 4 (dry-run): {result4['entities_processed']} entities would be processed"
+                    )
+                else:
+                    run_id = start_run(
+                        Session(engine4), [model_id], ["4"], seed_text
+                    )
+                    result4 = run_pass4(engine4, provider, run_id)
+                    complete_run(Session(engine4), run_id)
+                    typer.echo(
+                        f"Pass 4 complete for model {model_id}: "
+                        f"{result4['relations_written']} spatial relations written."
+                    )
