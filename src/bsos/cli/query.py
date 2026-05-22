@@ -74,3 +74,86 @@ def format_assertions(results: list[dict], entity: str) -> str:
             lines.append(f"    exceptions: {'; '.join(r['exceptions'])}")
         lines.append("")
     return "\n".join(lines)
+
+
+def format_constraints(result: dict) -> str:
+    items = result.get("constraints", [])
+    entity = result.get("entity", "?")
+    if not items:
+        return f"No constraints found for '{entity}'."
+    lines = [f"Constraints for '{entity}'  ({len(items)} results)\n"]
+    for c in items:
+        lines.append(f"  [{c['constraint_type'].upper()}] {c['rule']}")
+        lines.append(f"    confidence={c['confidence']:.2f}  origin={c['knowledge_origin']}  status={c['status']}")
+        if c.get("conditions"):
+            lines.append(f"    conditions: {'; '.join(c['conditions'])}")
+        if c.get("exceptions"):
+            lines.append(f"    exceptions: {'; '.join(c['exceptions'])}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def format_failure_modes(result: dict) -> str:
+    items = result.get("failure_modes", [])
+    entity = result.get("entity", "?")
+    if not items:
+        return f"No failure modes found for '{entity}'."
+    lines = [f"Failure modes for '{entity}'  ({len(items)} results)\n"]
+    for fm in items:
+        lines.append(f"  {fm['name']}")
+        lines.append(f"    confidence={fm['confidence']:.2f}  origin={fm['knowledge_origin']}  status={fm['status']}")
+        if fm.get("conditions"):
+            lines.append(f"    conditions: {'; '.join(fm['conditions'])}")
+        if fm.get("consequences"):
+            lines.append(f"    consequences: {'; '.join(fm['consequences'])}")
+        if fm.get("mitigations"):
+            lines.append(f"    mitigations: {'; '.join(fm['mitigations'])}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def format_forces(result: dict) -> str:
+    items = result.get("forces", [])
+    entity = result.get("entity", "?")
+    if not items:
+        return f"No forces found affecting '{entity}'."
+    lines = [f"Forces affecting '{entity}'  ({len(items)} results)\n"]
+    for f in items:
+        lines.append(f"  [{f['direction'].upper()}] {f['name']}")
+        lines.append(f"    confidence={f['confidence']:.2f}  origin={f['knowledge_origin']}  status={f['status']}")
+        if f.get("rationale"):
+            lines.append(f"    rationale: {f['rationale']}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def format_spatial_relations(result: dict) -> str:
+    items = result.get("spatial_relations", [])
+    entity = result.get("entity", "?")
+    if not items:
+        return f"No spatial relations found for '{entity}'."
+    lines = [f"Spatial relations for '{entity}'  ({len(items)} results)\n"]
+    for sr in items:
+        lines.append(f"  {sr['subject']} —[{sr['relation']}]→ {sr['object']}")
+        lines.append(f"    confidence={sr['confidence']:.2f}  origin={sr['knowledge_origin']}  status={sr['status']}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def format_process_sequence(result: dict) -> str:
+    entity = result.get("entity", "?")
+    if "error" in result:
+        return f"Entity '{entity}' not found."
+    seq = result.get("sequence", [])
+    has_cycle = result.get("has_cycle", False)
+    truncated = result.get("truncated", False)
+    lines = [f"Process sequence for '{entity}'\n"]
+    if has_cycle:
+        lines.append(f"  WARNING: cycle detected — {result.get('cycle_description', '')}")
+        lines.append("")
+    for i, name in enumerate(seq, 1):
+        marker = "→" if name != entity else "●"
+        lines.append(f"  {i:3}. {marker} {name}")
+    if truncated:
+        lines.append("  ... (truncated at max_depth)")
+    return "\n".join(lines)

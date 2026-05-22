@@ -31,15 +31,34 @@ def cmd_status(
 @app.command("query")
 def cmd_query(
     entity: str = typer.Argument(..., help="Entity name to query"),
-    type_filter: list[str] = typer.Option([], "--type", "-t", help="Item type (assertion)"),
+    type_filter: list[str] = typer.Option(
+        [], "--type", "-t",
+        help="Item type: assertion, constraint, antipattern, force, spatial, process",
+    ),
     min_confidence: float = typer.Option(0.0, "--min-confidence"),
     include_proposed: bool = typer.Option(False, "--include-proposed"),
     json_out: bool = typer.Option(False, "--json"),
     db: str = typer.Option(None, "--db"),
 ) -> None:
     """Query the knowledge base for an entity."""
-    from bsos.cli.query import resolve_entity, get_assertions, format_assertions
+    from bsos.cli.db_context import resolve_db_path
+    from bsos.persistence.database import create_db_engine
+    from bsos.mcp_server.server import (
+        get_constraints_tool, get_failure_modes_tool, get_forces_tool,
+        get_patterns_tool, get_process_sequence_tool, get_spatial_relations_tool,
+    )
+    from bsos.cli.query import (
+        resolve_entity, get_assertions, format_assertions,
+        format_constraints, format_failure_modes, format_forces,
+        format_spatial_relations, format_process_sequence,
+    )
+    from sqlmodel import Session as _Session
+
     _, session = open_db(db)
+    engine = create_db_engine(resolve_db_path(db))
+
+    types = set(type_filter) if type_filter else {"assertion"}
+
     with session:
         entity_row = resolve_entity(session, entity)
         if entity_row is None:
@@ -48,13 +67,55 @@ def cmd_query(
                 err=True,
             )
             raise typer.Exit(1)
-        results = get_assertions(session, entity_row, min_confidence, include_proposed)
 
-    if not type_filter or "assertion" in type_filter:
+        if "assertion" in types:
+            results = get_assertions(session, entity_row, min_confidence, include_proposed)
+            if json_out:
+                typer.echo(json.dumps(results, indent=2))
+            else:
+                typer.echo(format_assertions(results, entity))
+
+    kw = dict(min_confidence=min_confidence, include_proposed=include_proposed)
+
+    if "constraint" in types:
+        with _Session(engine) as s:
+            r = get_constraints_tool(s, entity, **kw)
         if json_out:
-            typer.echo(json.dumps(results, indent=2))
+            typer.echo(json.dumps(r, indent=2))
         else:
-            typer.echo(format_assertions(results, entity))
+            typer.echo(format_constraints(r))
+
+    if "antipattern" in types:
+        with _Session(engine) as s:
+            r = get_failure_modes_tool(s, entity, **kw)
+        if json_out:
+            typer.echo(json.dumps(r, indent=2))
+        else:
+            typer.echo(format_failure_modes(r))
+
+    if "force" in types:
+        with _Session(engine) as s:
+            r = get_forces_tool(s, entity, **kw)
+        if json_out:
+            typer.echo(json.dumps(r, indent=2))
+        else:
+            typer.echo(format_forces(r))
+
+    if "spatial" in types:
+        with _Session(engine) as s:
+            r = get_spatial_relations_tool(s, entity, **kw)
+        if json_out:
+            typer.echo(json.dumps(r, indent=2))
+        else:
+            typer.echo(format_spatial_relations(r))
+
+    if "process" in types:
+        with _Session(engine) as s:
+            r = get_process_sequence_tool(s, entity)
+        if json_out:
+            typer.echo(json.dumps(r, indent=2))
+        else:
+            typer.echo(format_process_sequence(r))
 
 
 @app.callback()
