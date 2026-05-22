@@ -1,17 +1,24 @@
-"""BSOS MCP server — get_requirements and get_dependencies tools.
+"""BSOS MCP server — knowledge graph query tools.
 
 Each tool call builds its own session from the engine for concurrency safety.
 Tool logic is exposed as plain functions so tests can call them directly.
 """
 import json as _json
+from collections import deque
 
+import networkx as nx
 from mcp.server.fastmcp import FastMCP
 from sqlmodel import Session, select
 
 from bsos.persistence.database import create_db_engine
-from bsos.persistence.models import AssertionRow, EntityAliasRow, EntityRow
+from bsos.persistence.models import (
+    AntiPatternRow, AssertionRow, ConstraintRow, EntityAliasRow, EntityRow,
+    ForceRow, PatternRow, ProcessRelationRow, SpatialRelationRow,
+)
 
 REQUIREMENTS_PREDICATES = frozenset({"requires", "depends_on"})
+
+_KNOWLEDGE_ORIGIN_ORDER = {"physical": 0, "engineering": 1, "architectural": 2, "cultural": 3}
 
 
 # ---------------------------------------------------------------------------
@@ -60,6 +67,25 @@ def _assertion_to_dict(session: Session, row: AssertionRow) -> dict:
     }
 
 
+def _apply_shared_params(rows, min_confidence=0.0, include_proposed=True):
+    """Filter rows by confidence and proposed status."""
+    result = []
+    for row in rows:
+        if row.confidence < min_confidence:
+            continue
+        if not include_proposed and row.status == "proposed":
+            continue
+        result.append(row)
+    return result
+
+
+def _sort_by_confidence_then_origin(rows):
+    return sorted(
+        rows,
+        key=lambda r: (-r.confidence, _KNOWLEDGE_ORIGIN_ORDER.get(r.knowledge_origin, 99)),
+    )
+
+
 # ---------------------------------------------------------------------------
 # Tool implementations (pure session-based, testable without MCP layer)
 # ---------------------------------------------------------------------------
@@ -103,12 +129,282 @@ def get_dependencies_tool(session: Session, entity: str) -> dict:
     }
 
 
+def get_constraints_tool(
+    session: Session,
+    entity: str,
+    min_confidence: float = 0.0,
+    max_results: int = 100,
+    include_proposed: bool = True,
+) -> dict:
+    """Constraint rules where subject_id matches entity."""
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    rows = session.exec(
+        select(ConstraintRow).where(ConstraintRow.subject_id == entity_row.id)
+    ).all()
+    rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _sort_by_confidence_then_origin(rows)[:max_results]
+
+    return {
+        "entity": entity_row.name,
+        "constraints": [
+            {
+                "rule": r.rule,
+                "constraint_type": r.constraint_type,
+                "conditions": _decode_list(r.conditions),
+                "exceptions": _decode_list(r.exceptions),
+                "confidence": r.confidence,
+                "knowledge_origin": r.knowledge_origin,
+                "status": r.status,
+            }
+            for r in rows
+        ],
+    }
+
+
+def get_failure_modes_tool(
+    session: Session,
+    entity: str,
+    min_confidence: float = 0.0,
+    max_results: int = 100,
+    include_proposed: bool = True,
+) -> dict:
+    """Anti-pattern failure modes where subject_id matches entity."""
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    rows = session.exec(
+        select(AntiPatternRow).where(AntiPatternRow.subject_id == entity_row.id)
+    ).all()
+    rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _sort_by_confidence_then_origin(rows)[:max_results]
+
+    return {
+        "entity": entity_row.name,
+        "failure_modes": [
+            {
+                "name": r.name,
+                "conditions": _decode_list(r.conditions),
+                "consequences": _decode_list(r.consequences),
+                "mitigations": _decode_list(r.mitigations),
+                "confidence": r.confidence,
+                "knowledge_origin": r.knowledge_origin,
+                "status": r.status,
+            }
+            for r in rows
+        ],
+    }
+
+
+def get_patterns_tool(
+    session: Session,
+    entity: str,
+    min_confidence: float = 0.0,
+    max_results: int = 100,
+    include_proposed: bool = True,
+) -> dict:
+    """Architectural patterns where subject_id matches entity."""
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    rows = session.exec(
+        select(PatternRow).where(PatternRow.subject_id == entity_row.id)
+    ).all()
+    rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _sort_by_confidence_then_origin(rows)[:max_results]
+
+    result_patterns = []
+    for r in rows:
+        force_ids = _decode_list(r.force_ids)
+        force_descriptions = _decode_list(r.force_descriptions)
+        forces_warning = None
+
+        if force_ids:
+            forces = []
+            for fid in force_ids:
+                frow = session.get(ForceRow, fid)
+                forces.append(frow.name if frow else fid)
+        elif force_descriptions:
+            forces = force_descriptions
+            forces_warning = "force_ids not yet resolved; using raw descriptions"
+        else:
+            forces = []
+
+        entry = {
+            "name": r.name,
+            "problem": r.problem,
+            "solution": r.solution,
+            "context": _decode_list(r.context),
+            "forces": forces,
+            "consequences": _decode_list(r.consequences),
+            "emergent_properties": _decode_list(r.emergent_properties),
+            "confidence": r.confidence,
+            "knowledge_origin": r.knowledge_origin,
+            "status": r.status,
+        }
+        if forces_warning:
+            entry["forces_warning"] = forces_warning
+        result_patterns.append(entry)
+
+    return {"entity": entity_row.name, "patterns": result_patterns}
+
+
+def get_forces_tool(
+    session: Session,
+    entity: str,
+    min_confidence: float = 0.0,
+    max_results: int = 100,
+    include_proposed: bool = True,
+) -> dict:
+    """Forces (design pressures) where entity UUID appears in affects JSON array."""
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    all_forces = session.exec(select(ForceRow)).all()
+    matching = [
+        r for r in all_forces
+        if entity_row.id in _decode_list(r.affects)
+    ]
+    matching = _apply_shared_params(matching, min_confidence, include_proposed)
+    matching = _sort_by_confidence_then_origin(matching)[:max_results]
+
+    return {
+        "entity": entity_row.name,
+        "forces": [
+            {
+                "name": r.name,
+                "direction": r.direction,
+                "confidence": r.confidence,
+                "knowledge_origin": r.knowledge_origin,
+                "rationale": r.rationale or "",
+                "status": r.status,
+            }
+            for r in matching
+        ],
+    }
+
+
+def get_spatial_relations_tool(
+    session: Session,
+    entity: str,
+    min_confidence: float = 0.0,
+    max_results: int = 100,
+    include_proposed: bool = True,
+) -> dict:
+    """Spatial relations where entity is subject or object."""
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    rows = session.exec(
+        select(SpatialRelationRow).where(
+            (SpatialRelationRow.subject_id == entity_row.id)
+            | (SpatialRelationRow.object_id == entity_row.id)
+        )
+    ).all()
+    rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _sort_by_confidence_then_origin(rows)[:max_results]
+
+    def _name(eid: str) -> str:
+        e = session.get(EntityRow, eid)
+        return e.name if e else eid
+
+    return {
+        "entity": entity_row.name,
+        "spatial_relations": [
+            {
+                "subject": _name(r.subject_id),
+                "relation": r.relation,
+                "object": _name(r.object_id),
+                "confidence": r.confidence,
+                "knowledge_origin": r.knowledge_origin,
+                "status": r.status,
+            }
+            for r in rows
+        ],
+    }
+
+
+def get_process_sequence_tool(
+    session: Session,
+    entity: str,
+    max_depth: int = 50,
+) -> dict:
+    """Process sequence subgraph reachable from entity in either direction."""
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    all_relations = session.exec(select(ProcessRelationRow)).all()
+
+    # Build full DiGraph
+    g = nx.DiGraph()
+    for rel in all_relations:
+        pred = session.get(EntityRow, rel.predecessor_id)
+        succ = session.get(EntityRow, rel.successor_id)
+        pred_name = pred.name if pred else rel.predecessor_id
+        succ_name = succ.name if succ else rel.successor_id
+        g.add_edge(pred_name, succ_name)
+
+    start = entity_row.name
+    if start not in g:
+        return {
+            "entity": start,
+            "sequence": [start],
+            "has_cycle": False,
+            "truncated": False,
+        }
+
+    # BFS reachable in both directions within max_depth
+    reachable: set[str] = {start}
+    frontier = deque([(start, 0)])
+    truncated = False
+    while frontier:
+        node, depth = frontier.popleft()
+        if depth >= max_depth:
+            truncated = True
+            continue
+        for nb in list(g.predecessors(node)) + list(g.successors(node)):
+            if nb not in reachable:
+                reachable.add(nb)
+                frontier.append((nb, depth + 1))
+
+    subgraph = g.subgraph(reachable)
+
+    if not nx.is_directed_acyclic_graph(subgraph):
+        try:
+            cycle = nx.find_cycle(subgraph)
+            cycle_desc = " -> ".join(u for u, v in cycle) + f" -> {cycle[0][0]}"
+        except Exception:
+            cycle_desc = "cycle detected"
+        return {
+            "entity": start,
+            "sequence": list(reachable),
+            "has_cycle": True,
+            "cycle_description": cycle_desc,
+            "truncated": truncated,
+        }
+
+    sequence = list(nx.topological_sort(subgraph))
+    return {
+        "entity": start,
+        "sequence": sequence,
+        "has_cycle": False,
+        "truncated": truncated,
+    }
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
 
 def create_server(db_path: str) -> FastMCP:
-    """Return a FastMCP server with get_requirements and get_dependencies tools."""
+    """Return a FastMCP server with all BSOS knowledge graph query tools."""
     mcp = FastMCP("bsos", instructions="BSOS building domain knowledge graph tools.")
     engine = create_db_engine(db_path)
 
@@ -121,5 +417,60 @@ def create_server(db_path: str) -> FastMCP:
     def get_dependencies(entity: str) -> dict:
         with Session(engine) as session:
             return get_dependencies_tool(session, entity)
+
+    @mcp.tool(description=get_constraints_tool.__doc__)
+    def get_constraints(
+        entity: str,
+        min_confidence: float = 0.0,
+        max_results: int = 100,
+        include_proposed: bool = True,
+    ) -> dict:
+        with Session(engine) as session:
+            return get_constraints_tool(session, entity, min_confidence, max_results, include_proposed)
+
+    @mcp.tool(description=get_failure_modes_tool.__doc__)
+    def get_failure_modes(
+        entity: str,
+        min_confidence: float = 0.0,
+        max_results: int = 100,
+        include_proposed: bool = True,
+    ) -> dict:
+        with Session(engine) as session:
+            return get_failure_modes_tool(session, entity, min_confidence, max_results, include_proposed)
+
+    @mcp.tool(description=get_patterns_tool.__doc__)
+    def get_patterns(
+        entity: str,
+        min_confidence: float = 0.0,
+        max_results: int = 100,
+        include_proposed: bool = True,
+    ) -> dict:
+        with Session(engine) as session:
+            return get_patterns_tool(session, entity, min_confidence, max_results, include_proposed)
+
+    @mcp.tool(description=get_forces_tool.__doc__)
+    def get_forces(
+        entity: str,
+        min_confidence: float = 0.0,
+        max_results: int = 100,
+        include_proposed: bool = True,
+    ) -> dict:
+        with Session(engine) as session:
+            return get_forces_tool(session, entity, min_confidence, max_results, include_proposed)
+
+    @mcp.tool(description=get_spatial_relations_tool.__doc__)
+    def get_spatial_relations(
+        entity: str,
+        min_confidence: float = 0.0,
+        max_results: int = 100,
+        include_proposed: bool = True,
+    ) -> dict:
+        with Session(engine) as session:
+            return get_spatial_relations_tool(session, entity, min_confidence, max_results, include_proposed)
+
+    @mcp.tool(description=get_process_sequence_tool.__doc__)
+    def get_process_sequence(entity: str, max_depth: int = 50) -> dict:
+        with Session(engine) as session:
+            return get_process_sequence_tool(session, entity, max_depth)
 
     return mcp
