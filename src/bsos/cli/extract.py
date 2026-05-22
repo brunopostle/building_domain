@@ -1,3 +1,77 @@
+"""bsos extract command."""
+import sys
+from pathlib import Path
 import typer
 
 app = typer.Typer()
+
+
+@app.callback(invoke_without_command=True)
+def extract(
+    seed: str = typer.Option(None, "--seed", help="Free-text domain description or path to concept list file"),
+    models: str = typer.Option(None, "--models", help="Comma-separated LLM model identifiers"),
+    passes: str = typer.Option(None, "--passes", help="Comma-separated pass numbers (default: all)"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Preview without writing to database"),
+    db: str = typer.Option(None, "--db"),
+) -> None:
+    """Run the extraction pipeline."""
+    from bsos.cli.db_context import open_db
+    from bsos.config import get_config
+    from bsos.pipeline.lock import ExtractionLock
+    from bsos.pipeline.run import start_run, complete_run
+    from bsos.pipeline.pass1 import run_pass1
+    from bsos.llm.openai_provider import OpenAIProvider
+    from bsos.llm.cache import LLMResponseCache
+
+    engine, session = open_db(db)
+    db_path = engine.url.database
+
+    # Resolve model IDs
+    with session:
+        model_ids_str = models or get_config(session, "default_llm_model")
+    if not model_ids_str:
+        typer.echo(
+            "No LLM model specified. Pass --models or run: "
+            "bsos config set default_llm_model <model-id>",
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    model_list = [m.strip() for m in model_ids_str.split(",") if m.strip()]
+
+    # Parse pass list
+    requested_passes = [p.strip() for p in passes.split(",")] if passes else None
+
+    # Resolve seed
+    seed_text: str | None = None
+    seed_is_file = False
+    if seed:
+        seed_path = Path(seed)
+        if seed_path.exists() and seed_path.is_file():
+            seed_text = seed_path.read_text()
+            seed_is_file = True
+        else:
+            seed_text = seed
+
+    with ExtractionLock(db_path):
+        for model_id in model_list:
+            cache = LLMResponseCache(db_path)
+            provider = OpenAIProvider(model_id, cache=cache)
+
+            if requested_passes is None or "1" in requested_passes:
+                engine2, session2 = open_db(db)
+                with session2:
+                    if dry_run:
+                        concepts = run_pass1(
+                            session2, provider, "__dry_run__",
+                            seed=seed_text, seed_is_file_contents=seed_is_file, dry_run=True,
+                        )
+                        typer.echo(f"Pass 1 (dry-run): {len(concepts)} concepts would be written")
+                    else:
+                        run_id = start_run(session2, [model_id], ["1"], seed_text)
+                        run_pass1(
+                            session2, provider, run_id,
+                            seed=seed_text, seed_is_file_contents=seed_is_file,
+                        )
+                        complete_run(session2, run_id)
+                        typer.echo(f"Pass 1 complete for model {model_id}.")
