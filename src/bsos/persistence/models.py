@@ -183,6 +183,7 @@ class AntiPatternRow(SQLModel, table=True):
 
     id: str = Field(primary_key=True)
     name: str = Field(index=True)
+    subject_id: Optional[str] = Field(default=None, index=True)
     conditions: str = Field(default="[]", sa_column=Column(Text))
     consequences: str = Field(default="[]", sa_column=Column(Text))
     mitigations: str = Field(default="[]", sa_column=Column(Text))

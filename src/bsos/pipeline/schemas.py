@@ -99,3 +99,21 @@ class ExtractedConstraint(BaseModel):
 class ConstraintExtractionResponse(BaseModel):
     """Pass 6 extraction result for one entity."""
     constraints: list[ExtractedConstraint]
+
+
+# Pass 7 schemas
+
+class ExtractedAntiPattern(BaseModel):
+    """One failure condition or pathological configuration extracted for an entity."""
+    name: str = Field(description="Short descriptive name for this anti-pattern")
+    conditions: list[str] = Field(default_factory=list, description="Conditions that lead to this failure")
+    consequences: list[str] = Field(default_factory=list, description="Resulting failures or harms")
+    mitigations: list[str] = Field(default_factory=list, description="Ways to avoid or recover from this")
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+    knowledge_origin: KnowledgeOriginLiteral = "engineering"
+    rationale: str = ""
+
+
+class AntiPatternExtractionResponse(BaseModel):
+    """Pass 7 extraction result for one entity."""
+    anti_patterns: list[ExtractedAntiPattern]

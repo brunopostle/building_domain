@@ -206,3 +206,27 @@ def extract(
                         f"Pass 6 complete for model {model_id}: "
                         f"{result6['constraints_written']} constraints written."
                     )
+
+        if requested_passes is None or "7" in requested_passes:
+            from bsos.pipeline.pass7 import run_pass7
+            from bsos.persistence.database import create_db_engine
+            from bsos.cli.db_context import resolve_db_path
+            engine7 = create_db_engine(resolve_db_path(db))
+            for model_id in model_list:
+                cache = LLMResponseCache(db_path)
+                provider = make_provider(model_id, cache=cache)
+                if dry_run:
+                    result7 = run_pass7(engine7, provider, "__dry_run__", dry_run=True)
+                    typer.echo(
+                        f"Pass 7 (dry-run): {result7['entities_processed']} entities would be processed"
+                    )
+                else:
+                    run_id = start_run(
+                        Session(engine7), [model_id], ["7"], seed_text
+                    )
+                    result7 = run_pass7(engine7, provider, run_id)
+                    complete_run(Session(engine7), run_id)
+                    typer.echo(
+                        f"Pass 7 complete for model {model_id}: "
+                        f"{result7['anti_patterns_written']} anti-patterns written."
+                    )
