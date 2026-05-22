@@ -1,3 +1,7 @@
+import sys
+import os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config, pool
@@ -8,6 +12,8 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
+# NOTE: abstraction_node_effective_origins view is not Alembic-managed.
+# Any migration that drops assertions or abstraction_nodes must recreate it manually.
 from bsos.persistence.models import SQLModel
 target_metadata = SQLModel.metadata
 
