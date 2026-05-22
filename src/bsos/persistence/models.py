@@ -299,3 +299,63 @@ class PredicateMappingRow(SQLModel, table=True):
     to_predicate: str
     created_at: datetime
     reviewer: Optional[str] = None
+
+
+# ---------------------------------------------------------------------------
+# Phase 3 tables
+# ---------------------------------------------------------------------------
+
+class AbstractionNodeRow(SQLModel, table=True):
+    __tablename__ = "abstraction_nodes"
+    # knowledge_origin is NOT stored — it is computed via the
+    # abstraction_node_effective_origins view at query time.
+
+    id: str = Field(primary_key=True)
+    statement: str
+    child_ids: str = Field(default="[]", sa_column=Column(Text))  # JSON list of assertion UUIDs
+    abstraction_rationale: str
+    source_model: str
+    source_prompt: Optional[str] = None
+    created_at: datetime
+    extraction_run_id: Optional[str] = None
+    confidence: float
+    status: str = "proposed"
+    rationale: Optional[str] = None
+    conflict_evaluated_at: Optional[datetime] = None
+
+
+class ReviewDecisionRow(SQLModel, table=True):
+    __tablename__ = "review_decisions"
+
+    id: str = Field(primary_key=True)
+    item_id: str = Field(index=True)
+    item_type: str
+    decision: str  # "accept" | "reject" | "map_to" | "defer"
+    mapped_to: Optional[str] = None
+    rationale: Optional[str] = None
+    reviewer: str
+    created_at: datetime
+
+
+class ConflictPairRow(SQLModel, table=True):
+    __tablename__ = "conflict_pairs"
+
+    id: str = Field(primary_key=True)
+    item_a_id: str = Field(index=True)
+    item_a_type: str
+    item_b_id: str = Field(index=True)
+    item_b_type: str
+    detected_at: datetime
+    classification: str  # "duplicate" | "contradictory" | "complementary" | "unrelated"
+
+
+class ProvenanceLogRow(SQLModel, table=True):
+    __tablename__ = "provenance_log"
+
+    id: str = Field(primary_key=True)
+    item_id: str = Field(index=True)
+    item_type: str
+    old_status: Optional[str] = None  # None for the initial "proposed" transition
+    new_status: str
+    changed_at: datetime
+    changed_by: str  # model identifier or "human" or "bsos purge"
