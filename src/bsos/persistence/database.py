@@ -2,6 +2,9 @@
 from sqlmodel import SQLModel, create_engine, Session
 from sqlalchemy import event, text
 
+# Import all table models so they register in SQLModel.metadata before create_all().
+import bsos.persistence.models  # noqa: F401
+
 # View created by bsos init (not Alembic-managed).
 ABSTRACTION_NODE_EFFECTIVE_ORIGINS_VIEW = """
 CREATE VIEW IF NOT EXISTS abstraction_node_effective_origins AS
