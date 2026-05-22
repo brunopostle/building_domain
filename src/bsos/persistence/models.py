@@ -140,6 +140,7 @@ class PatternRow(SQLModel, table=True):
 
     id: str = Field(primary_key=True)
     name: str = Field(index=True)
+    subject_id: Optional[str] = Field(default=None, index=True)
     context: str = Field(default="[]", sa_column=Column(Text))
     problem: str
     force_descriptions: str = Field(default="[]", sa_column=Column(Text))
