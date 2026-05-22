@@ -139,3 +139,23 @@ class ExtractedPattern(BaseModel):
 class PatternExtractionResponse(BaseModel):
     """Pass 8 extraction result for one entity."""
     patterns: list[ExtractedPattern]
+
+
+# Pass 9 schemas
+
+ForceDirectionLiteral = Literal["increase", "decrease"]
+
+
+class ExtractedForce(BaseModel):
+    """One design pressure extracted for an entity."""
+    name: str = Field(description="Force name as a directional pressure (must contain a direction qualifier)")
+    direction: ForceDirectionLiteral = Field(description="'increase' or 'decrease'")
+    affects: list[str] = Field(default_factory=list, description="Names of entities this force acts upon")
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+    knowledge_origin: KnowledgeOriginLiteral = "engineering"
+    rationale: str = ""
+
+
+class ForceExtractionResponse(BaseModel):
+    """Pass 9 extraction result for one entity."""
+    forces: list[ExtractedForce]

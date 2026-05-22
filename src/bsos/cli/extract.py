@@ -254,3 +254,29 @@ def extract(
                         f"Pass 8 complete for model {model_id}: "
                         f"{result8['patterns_written']} patterns written."
                     )
+
+        if requested_passes is None or "9" in requested_passes:
+            from bsos.pipeline.pass9 import run_pass9
+            from bsos.persistence.database import create_db_engine
+            from bsos.cli.db_context import resolve_db_path
+            engine9 = create_db_engine(resolve_db_path(db))
+            for model_id in model_list:
+                cache = LLMResponseCache(db_path)
+                provider = make_provider(model_id, cache=cache)
+                if dry_run:
+                    result9 = run_pass9(engine9, provider, "__dry_run__", dry_run=True)
+                    typer.echo(
+                        f"Pass 9 (dry-run): {result9['entities_processed']} entities would be processed"
+                    )
+                else:
+                    run_id = start_run(
+                        Session(engine9), [model_id], ["9"], seed_text
+                    )
+                    result9 = run_pass9(engine9, provider, run_id)
+                    complete_run(Session(engine9), run_id)
+                    msg = f"Pass 9 complete for model {model_id}: {result9['forces_written']} forces written"
+                    if result9["validation_failures"]:
+                        msg += f" ({result9['validation_failures']} validation failures)"
+                    if result9["unresolved_refs"]:
+                        msg += f" ({result9['unresolved_refs']} unresolved refs)"
+                    typer.echo(msg + ".")
