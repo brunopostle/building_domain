@@ -65,3 +65,104 @@ class FakeLLMProvider:
 
     def classify(self, prompt: str, options: list[str]) -> str:
         return options[0]
+
+
+def build_standard_fixture() -> "FakeLLMProvider":
+    """Return a fully-configured FakeLLMProvider for standard pipeline tests.
+
+    Entities in the fixture knowledge base:
+      Roof (component), Precipitation (component), Formwork (activity),
+      Concrete pouring (activity), Roof membrane (material),
+      Roof covering (material — near-duplicate of Roof, merged in Pass 2).
+
+    Pass 3 response highlights:
+      - Roof protects_from Precipitation  (main roof assertion)
+      - Roof requires Roof membrane       (structural dependency)
+      - Concrete pouring depends_on Formwork  (process relation)
+      - Concrete pouring conflicts_with Formwork  (contradictory pair)
+    """
+    from bsos.pipeline.schemas import (
+        AssertionExtractionResponse, ConceptDiscoveryResponse, ConceptExpansionResponse,
+        DiscoveredConcept, ExtractedAssertion,
+    )
+
+    p = FakeLLMProvider()
+
+    # ------------------------------------------------------------------
+    # Pass 1: bootstrap discovery
+    # ------------------------------------------------------------------
+    p.register(
+        ConceptDiscoveryResponse,
+        "__bootstrap__",
+        ConceptDiscoveryResponse(concepts=[
+            DiscoveredConcept(name="Roof", entity_type="component",
+                              description="Top external enclosure of a building"),
+            DiscoveredConcept(name="Precipitation", entity_type="component",
+                              description="Rain, snow, or hail acting on the building"),
+            DiscoveredConcept(name="Formwork", entity_type="activity",
+                              description="Temporary mould into which concrete is poured"),
+            DiscoveredConcept(name="Concrete pouring", entity_type="activity",
+                              description="Placing wet concrete into formwork"),
+        ]),
+    )
+
+    # Pass 1: expansions
+    p.register(
+        ConceptExpansionResponse,
+        "Roof",
+        ConceptExpansionResponse(sub_concepts=[
+            DiscoveredConcept(name="Roof membrane", entity_type="material",
+                              description="Waterproof layer applied to roof deck"),
+            DiscoveredConcept(name="Roof covering", entity_type="material",
+                              description="Outer protective layer of a roof"),  # near-dup of Roof
+        ]),
+    )
+    # Other expansions return empty (FakeLLMProvider fallback handles this)
+
+    # ------------------------------------------------------------------
+    # Pass 3: relationship extraction (same response for all 3 framings)
+    # ------------------------------------------------------------------
+    p.register(
+        AssertionExtractionResponse,
+        "Roof",
+        AssertionExtractionResponse(assertions=[
+            ExtractedAssertion(
+                predicate="protects_from",
+                object_name="Precipitation",
+                knowledge_origin="physical",
+                confidence=0.92,
+                rationale="Roof is primary weather barrier",
+            ),
+            ExtractedAssertion(
+                predicate="requires",
+                object_name="Roof membrane",
+                knowledge_origin="engineering",
+                confidence=0.85,
+                rationale="Membrane provides waterproofing",
+            ),
+        ]),
+    )
+
+    p.register(
+        AssertionExtractionResponse,
+        "Concrete pouring",
+        AssertionExtractionResponse(assertions=[
+            ExtractedAssertion(
+                predicate="depends_on",
+                object_name="Formwork",
+                knowledge_origin="engineering",
+                confidence=0.95,
+                rationale="Formwork must be in place before concrete is poured",
+            ),
+            # Contradictory pair: same entity pair, opposing predicates
+            ExtractedAssertion(
+                predicate="conflicts_with",
+                object_name="Formwork",
+                knowledge_origin="engineering",
+                confidence=0.20,
+                rationale="Contradictory low-confidence extraction — for conflict detection testing",
+            ),
+        ]),
+    )
+
+    return p
