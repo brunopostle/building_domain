@@ -16,7 +16,7 @@ def extract(
 ) -> None:
     """Run the extraction pipeline."""
     from bsos.cli.db_context import open_db
-    from bsos.config import get_config
+    from bsos.config import get_config, set_config
     from bsos.pipeline.lock import ExtractionLock
     from bsos.pipeline.run import start_run, complete_run
     from bsos.pipeline.pass1 import run_pass1
@@ -75,3 +75,35 @@ def extract(
                         )
                         complete_run(session2, run_id)
                         typer.echo(f"Pass 1 complete for model {model_id}.")
+
+        if requested_passes is None or "2" in requested_passes:
+            from bsos.pipeline.pass2 import run_pass2, EMBEDDING_MODEL
+            engine2, session2 = open_db(db)
+            with session2:
+                confirmed = get_config(session2, "embedding_model_confirmed")
+                if not confirmed:
+                    typer.echo(
+                        f"Pass 2 requires downloading the '{EMBEDDING_MODEL}' "
+                        "sentence-transformers model (~420 MB)."
+                    )
+                    if not typer.confirm("Download now?", default=True):
+                        typer.echo("Skipping Pass 2.", err=True)
+                    else:
+                        set_config(session2, "embedding_model_confirmed", "true")
+                        session2.commit()
+                        confirmed = "true"
+
+                if confirmed:
+                    if dry_run:
+                        result = run_pass2(session2, "__dry_run__", dry_run=True)
+                        typer.echo(
+                            f"Pass 2 (dry-run): {result['clusters_found']} clusters found, "
+                            f"{result['entities_merged']} entities would be merged"
+                        )
+                    else:
+                        run_id = start_run(session2, [], ["2"], seed_text)
+                        result = run_pass2(session2, run_id)
+                        complete_run(session2, run_id)
+                        typer.echo(
+                            f"Pass 2 complete: {result['entities_merged']} entities merged."
+                        )
