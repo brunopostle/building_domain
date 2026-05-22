@@ -118,6 +118,19 @@ def cmd_query(
             typer.echo(format_process_sequence(r))
 
 
+@app.command("history")
+def cmd_history(
+    item_id: str = typer.Argument(..., help="Item UUID to show history for"),
+    json_out: bool = typer.Option(False, "--json"),
+    db: str = typer.Option(None, "--db"),
+) -> None:
+    """Show status transition history for an item."""
+    from bsos.cli.history import run_history
+    _, session = open_db(db)
+    with session:
+        run_history(session, item_id, json_out)
+
+
 @app.callback()
 def callback() -> None:
     pass
