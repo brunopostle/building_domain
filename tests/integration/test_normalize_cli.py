@@ -151,6 +151,22 @@ class TestNormalizeCommand:
             rows = s.exec(select(EmbeddingRow)).all()
             assert len(rows) == 0
 
+    def test_reembed_writes_calibration_config(self, tmp_path):
+        db = _init_db(tmp_path)
+        eng = _engine(db)
+        e1 = _add_entity(eng, "roof")
+        _add_assertion(eng, e1, e1)
+        _mark_pass_complete(eng, "10a")
+        _mark_pass_complete(eng, "10b")
+        _mark_pass_complete(eng, "10c")
+
+        runner.invoke(app, ["normalize", "--reembed", "--models", "test-model", "--db", db])
+        # Config write happens before passes run, so it's set regardless of LLM availability.
+        from bsos.config import get_config
+        with Session(eng) as s:
+            val = get_config(s, "embedding_model_at_last_calibration")
+        assert val == "all-mpnet-base-v2"
+
     def test_reembed_warns_about_thresholds(self, tmp_path):
         db = _init_db(tmp_path)
         eng = _engine(db)

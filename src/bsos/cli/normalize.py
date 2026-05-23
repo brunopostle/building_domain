@@ -5,10 +5,10 @@ from sqlmodel import Session, func, select
 app = typer.Typer()
 
 _REEMBED_THRESHOLD_KEYS = [
-    "pass10a similarity threshold (0.85)",
-    "pass10b auto-map threshold (0.85)",
-    "pass10b ambiguous band low (0.60)",
-    "pass10c cluster distance threshold (0.25)",
+    "entity clustering (0.20)",
+    "cross-model matching (0.85)",
+    "predicate stabilization (0.85/0.60)",
+    "ground-truth fuzzy match (0.90)",
 ]
 
 
@@ -61,11 +61,13 @@ def run_normalize(
         raise typer.Exit(1)
 
     if reembed:
-        typer.echo("Warning: --reembed deletes all cached embeddings. The following thresholds")
-        typer.echo("will affect re-run results and may differ from original runs:")
+        typer.echo(
+            "Warning: --reembed deletes all cached embeddings and resets normalization passes.\n"
+            "Recalibrate the following thresholds before running extraction or validation:"
+        )
         for key in _REEMBED_THRESHOLD_KEYS:
             typer.echo(f"  • {key}")
-        # Also clear pass_progress for 10a/10b/10c so they re-run from scratch.
+        # Clear pass_progress for 10a/10b/10c so they re-run from scratch.
         with Session(engine) as session:
             from bsos.persistence.models import PassProgressRow
             for sub in ("10a", "10b", "10c"):
@@ -75,6 +77,9 @@ def run_normalize(
             session.commit()
         deleted = _delete_embeddings(engine)
         typer.echo(f"Deleted {deleted} embedding rows.")
+        from bsos.config import set_config
+        with Session(engine) as session:
+            set_config(session, "embedding_model_at_last_calibration", embedding_model)
 
     with Session(engine) as session:
         status = _sub_pass_status(session, embedding_model)
@@ -181,6 +186,7 @@ def normalize(
 
     with session:
         model_ids_str = models or get_config(session, "default_llm_model")
+        embedding_model = get_config(session, "embedding_model") or "all-mpnet-base-v2"
 
     if not model_ids_str:
         typer.echo(
@@ -194,4 +200,4 @@ def normalize(
     db_path = resolve_db_path(db)
     engine = create_db_engine(db_path)
 
-    run_normalize(engine, model_list, reembed=reembed, dry_run=dry_run)
+    run_normalize(engine, model_list, reembed=reembed, dry_run=dry_run, embedding_model=embedding_model)
