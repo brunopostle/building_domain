@@ -248,6 +248,81 @@ def export_assertions(
         typer.echo(payload)
 
 
+@app.command("import-apl")
+def import_apl(
+    path: str = typer.Argument("data/apl_patterns.json", help="Path to apl_patterns.json"),
+    db: str = typer.Option(None, "--db"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Print what would be inserted without writing"),
+) -> None:
+    """Import Alexander's 253 patterns from apl_patterns.json as ground-truth Pattern records."""
+    import json as _json
+    import uuid
+    from datetime import datetime, timezone
+    from bsos.cli.db_context import open_db
+    from bsos.persistence.models import PatternRow
+    from sqlmodel import select
+
+    with open(path) as f:
+        patterns = _json.load(f)
+
+    def _conf(sym: str) -> float:
+        return {("**"): 1.0, ("*"): 0.8}.get(sym, 0.5)
+
+    _, session = open_db(db)
+    inserted = skipped = 0
+
+    with session:
+        existing_names = {
+            r.name
+            for r in session.exec(
+                select(PatternRow).where(PatternRow.source_model == "human")
+            ).all()
+        }
+
+        for p in patterns:
+            name = p["name"]
+            if name in existing_names:
+                skipped += 1
+                continue
+
+            related_names = [r["name"] for r in p.get("higher_patterns", []) + p.get("lower_patterns", [])]
+            related_ids = [r["id"] for r in p.get("higher_patterns", []) + p.get("lower_patterns", [])]
+
+            row = PatternRow(
+                id=str(uuid.uuid4()),
+                name=name,
+                subject_id=None,
+                context=_json.dumps([p["section"]] if p.get("section") else []),
+                problem=p.get("problem", ""),
+                force_descriptions=_json.dumps([]),
+                force_ids=_json.dumps([]),
+                solution=p.get("solution", ""),
+                consequences=_json.dumps([]),
+                related_pattern_names=_json.dumps(related_names),
+                related_pattern_ids=_json.dumps(related_ids),
+                emergent_properties=_json.dumps([]),
+                source_model="human",
+                source_prompt=None,
+                created_at=datetime.now(timezone.utc),
+                extraction_run_id=None,
+                confidence=_conf(p.get("confidence", "")),
+                status="accepted",
+                knowledge_origin="human",
+                rationale=None,
+            )
+            if dry_run:
+                typer.echo(f"  Would insert: {name}")
+            else:
+                session.add(row)
+            inserted += 1
+
+        if not dry_run:
+            session.commit()
+
+    action = "Would insert" if dry_run else "Inserted"
+    typer.echo(f"{action} {inserted} pattern(s), skipped {skipped} already-present.")
+
+
 @app.command("verify")
 def verify_coverage(
     db: str = typer.Option(None, "--db"),
