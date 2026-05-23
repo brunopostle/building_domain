@@ -10,6 +10,79 @@ from bsos.persistence.models import (
 app = typer.Typer()
 
 
+@app.command("conflicts")
+def validate_conflicts(
+    db: str = typer.Option(None, "--db"),
+    model: str = typer.Option(None, "--model", help="LLM model ID (overrides config)"),
+    limit: int = typer.Option(None, "--limit", help="Stop after N LLM classification calls"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Report scope without writing"),
+) -> None:
+    """Detect conflicts: contradictions, ProcessRelation divergences, and cycles."""
+    from bsos.cli.db_context import open_db, resolve_db_path
+    from bsos.config import get_config
+    from bsos.llm import make_provider
+    from bsos.normalization.conflict_detection import run_conflict_detection
+    from bsos.persistence.database import create_db_engine
+
+    db_path = resolve_db_path(db)
+    engine = create_db_engine(db_path)
+    _, session = open_db(db)
+
+    with session:
+        model_id = model or get_config(session, "default_llm_model")
+
+    if not model_id and not dry_run:
+        typer.echo(
+            "No model specified. Pass --model or set: bsos config set default_llm_model <id>",
+            err=True,
+        )
+        raise typer.Exit(1)
+
+    provider = make_provider(model_id) if model_id else None
+
+    if dry_run and provider is None:
+        from bsos.normalization.conflict_detection import run_conflict_detection
+
+        class _NullProvider:
+            model_id = "none"
+            def extract(self, *a, **kw):
+                raise NotImplementedError
+            def classify(self, *a, **kw):
+                raise NotImplementedError
+
+        provider = _NullProvider()  # type: ignore[assignment]
+
+    result = run_conflict_detection(
+        engine,
+        provider,
+        limit=limit,
+        dry_run=dry_run,
+    )
+
+    if dry_run:
+        typer.echo(f"Dry run — scope:")
+        typer.echo(f"  Unevaluated assertions: {result.get('unevaluated_assertions', 0)}")
+        typer.echo(f"  ProcessRelation divergence candidates: {result.get('process_relation_divergence_candidates', 0)}")
+        return
+
+    typer.echo(f"Conflict detection complete:")
+    typer.echo(f"  Items evaluated:          {result.get('items_evaluated', 0)}")
+    typer.echo(f"  LLM calls:                {result.get('llm_calls', 0)}")
+    typer.echo(f"  Contradictions found:     {result.get('conflicts_found', 0)}")
+    typer.echo(f"  PR divergences:           {result.get('divergences_found', 0)}")
+    typer.echo(f"  Cycles found:             {result.get('cycles_found', 0)}")
+    typer.echo(f"  Cyclic edges marked:      {result.get('cyclic_edges_marked', 0)}")
+    typer.echo(f"  Abstraction nodes re-evaluated: {result.get('abstraction_nodes_re_evaluated', 0)}")
+    typer.echo(f"  Abstraction nodes conflicted:   {result.get('abstraction_nodes_conflicted', 0)}")
+    typer.echo(f"  Total conflicted items:   {result.get('conflicted_total', 0)}")
+    if result.get("cap_reached"):
+        typer.echo(
+            "\nWarning: conflict queue cap (500) reached. "
+            "Run 'bsos review-pending --type conflict' to clear the queue.",
+            err=True,
+        )
+
+
 @app.command("topology")
 def validate_topology(db: str = typer.Option(None, "--db")) -> None:
     """Check space reachability from entrance nodes via accessible_from edges."""
