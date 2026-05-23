@@ -610,6 +610,10 @@ def run_conflict_detection(
             hint="bsos review-pending --type conflict",
         )
 
+    # Auto-promotion: promote items that passed conflict evaluation
+    from bsos.normalization.auto_promotion import run_auto_promotion
+    promotion_result = run_auto_promotion(engine)
+
     result = {
         **detection_result,
         **divergence_result,
@@ -617,6 +621,7 @@ def run_conflict_detection(
         **cascade_result,
         "conflicted_total": cap_count,
         "cap_reached": cap_count >= CONFLICT_QUEUE_CAP,
+        "auto_promoted": promotion_result.get("total_promoted", 0),
     }
     log.info("conflict_detection_complete", **result)
     return result

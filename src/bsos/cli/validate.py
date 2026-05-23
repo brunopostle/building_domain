@@ -75,6 +75,7 @@ def validate_conflicts(
     typer.echo(f"  Abstraction nodes re-evaluated: {result.get('abstraction_nodes_re_evaluated', 0)}")
     typer.echo(f"  Abstraction nodes conflicted:   {result.get('abstraction_nodes_conflicted', 0)}")
     typer.echo(f"  Total conflicted items:   {result.get('conflicted_total', 0)}")
+    typer.echo(f"  Auto-promoted:            {result.get('auto_promoted', 0)}")
     if result.get("cap_reached"):
         typer.echo(
             "\nWarning: conflict queue cap (500) reached. "

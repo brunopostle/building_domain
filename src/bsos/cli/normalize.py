@@ -169,6 +169,19 @@ def run_normalize(
                 f"{cap_note}."
             )
 
+    # Auto-promotion — promote conflict-evaluated items meeting consistency thresholds
+    if not dry_run:
+        from bsos.normalization.auto_promotion import run_auto_promotion
+        promotion_result = run_auto_promotion(engine)
+        if promotion_result.get("skipped"):
+            typer.echo("Auto-promotion: disabled (auto_promote_enabled=0).")
+        else:
+            typer.echo(
+                f"Auto-promotion complete: "
+                f"{promotion_result.get('single_model_promoted', 0)} single-model, "
+                f"{promotion_result.get('multi_model_promoted', 0)} multi-model promoted."
+            )
+
 
 @app.callback(invoke_without_command=True)
 def normalize(
