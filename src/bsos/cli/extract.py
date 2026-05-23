@@ -54,10 +54,13 @@ def extract(
         else:
             seed_text = seed
 
+    _LLM_PASSES = {"1", "3", "4", "5", "6", "7", "8", "9"}
+    _needs_llm = requested_passes is None or bool(_LLM_PASSES.intersection(requested_passes))
+
     with ExtractionLock(db_path):
         for model_id in model_list:
             cache = LLMResponseCache(db_path)
-            provider = make_provider(model_id, cache=cache)
+            provider = make_provider(model_id, cache=cache) if _needs_llm else None
 
             if requested_passes is None or "1" in requested_passes:
                 engine2, session2 = open_db(db)
@@ -280,3 +283,10 @@ def extract(
                     if result9["unresolved_refs"]:
                         msg += f" ({result9['unresolved_refs']} unresolved refs)"
                     typer.echo(msg + ".")
+
+        if requested_passes is None or "10" in requested_passes:
+            from bsos.persistence.database import create_db_engine
+            from bsos.cli.db_context import resolve_db_path
+            from bsos.cli.normalize import run_normalize
+            engine10 = create_db_engine(resolve_db_path(db))
+            run_normalize(engine10, model_list, reembed=False, dry_run=dry_run)

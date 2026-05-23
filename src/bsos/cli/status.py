@@ -52,10 +52,13 @@ def run_status(session, json_out: bool) -> None:
 
     pass_rows = session.exec(select(PassProgressRow)).all()
     passes_by_model: dict[str, set[str]] = {}
+    normalization_passes: set[str] = set()
     skipped_count = 0
     for row in pass_rows:
         if row.status == "skipped":
             skipped_count += 1
+        elif row.pass_number in ("10a", "10b", "10c"):
+            normalization_passes.add(row.pass_number)
         else:
             passes_by_model.setdefault(row.model, set()).add(row.pass_number)
 
@@ -73,6 +76,7 @@ def run_status(session, json_out: bool) -> None:
             "entity_refs": pending_entity_refs,
         },
         "passes_completed": {m: sorted(ps) for m, ps in passes_by_model.items()},
+        "normalization_passes_completed": sorted(normalization_passes),
         "entities_skipped_pass_failures": skipped_count,
         "llm_response_cache_entries": cache_count,
     }
@@ -111,6 +115,8 @@ def run_status(session, json_out: bool) -> None:
             print(f"Passes completed ({model}): {', '.join(sorted(passes))}")
     else:
         print("Passes completed: none")
+    if normalization_passes:
+        print(f"Normalization passes completed: {', '.join(sorted(normalization_passes))}")
     print(f"Entities skipped (pass failures): {skipped_count}")
     print(f"LLM response cache: {cache_count} entries")
 
