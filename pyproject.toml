@@ -21,6 +21,7 @@ dependencies = [
     "structlog",
     "joblib",
     "mcp",
+    "pypdf",
 ]
 
 [project.scripts]

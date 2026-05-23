@@ -67,7 +67,7 @@ def extract(
         apl_pattern_names = [p["name"].title() for p in raw]
         typer.echo(f"Loaded {len(apl_pattern_names)} APL pattern names for Pass 1 seeding.")
 
-    _LLM_PASSES = {"1", "3", "4", "5", "6", "7", "8", "9", "11"}
+    _LLM_PASSES = {"1", "3", "4", "5", "6", "7", "8", "9", "11", "12"}
     _needs_llm = requested_passes is None or bool(_LLM_PASSES.intersection(requested_passes))
 
     with ExtractionLock(db_path):
@@ -305,6 +305,32 @@ def extract(
             from bsos.cli.normalize import run_normalize
             engine10 = create_db_engine(resolve_db_path(db))
             run_normalize(engine10, model_list, reembed=False, dry_run=dry_run)
+
+        if requested_passes is None or "12" in requested_passes:
+            from bsos.pipeline.pass12 import run_pass12
+            from bsos.persistence.database import create_db_engine
+            from bsos.cli.db_context import resolve_db_path
+            engine12 = create_db_engine(resolve_db_path(db))
+            for model_id in model_list:
+                cache = LLMResponseCache(db_path)
+                provider = make_provider(model_id, cache=cache)
+                if dry_run:
+                    result12 = run_pass12(engine12, provider, "__dry_run__", dry_run=True)
+                    typer.echo(
+                        f"Pass 12 (dry-run): {result12['chunks_processed']} chunks would be processed"
+                    )
+                else:
+                    run_id = start_run(
+                        Session(engine12), [model_id], ["12"], seed_text
+                    )
+                    result12 = run_pass12(engine12, provider, run_id)
+                    complete_run(Session(engine12), run_id)
+                    typer.echo(
+                        f"Pass 12 complete for model {model_id}: "
+                        f"{result12['entities_written']} IFC entities, "
+                        f"{result12['assertions_written']} assertions, "
+                        f"{result12['constraints_written']} constraints written."
+                    )
 
         if requested_passes is None or "11" in requested_passes:
             from bsos.pipeline.pass11 import run_pass11

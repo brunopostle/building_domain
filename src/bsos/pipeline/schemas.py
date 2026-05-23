@@ -176,3 +176,34 @@ class AdversarialFinding(BaseModel):
 class AdversarialValidationResponse(BaseModel):
     """Pass 11 adversarial review result for a batch of assertions."""
     findings: list[AdversarialFinding]
+
+
+# Pass 12 schemas
+
+class IFCClassItem(BaseModel):
+    """One IFC class discovered in a document chunk."""
+    name: str = Field(description="IFC class name, e.g. IfcWindow")
+    description: str = Field(description="Short description of what this IFC class represents")
+
+
+class IFCSchemaRelation(BaseModel):
+    """One schema-specified relationship between two IFC classes."""
+    subject_class: str = Field(description="Subject IFC class name")
+    predicate: PredicateLiteral = Field(description="Relationship type")
+    object_class: str = Field(description="Object IFC class name")
+    rationale: str = Field(default="", description="Why this relationship exists per the IFC spec")
+
+
+class IFCSchemaConstraintItem(BaseModel):
+    """One schema-specified must/must_not rule for an IFC class."""
+    subject_class: str = Field(description="IFC class this constraint applies to")
+    rule: str = Field(description="The constraint rule text")
+    constraint_type: ConstraintTypeLiteral = Field(description="'must' or 'must_not'")
+    rationale: str = Field(default="", description="Source in IFC spec for this constraint")
+
+
+class IFCChunkExtractionResponse(BaseModel):
+    """Pass 12 extraction result for one document chunk."""
+    ifc_classes: list[IFCClassItem]
+    schema_relations: list[IFCSchemaRelation]
+    schema_constraints: list[IFCSchemaConstraintItem]
