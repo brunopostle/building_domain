@@ -13,6 +13,6 @@ class BaseProvenanceMixin(BaseModel):
 class ProvenanceMixin(BaseProvenanceMixin):
     confidence: Annotated[float, Field(ge=0.0, le=1.0)]
     status: Literal["proposed", "accepted", "deprecated", "conflicted"] = "proposed"
-    knowledge_origin: Literal["physical", "engineering", "cultural", "architectural"]
+    knowledge_origin: Literal["physical", "engineering", "cultural", "architectural", "schema"]
     rationale: str | None = None
     conflict_evaluated_at: datetime | None = None

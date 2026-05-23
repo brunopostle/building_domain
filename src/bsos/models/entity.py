@@ -5,7 +5,7 @@ from bsos.models.base import BaseProvenanceMixin
 class Entity(BaseProvenanceMixin):
     id: str
     name: str
-    entity_type: Literal["component", "system", "space", "material", "activity"]
+    entity_type: Literal["component", "system", "space", "material", "activity", "ifc_class"]
     description: str = ""
     status: Literal["proposed", "accepted", "deprecated"] = "proposed"
     is_entrance: bool = False

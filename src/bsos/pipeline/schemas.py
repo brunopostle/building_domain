@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 
 class DiscoveredConcept(BaseModel):
     name: str
-    entity_type: Literal["component", "system", "space", "material", "activity"]
+    entity_type: Literal["component", "system", "space", "material", "activity", "ifc_class"]
     description: str = ""
 
 
@@ -29,7 +29,7 @@ PredicateLiteral = Literal[
     "improves", "conflicts_with", "contains", "connects_to", "supports",
 ]
 
-KnowledgeOriginLiteral = Literal["physical", "engineering", "architectural", "cultural"]
+KnowledgeOriginLiteral = Literal["physical", "engineering", "architectural", "cultural", "schema"]
 
 
 class ExtractedAssertion(BaseModel):
