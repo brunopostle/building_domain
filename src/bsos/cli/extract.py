@@ -67,7 +67,7 @@ def extract(
         apl_pattern_names = [p["name"].title() for p in raw]
         typer.echo(f"Loaded {len(apl_pattern_names)} APL pattern names for Pass 1 seeding.")
 
-    _LLM_PASSES = {"1", "3", "4", "5", "6", "7", "8", "9"}
+    _LLM_PASSES = {"1", "3", "4", "5", "6", "7", "8", "9", "11"}
     _needs_llm = requested_passes is None or bool(_LLM_PASSES.intersection(requested_passes))
 
     with ExtractionLock(db_path):
@@ -305,3 +305,27 @@ def extract(
             from bsos.cli.normalize import run_normalize
             engine10 = create_db_engine(resolve_db_path(db))
             run_normalize(engine10, model_list, reembed=False, dry_run=dry_run)
+
+        if requested_passes is None or "11" in requested_passes:
+            from bsos.pipeline.pass11 import run_pass11
+            from bsos.persistence.database import create_db_engine
+            from bsos.cli.db_context import resolve_db_path
+            engine11 = create_db_engine(resolve_db_path(db))
+            providers11 = [make_provider(m, cache=LLMResponseCache(db_path)) for m in model_list]
+            if dry_run:
+                result11 = run_pass11(engine11, providers11, "__dry_run__", dry_run=True)
+                typer.echo(
+                    f"Pass 11 (dry-run): {result11.get('findings_collected', 0)} findings collected "
+                    f"from {result11.get('assertion_count', '?')} assertions"
+                )
+            else:
+                run_id11 = start_run(Session(engine11), model_list, ["11"], seed_text)
+                result11 = run_pass11(engine11, providers11, run_id11)
+                complete_run(Session(engine11), run_id11)
+                typer.echo(
+                    f"Pass 11 complete: {result11.get('findings_applied', 0)} findings applied "
+                    f"({result11.get('exceptions_appended', 0)} exceptions, "
+                    f"{result11.get('conditions_appended', 0)} conditions, "
+                    f"{result11.get('conflicted', 0)} conflicted, "
+                    f"{result11.get('deferred', 0)} deferred)."
+                )

@@ -159,3 +159,20 @@ class ExtractedForce(BaseModel):
 class ForceExtractionResponse(BaseModel):
     """Pass 9 extraction result for one entity."""
     forces: list[ExtractedForce]
+
+
+# Pass 11 schemas
+
+class AdversarialFinding(BaseModel):
+    """One adversarial finding for an extracted item."""
+    item_id: str = Field(description="UUID of the assertion, constraint, pattern, or antipattern")
+    item_type: Literal["assertion", "constraint", "pattern", "antipattern"]
+    finding_type: Literal["exception", "context_limitation", "potential_error", "scope_restriction"]
+    detail: str = Field(description="Specific, concrete description of the finding")
+    suggested_action: Literal["add_exception", "add_condition", "flag_for_review", "deprecate"]
+    confidence: float = Field(default=0.7, ge=0.0, le=1.0)
+
+
+class AdversarialValidationResponse(BaseModel):
+    """Pass 11 adversarial review result for a batch of assertions."""
+    findings: list[AdversarialFinding]
