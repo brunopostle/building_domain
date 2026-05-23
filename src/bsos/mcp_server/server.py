@@ -15,6 +15,7 @@ from bsos.persistence.models import (
     AntiPatternRow, AssertionRow, ConstraintRow, EntityAliasRow, EntityRow,
     ForceRow, PatternRow, ProcessRelationRow, SpatialRelationRow,
 )
+from bsos.graph import build_lazy_subgraph
 
 REQUIREMENTS_PREDICATES = frozenset({"requires", "depends_on"})
 
@@ -335,27 +336,34 @@ def get_process_sequence_tool(
     entity: str,
     max_depth: int = 50,
 ) -> dict:
-    """Process sequence subgraph reachable from entity in either direction."""
+    """Process sequence subgraph reachable from entity in either direction.
+
+    Builds a per-request lazy subgraph from the graph layer (no shared state).
+    """
     entity_row = resolve_entity(session, entity)
     if entity_row is None:
         return {"error": "entity_not_found", "query": entity}
 
-    all_relations = session.exec(select(ProcessRelationRow)).all()
+    sub = build_lazy_subgraph(session, entity_row.id)
 
-    # Build full DiGraph
-    g = nx.DiGraph()
-    for rel in all_relations:
-        pred = session.get(EntityRow, rel.predecessor_id)
-        succ = session.get(EntityRow, rel.successor_id)
-        pred_name = pred.name if pred else rel.predecessor_id
-        succ_name = succ.name if succ else rel.successor_id
-        g.add_edge(pred_name, succ_name)
+    def _name(eid: str) -> str:
+        node = sub.nodes.get(eid)
+        if node:
+            return node.get("name", eid)
+        e = session.get(EntityRow, eid)
+        return e.name if e else eid
 
-    start = entity_row.name
+    # Extract process-only graph (precedes edges between entity nodes)
+    g = nx.DiGraph(
+        (u, v) for u, v, d in sub.edges(data=True)
+        if d.get("edge_type") == "precedes"
+    )
+
+    start = entity_row.id
     if start not in g:
         return {
-            "entity": start,
-            "sequence": [start],
+            "entity": entity_row.name,
+            "sequence": [entity_row.name],
             "has_cycle": False,
             "truncated": False,
         }
@@ -379,20 +387,20 @@ def get_process_sequence_tool(
     if not nx.is_directed_acyclic_graph(subgraph):
         try:
             cycle = nx.find_cycle(subgraph)
-            cycle_desc = " -> ".join(u for u, v in cycle) + f" -> {cycle[0][0]}"
+            cycle_desc = " -> ".join(_name(u) for u, v in cycle) + f" -> {_name(cycle[0][0])}"
         except Exception:
             cycle_desc = "cycle detected"
         return {
-            "entity": start,
-            "sequence": list(reachable),
+            "entity": entity_row.name,
+            "sequence": [_name(n) for n in reachable],
             "has_cycle": True,
             "cycle_description": cycle_desc,
             "truncated": truncated,
         }
 
-    sequence = list(nx.topological_sort(subgraph))
+    sequence = [_name(n) for n in nx.topological_sort(subgraph)]
     return {
-        "entity": start,
+        "entity": entity_row.name,
         "sequence": sequence,
         "has_cycle": False,
         "truncated": truncated,

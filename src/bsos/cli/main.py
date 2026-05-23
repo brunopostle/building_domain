@@ -131,6 +131,49 @@ def cmd_history(
         run_history(session, item_id, json_out)
 
 
+@app.command("build-graph")
+def cmd_build_graph(
+    db: str = typer.Option(None, "--db"),
+    output: str = typer.Option(None, "--output", "-o", help="Output path (default: bsos_graph.pkl)"),
+    min_status: str = typer.Option("proposed", "--min-status", help="Minimum status: proposed or accepted"),
+) -> None:
+    """Build full knowledge graph and serialize to disk."""
+    from bsos.cli.db_context import resolve_db_path
+    from bsos.persistence.database import create_db_engine
+    from bsos.graph import build_full_graph, save_graph, get_schema_version
+    from bsos.config import get_config
+    from sqlmodel import Session
+
+    db_path = resolve_db_path(db)
+    engine = create_db_engine(db_path)
+
+    out_path = output
+    if out_path is None:
+        with Session(engine) as s:
+            out_path = get_config(s, "graph_output_path") or "bsos_graph.pkl"
+
+    typer.echo("Building graph…")
+    with Session(engine) as session:
+        g = build_full_graph(session, min_status=min_status)
+
+    schema_version = get_schema_version(engine)
+    node_count = g.number_of_nodes()
+    edge_count = g.number_of_edges()
+
+    with Session(engine) as s:
+        threshold = int(get_config(s, "graph_rebuild_threshold") or 50000)
+
+    if node_count > threshold:
+        typer.echo(
+            f"Warning: graph has {node_count} nodes (threshold {threshold}). "
+            "CLI queries will use lazy loading instead of the cached graph.",
+            err=True,
+        )
+
+    save_graph(g, out_path, schema_version)
+    typer.echo(f"Saved: {out_path}  ({node_count} nodes, {edge_count} edges, schema={schema_version})")
+
+
 @app.callback()
 def callback() -> None:
     pass
