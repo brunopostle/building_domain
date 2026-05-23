@@ -48,6 +48,8 @@ EXPANSION_PROMPT_TEMPLATE = (
     "and a one-sentence description. Omit concepts already covered by the parent name."
 )
 
+APL_SEED_PROMPT = "apl_pattern_seed"
+
 
 def run_pass1(
     session: Session,
@@ -55,6 +57,7 @@ def run_pass1(
     run_id: str,
     seed: str | None = None,
     seed_is_file_contents: bool = False,
+    apl_patterns: list[str] | None = None,
     dry_run: bool = False,
 ) -> list[DiscoveredConcept]:
     """Run Pass 1. Returns the list of discovered concepts (for dry-run reporting).
@@ -62,6 +65,7 @@ def run_pass1(
     seed: free-text domain description, or None for default bootstrap.
     seed_is_file_contents: if True, seed is a newline-separated concept list;
                            skip discovery and go straight to expansion.
+    apl_patterns: optional list of title-cased Alexander pattern names to merge as seeds.
     """
     log.info("pass1_start", model=provider.model_id, seed_provided=seed is not None)
 
@@ -81,6 +85,16 @@ def run_pass1(
         response = provider.extract(prompt, ConceptDiscoveryResponse, entity_name=entity_name)
         top_level = response.concepts  # type: ignore[attr-defined]
         log.info("pass1_discovery", concept_count=len(top_level))
+
+    if apl_patterns:
+        existing_lower = {c.name.lower() for c in top_level}
+        added = 0
+        for name in apl_patterns:
+            if name.lower() not in existing_lower:
+                top_level.append(DiscoveredConcept(name=name, entity_type="space"))
+                existing_lower.add(name.lower())
+                added += 1
+        log.info("pass1_apl_merged", apl_requested=len(apl_patterns), apl_added=added)
 
     # Expand each top-level concept for sub-concepts
     all_concepts: list[DiscoveredConcept] = list(top_level)
@@ -114,6 +128,9 @@ def run_pass1(
         for row in session.exec(select(EntityRow)).all()
     }
 
+    apl_names_lower = {n.lower() for n in (apl_patterns or [])}
+    default_prompt = BOOTSTRAP_PROMPT if not seed else DOMAIN_PROMPT_TEMPLATE.format(domain=seed)
+
     now = datetime.now(timezone.utc)
     new_count = 0
     for concept in unique_concepts:
@@ -126,7 +143,7 @@ def run_pass1(
             description=concept.description,
             status="proposed",
             source_model=provider.model_id,
-            source_prompt=BOOTSTRAP_PROMPT if not seed else DOMAIN_PROMPT_TEMPLATE.format(domain=seed),
+            source_prompt=APL_SEED_PROMPT if concept.name.lower() in apl_names_lower else default_prompt,
             created_at=now,
             extraction_run_id=run_id,
         )

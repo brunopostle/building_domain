@@ -155,3 +155,31 @@ def test_pass1_source_model_stored(session, provider):
 
     rows = session.exec(select(EntityRow)).all()
     assert all(r.source_model == "fake-model" for r in rows)
+
+
+def test_pass1_apl_patterns_merged(session, provider):
+    """APL pattern names are added as 'space' entities alongside bootstrap concepts."""
+    apl = ["Light On Two Sides Of Every Room", "South Facing Outdoors", "Entrance Transition"]
+    run_pass1(session, provider, run_id="run-001", apl_patterns=apl)
+
+    rows = session.exec(select(EntityRow)).all()
+    names = {r.name for r in rows}
+    for pattern in apl:
+        assert pattern in names
+
+    # APL entities have entity_type "space"
+    for row in rows:
+        if row.name in apl:
+            assert row.entity_type == "space"
+            assert row.source_prompt == "apl_pattern_seed"
+
+
+def test_pass1_apl_patterns_deduplicated(session, provider):
+    """APL patterns with same name as a bootstrap concept are not double-added."""
+    # 'Roof' is already in the bootstrap fixture
+    apl = ["Roof", "South Facing Outdoors"]
+    run_pass1(session, provider, run_id="run-001", apl_patterns=apl)
+
+    rows = session.exec(select(EntityRow)).all()
+    lower_names = [r.name.lower() for r in rows]
+    assert lower_names.count("roof") == 1

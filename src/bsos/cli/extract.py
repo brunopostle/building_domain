@@ -10,6 +10,7 @@ app = typer.Typer()
 @app.callback(invoke_without_command=True)
 def extract(
     seed: str = typer.Option(None, "--seed", help="Free-text domain description or path to concept list file"),
+    seed_apl: bool = typer.Option(False, "--seed-apl", help="Augment Pass 1 seeds with Alexander's 253 pattern names from data/apl_patterns.json"),
     models: str = typer.Option(None, "--models", help="Comma-separated LLM model identifiers"),
     passes: str = typer.Option(None, "--passes", help="Comma-separated pass numbers (default: all)"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Preview without writing to database"),
@@ -54,6 +55,18 @@ def extract(
         else:
             seed_text = seed
 
+    # Load APL pattern names if requested
+    apl_pattern_names: list[str] | None = None
+    if seed_apl:
+        import json
+        apl_path = Path(__file__).parent.parent.parent.parent / "data" / "apl_patterns.json"
+        if not apl_path.exists():
+            typer.echo(f"--seed-apl: {apl_path} not found", err=True)
+            raise typer.Exit(1)
+        raw = json.loads(apl_path.read_text())
+        apl_pattern_names = [p["name"].title() for p in raw]
+        typer.echo(f"Loaded {len(apl_pattern_names)} APL pattern names for Pass 1 seeding.")
+
     _LLM_PASSES = {"1", "3", "4", "5", "6", "7", "8", "9"}
     _needs_llm = requested_passes is None or bool(_LLM_PASSES.intersection(requested_passes))
 
@@ -68,7 +81,8 @@ def extract(
                     if dry_run:
                         concepts = run_pass1(
                             session2, provider, "__dry_run__",
-                            seed=seed_text, seed_is_file_contents=seed_is_file, dry_run=True,
+                            seed=seed_text, seed_is_file_contents=seed_is_file,
+                            apl_patterns=apl_pattern_names, dry_run=True,
                         )
                         typer.echo(f"Pass 1 (dry-run): {len(concepts)} concepts would be written")
                     else:
@@ -76,6 +90,7 @@ def extract(
                         run_pass1(
                             session2, provider, run_id,
                             seed=seed_text, seed_is_file_contents=seed_is_file,
+                            apl_patterns=apl_pattern_names,
                         )
                         complete_run(session2, run_id)
                         typer.echo(f"Pass 1 complete for model {model_id}.")
