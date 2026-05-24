@@ -6,6 +6,8 @@ build-backend = "hatchling.build"
 name = "bsos"
 version = "0.1.0"
 requires-python = ">=3.12"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 dependencies = [
     "pydantic>=2.0",
     "sqlmodel",
