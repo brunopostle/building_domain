@@ -39,6 +39,7 @@ class LLMResponseCache:
                 CREATE TABLE IF NOT EXISTS llm_response_cache (
                     model       TEXT NOT NULL,
                     prompt_hash TEXT NOT NULL,
+                    entity_name TEXT,
                     response_json TEXT NOT NULL,
                     cached_at   TEXT NOT NULL,
                     PRIMARY KEY (model, prompt_hash)
