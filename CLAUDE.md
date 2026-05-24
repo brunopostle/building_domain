@@ -68,7 +68,7 @@ bsos extract --seed-apl --models claude-haiku-4-5-20251001 \
 ```
 
 - `--framings 1` — single prompt framing per entity (3× cheaper than default 3)
-- `--workers 2` — reduces rate-limit 429 collisions
+- `--workers 2` — **do not exceed 2**: SQLite WAL shared-memory (-shm) fails with SQLITE_CANTOPEN under 3+ concurrent writers regardless of pool settings
 - `--passes` — omit to run all, or specify e.g. `3,4,5,6,7,8,9,10,11,12` to resume after a crash
 
 ### Model routing (`bsos/llm/__init__.py`)

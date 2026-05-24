@@ -1,7 +1,6 @@
 """Database engine creation, WAL mode, session factory."""
 from sqlmodel import SQLModel, create_engine, Session
 from sqlalchemy import event, text
-from sqlalchemy.pool import NullPool
 
 # Import all table models so they register in SQLModel.metadata before create_all().
 import bsos.persistence.models  # noqa: F401
@@ -24,7 +23,6 @@ def create_db_engine(db_path: str = "bsos.db"):
     engine = create_engine(
         f"sqlite:///{db_path}",
         echo=False,
-        poolclass=NullPool,
         connect_args={"check_same_thread": False, "timeout": 30},
     )
 
