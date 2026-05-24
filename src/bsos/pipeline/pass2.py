@@ -21,7 +21,7 @@ from bsos.persistence.models import (
 log = structlog.get_logger()
 
 EMBEDDING_MODEL = "all-mpnet-base-v2"
-CLUSTER_DISTANCE_THRESHOLD = 0.20
+CLUSTER_DISTANCE_THRESHOLD = 0.04
 
 
 def _content_hash(text: str) -> str:

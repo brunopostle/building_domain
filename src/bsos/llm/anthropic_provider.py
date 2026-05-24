@@ -11,7 +11,7 @@ from bsos.llm.cache import LLMResponseCache
 log = structlog.get_logger()
 
 DEFAULT_TIMEOUT = 120.0
-DEFAULT_MAX_TOKENS = 4096
+DEFAULT_MAX_TOKENS = 16384
 
 
 class AnthropicProvider:

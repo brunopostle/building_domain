@@ -15,6 +15,8 @@ def extract(
     passes: str = typer.Option(None, "--passes", help="Comma-separated pass numbers (default: all)"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Preview without writing to database"),
     db: str = typer.Option(None, "--db"),
+    framings: int = typer.Option(3, "--framings", help="Number of prompt framings per entity in Pass 3 (fewer = faster/cheaper, default: 3)"),
+    workers: int = typer.Option(4, "--workers", help="Parallel workers for passes 3-9 (fewer = less rate-limit pressure, default: 4)"),
 ) -> None:
     """Run the extraction pipeline."""
     from bsos.cli.db_context import open_db
@@ -136,7 +138,7 @@ def extract(
                 cache = LLMResponseCache(db_path)
                 provider = make_provider(model_id, cache=cache)
                 if dry_run:
-                    result3 = run_pass3(engine3, provider, "__dry_run__", dry_run=True)
+                    result3 = run_pass3(engine3, provider, "__dry_run__", dry_run=True, n_framings=framings, max_workers=workers)
                     typer.echo(
                         f"Pass 3 (dry-run): {result3['entities_processed']} entities would be processed"
                     )
@@ -144,7 +146,7 @@ def extract(
                     run_id = start_run(
                         Session(engine3), [model_id], ["3"], seed_text
                     )
-                    result3 = run_pass3(engine3, provider, run_id)
+                    result3 = run_pass3(engine3, provider, run_id, n_framings=framings, max_workers=workers)
                     complete_run(Session(engine3), run_id)
                     typer.echo(
                         f"Pass 3 complete for model {model_id}: "
@@ -160,7 +162,7 @@ def extract(
                 cache = LLMResponseCache(db_path)
                 provider = make_provider(model_id, cache=cache)
                 if dry_run:
-                    result4 = run_pass4(engine4, provider, "__dry_run__", dry_run=True)
+                    result4 = run_pass4(engine4, provider, "__dry_run__", dry_run=True, max_workers=workers)
                     typer.echo(
                         f"Pass 4 (dry-run): {result4['entities_processed']} entities would be processed"
                     )
@@ -168,7 +170,7 @@ def extract(
                     run_id = start_run(
                         Session(engine4), [model_id], ["4"], seed_text
                     )
-                    result4 = run_pass4(engine4, provider, run_id)
+                    result4 = run_pass4(engine4, provider, run_id, max_workers=workers)
                     complete_run(Session(engine4), run_id)
                     typer.echo(
                         f"Pass 4 complete for model {model_id}: "
@@ -184,7 +186,7 @@ def extract(
                 cache = LLMResponseCache(db_path)
                 provider = make_provider(model_id, cache=cache)
                 if dry_run:
-                    result5 = run_pass5(engine5, provider, "__dry_run__", dry_run=True)
+                    result5 = run_pass5(engine5, provider, "__dry_run__", dry_run=True, max_workers=workers)
                     typer.echo(
                         f"Pass 5 (dry-run): {result5['entities_processed']} entities would be processed"
                     )
@@ -192,7 +194,7 @@ def extract(
                     run_id = start_run(
                         Session(engine5), [model_id], ["5"], seed_text
                     )
-                    result5 = run_pass5(engine5, provider, run_id)
+                    result5 = run_pass5(engine5, provider, run_id, max_workers=workers)
                     complete_run(Session(engine5), run_id)
                     typer.echo(
                         f"Pass 5 complete for model {model_id}: "
@@ -210,7 +212,7 @@ def extract(
                 cache = LLMResponseCache(db_path)
                 provider = make_provider(model_id, cache=cache)
                 if dry_run:
-                    result6 = run_pass6(engine6, provider, "__dry_run__", dry_run=True)
+                    result6 = run_pass6(engine6, provider, "__dry_run__", dry_run=True, max_workers=workers)
                     typer.echo(
                         f"Pass 6 (dry-run): {result6['entities_processed']} entities would be processed"
                     )
@@ -218,7 +220,7 @@ def extract(
                     run_id = start_run(
                         Session(engine6), [model_id], ["6"], seed_text
                     )
-                    result6 = run_pass6(engine6, provider, run_id)
+                    result6 = run_pass6(engine6, provider, run_id, max_workers=workers)
                     complete_run(Session(engine6), run_id)
                     typer.echo(
                         f"Pass 6 complete for model {model_id}: "
@@ -234,7 +236,7 @@ def extract(
                 cache = LLMResponseCache(db_path)
                 provider = make_provider(model_id, cache=cache)
                 if dry_run:
-                    result7 = run_pass7(engine7, provider, "__dry_run__", dry_run=True)
+                    result7 = run_pass7(engine7, provider, "__dry_run__", dry_run=True, max_workers=workers)
                     typer.echo(
                         f"Pass 7 (dry-run): {result7['entities_processed']} entities would be processed"
                     )
@@ -242,7 +244,7 @@ def extract(
                     run_id = start_run(
                         Session(engine7), [model_id], ["7"], seed_text
                     )
-                    result7 = run_pass7(engine7, provider, run_id)
+                    result7 = run_pass7(engine7, provider, run_id, max_workers=workers)
                     complete_run(Session(engine7), run_id)
                     typer.echo(
                         f"Pass 7 complete for model {model_id}: "
@@ -258,7 +260,7 @@ def extract(
                 cache = LLMResponseCache(db_path)
                 provider = make_provider(model_id, cache=cache)
                 if dry_run:
-                    result8 = run_pass8(engine8, provider, "__dry_run__", dry_run=True)
+                    result8 = run_pass8(engine8, provider, "__dry_run__", dry_run=True, max_workers=workers)
                     typer.echo(
                         f"Pass 8 (dry-run): {result8['entities_processed']} entities would be processed"
                     )
@@ -266,7 +268,7 @@ def extract(
                     run_id = start_run(
                         Session(engine8), [model_id], ["8"], seed_text
                     )
-                    result8 = run_pass8(engine8, provider, run_id)
+                    result8 = run_pass8(engine8, provider, run_id, max_workers=workers)
                     complete_run(Session(engine8), run_id)
                     typer.echo(
                         f"Pass 8 complete for model {model_id}: "
@@ -282,7 +284,7 @@ def extract(
                 cache = LLMResponseCache(db_path)
                 provider = make_provider(model_id, cache=cache)
                 if dry_run:
-                    result9 = run_pass9(engine9, provider, "__dry_run__", dry_run=True)
+                    result9 = run_pass9(engine9, provider, "__dry_run__", dry_run=True, max_workers=workers)
                     typer.echo(
                         f"Pass 9 (dry-run): {result9['entities_processed']} entities would be processed"
                     )
@@ -290,7 +292,7 @@ def extract(
                     run_id = start_run(
                         Session(engine9), [model_id], ["9"], seed_text
                     )
-                    result9 = run_pass9(engine9, provider, run_id)
+                    result9 = run_pass9(engine9, provider, run_id, max_workers=workers)
                     complete_run(Session(engine9), run_id)
                     msg = f"Pass 9 complete for model {model_id}: {result9['forces_written']} forces written"
                     if result9["validation_failures"]:
