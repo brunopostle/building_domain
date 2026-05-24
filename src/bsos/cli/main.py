@@ -6,6 +6,7 @@ from bsos.cli.serve import app as serve_app
 from bsos.cli.normalize import app as normalize_app
 from bsos.cli.doctor import app as doctor_app
 from bsos.cli.purge import app as purge_app
+from bsos.cli.compress import app as compress_app
 from bsos.cli.db_context import open_db
 
 app = typer.Typer(name="bsos", help="Building Semantic Ontology System", no_args_is_help=True)
@@ -20,6 +21,7 @@ app.add_typer(normalize_app, name="normalize", help="Run normalization passes (1
 app.add_typer(serve_app, name="serve", help="Start the MCP server")
 app.add_typer(doctor_app, name="doctor", help="Run database integrity checks")
 app.add_typer(purge_app, name="purge", help="Deprecate all items from an extraction run")
+app.add_typer(compress_app, name="compress", help="Semantically compress knowledge base into abstraction nodes")
 
 
 @app.command("status")
