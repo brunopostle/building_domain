@@ -86,15 +86,32 @@ bsos extract --seed-apl --models claude-haiku-4-5-20251001 \
 
 - **Pass 2 threshold:** `CLUSTER_DISTANCE_THRESHOLD = 0.04` in `pass2.py`. Values above ~0.08 merge distinct-but-related concepts (e.g. "High Ceiling Zone" / "Low Ceiling Zone"). Skip pass 2 or keep threshold at 0.04.
 - **Pass 1 max_tokens:** Set to 16384 in `anthropic_provider.py`; 4096 is too small for the full concept-discovery response.
-- **Crash recovery:** All LLM responses are cached in `bsos.db`. Re-running the same command resumes from where it left off at no extra API cost.
+- **LLM cache location:** Stored in `bsos_cache.db` (separate from `bsos.db`) using a single persistent connection + threading lock. Do NOT revert this — per-call `sqlite3.connect()` causes SQLITE_CANTOPEN under concurrent workers.
+- **Crash recovery:** All LLM responses are cached in `bsos_cache.db`. Re-running the same command resumes from where it left off at no extra API cost.
 - **Undo bad pass 2 merges:** `UPDATE entities SET status='proposed' WHERE status='merged'; DELETE FROM entity_aliases;` then re-run pass 2.
+- **Groq provider:** Set `OPENAI_API_KEY=gsk_...` and `OPENAI_BASE_URL=https://api.groq.com/openai/v1` then use `--models llama-3.3-70b-versatile`. Quality is significantly lower than Haiku for complex structured output schemas — use Haiku or Sonnet for production runs.
+- **Open-weight models (Llama, Groq):** Produce very sparse assertions (1-2 per entity vs 10-20 for Haiku). Not suitable for pass 3+.
+
+### Recovering from phantom progress records
+
+If the pipeline crashes mid-pass, some entities may have `pass_progress` records but no assertions. Clean up before restarting:
+
+```bash
+sqlite3 bsos.db "
+  DELETE FROM pass_progress
+  WHERE pass_number='3'
+  AND NOT EXISTS (
+    SELECT 1 FROM assertions a WHERE a.subject_id = entity_id
+  );
+"
+```
+
+Replace `'3'` with the relevant pass number. Then restart normally — resume logic fills the gaps.
 
 ### Pass 3 missing entities (Roof, Foundation, Beam, Wall)
 
-If pass 3 was interrupted previously, these 4 entities have progress records but no assertions. Patch with:
+These 4 entities had their assertions deleted during an earlier cleanup but their progress records persisted. After the current run completes, patch with:
 
 ```bash
 bsos extract --seed-apl --models claude-haiku-4-5-20251001 --passes 3 --framings 1 --workers 2
 ```
-
-Pass 3 skips already-done entities and fills in the gaps.
