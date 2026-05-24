@@ -1,10 +1,14 @@
 """Pass 5 — Process/Sequence Extraction.
 
-For each active entity, ask the LLM what must happen before and after it in
-construction sequencing. Extracts ProcessRelation records. Unknown activity names
-are created inline as proposed EntityRow(activity). Duplicate (predecessor_id,
-successor_id, source_model) triplets are silently skipped; hard_constraint
-divergence from an existing row triggers a structlog ERROR.
+For each active activity or component entity, ask the LLM what must happen before
+and after it in construction sequencing. Extracts ProcessRelation records. Unknown
+activity names are created inline as proposed EntityRow(activity). Duplicate
+(predecessor_id, successor_id, source_model) triplets are silently skipped;
+hard_constraint divergence from an existing row triggers a structlog ERROR.
+
+Materials, spaces, systems, and ifc_class entities are skipped — construction
+sequencing constraints apply to activities and physical components, not to
+materials, spaces, systems, or IFC schema classes.
 """
 import threading
 import uuid
@@ -196,6 +200,9 @@ def _process_entity(
         return written, divergences
 
 
+ENTITY_TYPES = frozenset({"activity", "component"})
+
+
 def run_pass5(
     engine,
     provider: LLMProvider,
@@ -203,13 +210,16 @@ def run_pass5(
     dry_run: bool = False,
     max_workers: int = 4,
 ) -> dict:
-    """Run Pass 5: process/sequence extraction for all active entities.
+    """Run Pass 5: process/sequence extraction for activity and component entities.
 
     Returns summary dict: {entities_processed, relations_written, hard_constraint_divergences}.
     """
     with Session(engine) as session:
         entities = session.exec(
-            select(EntityRow).where(EntityRow.status != "merged")
+            select(EntityRow).where(
+                EntityRow.status != "merged",
+                EntityRow.entity_type.in_(ENTITY_TYPES),  # type: ignore[attr-defined]
+            )
         ).all()
         entity_tuples = [(e.id, e.name, e.entity_type) for e in entities]
 

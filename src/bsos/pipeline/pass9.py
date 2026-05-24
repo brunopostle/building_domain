@@ -1,9 +1,13 @@
 """Pass 9 — Force Extraction with direction validation.
 
-For each active entity: extract design pressures into ForceRow records.
-Each force name must contain a direction-consistent qualifier word; failures
-are written to pending_force_refs. Unresolved entity names in 'affects' are
-written to pending_entity_refs rather than discarded.
+For each active component, space, or system entity: extract design pressures into
+ForceRow records. Each force name must contain a direction-consistent qualifier
+word; failures are written to pending_force_refs. Unresolved entity names in
+'affects' are written to pending_entity_refs rather than discarded.
+
+Activities, materials, and ifc_class entities are skipped — design forces (in the
+Alexander sense) act on physical elements, spaces, and systems, not on construction
+activities, raw materials, or IFC schema classes.
 """
 import json
 import uuid
@@ -189,6 +193,9 @@ def _process_entity(
         return forces_written, validation_failures, unresolved_refs
 
 
+ENTITY_TYPES = frozenset({"component", "space", "system"})
+
+
 def run_pass9(
     engine,
     provider: LLMProvider,
@@ -196,7 +203,7 @@ def run_pass9(
     dry_run: bool = False,
     max_workers: int = 4,
 ) -> dict:
-    """Run Pass 9: force extraction for all active entities.
+    """Run Pass 9: force extraction for component, space, and system entities.
 
     Returns summary dict: {entities_processed, forces_written,
                            validation_failures, unresolved_refs}.
@@ -205,7 +212,10 @@ def run_pass9(
 
     with Session(engine) as session:
         entities = session.exec(
-            select(EntityRow).where(EntityRow.status != "merged")
+            select(EntityRow).where(
+                EntityRow.status != "merged",
+                EntityRow.entity_type.in_(ENTITY_TYPES),  # type: ignore[attr-defined]
+            )
         ).all()
         entity_tuples = [(e.id, e.name, e.entity_type) for e in entities]
 

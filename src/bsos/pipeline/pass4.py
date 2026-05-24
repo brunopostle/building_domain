@@ -1,9 +1,12 @@
 """Pass 4 — Spatial Relation Extraction.
 
-For each active (non-merged) entity: ask the LLM what spatial and topological
+For each active component or space entity: ask the LLM what spatial and topological
 relationships it has with other building entities. Relations in SPATIAL_RELATION_TYPES
 are written directly; unknown types are also written to pending_spatial_relation_types
 for curation. Unresolved object names are logged and skipped.
+
+Activities, materials, systems, and ifc_class entities are skipped — they do not
+have meaningful spatial/topological relationships in a building model.
 """
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -132,6 +135,9 @@ def _process_entity(
         return written
 
 
+ENTITY_TYPES = frozenset({"component", "space"})
+
+
 def run_pass4(
     engine,
     provider: LLMProvider,
@@ -139,7 +145,7 @@ def run_pass4(
     dry_run: bool = False,
     max_workers: int = 4,
 ) -> dict:
-    """Run Pass 4: spatial relation extraction for all active entities.
+    """Run Pass 4: spatial relation extraction for component and space entities.
 
     engine: SQLAlchemy Engine (not session) — workers create their own sessions.
     Returns summary dict: {entities_processed, relations_written}.
@@ -148,7 +154,10 @@ def run_pass4(
 
     with Session(engine) as session:
         entities = session.exec(
-            select(EntityRow).where(EntityRow.status != "merged")
+            select(EntityRow).where(
+                EntityRow.status != "merged",
+                EntityRow.entity_type.in_(ENTITY_TYPES),  # type: ignore[attr-defined]
+            )
         ).all()
         entity_tuples = [(e.id, e.name, e.entity_type) for e in entities]
 
