@@ -1,9 +1,13 @@
 """Pass 8 — Pattern Extraction.
 
-For each active entity: extract Alexander-style architectural patterns into
-PatternRow records. force_ids and related_pattern_ids are written as empty
-lists at extraction time and resolved in a later pass. Each record is linked
-to the entity it was extracted for via subject_id.
+For each active component, space, or system entity: extract Alexander-style
+architectural patterns into PatternRow records. force_ids and related_pattern_ids
+are written as empty lists at extraction time and resolved in a later pass. Each
+record is linked to the entity it was extracted for via subject_id.
+
+Activities, materials, and ifc_class entities are skipped — Alexander patterns
+describe recurring solutions to spatial/physical design problems, not construction
+activities, raw materials, or IFC schema classes.
 """
 import json
 import uuid
@@ -113,6 +117,9 @@ def _process_entity(
         return written
 
 
+ENTITY_TYPES = frozenset({"component", "space", "system"})
+
+
 def run_pass8(
     engine,
     provider: LLMProvider,
@@ -120,13 +127,16 @@ def run_pass8(
     dry_run: bool = False,
     max_workers: int = 4,
 ) -> dict:
-    """Run Pass 8: pattern extraction for all active entities.
+    """Run Pass 8: pattern extraction for component, space, and system entities.
 
     Returns summary dict: {entities_processed, patterns_written}.
     """
     with Session(engine) as session:
         entities = session.exec(
-            select(EntityRow).where(EntityRow.status != "merged")
+            select(EntityRow).where(
+                EntityRow.status != "merged",
+                EntityRow.entity_type.in_(ENTITY_TYPES),  # type: ignore[attr-defined]
+            )
         ).all()
         entity_tuples = [(e.id, e.name, e.entity_type) for e in entities]
 
