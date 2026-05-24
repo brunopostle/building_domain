@@ -18,7 +18,7 @@ class LLMResponseCache:
         self._ensure_table()
 
     def _connect(self) -> sqlite3.Connection:
-        conn = sqlite3.connect(self._db_path)
+        conn = sqlite3.connect(self._db_path, timeout=30)
         conn.execute("PRAGMA journal_mode=WAL")
         return conn
 
