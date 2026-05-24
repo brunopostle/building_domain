@@ -5,13 +5,17 @@ from datetime import datetime, timezone
 import pytest
 from sqlmodel import Session
 
+import numpy as np
+
 from bsos.persistence.database import create_db_engine, create_views
-from bsos.persistence.models import AssertionRow, EntityAliasRow, EntityRow
+from bsos.persistence.models import AssertionRow, EntityAliasRow, EntityRow, EmbeddingRow
 from bsos.mcp_server.server import (
     create_server,
     get_dependencies_tool,
     get_requirements_tool,
     resolve_entity,
+    search_entities_tool,
+    SEARCH_EMBEDDING_MODEL,
 )
 
 NOW = datetime.now(timezone.utc)
@@ -229,3 +233,104 @@ def test_create_server_has_expected_tools(engine, tmp_path):
     tool_names = {t.name for t in server._tool_manager.list_tools()}
     assert "get_requirements" in tool_names
     assert "get_dependencies" in tool_names
+    assert "search_entities" in tool_names
+
+
+# ---------------------------------------------------------------------------
+# search_entities
+# ---------------------------------------------------------------------------
+
+DIM = 4  # tiny vectors for test speed
+
+
+def _make_vec(values: list[float]) -> bytes:
+    return np.array(values, dtype=np.float32).tobytes()
+
+
+def _stub_embedder(texts: list[str]) -> np.ndarray:
+    """Return a fixed vector per query text for deterministic tests."""
+    vectors = {
+        "entrance hall": [1.0, 0.0, 0.0, 0.0],
+        "foyer":         [0.9, 0.1, 0.0, 0.0],
+        "roof":          [0.0, 0.0, 0.0, 1.0],
+    }
+    default = [0.25, 0.25, 0.25, 0.25]
+    result = np.array([vectors.get(t.lower(), default) for t in texts], dtype=np.float32)
+    # Normalise rows
+    norms = np.linalg.norm(result, axis=1, keepdims=True)
+    return result / np.where(norms == 0, 1, norms)
+
+
+class _StubEmbedder:
+    def encode(self, texts):
+        return _stub_embedder(texts)
+
+
+def _add_embedding(session, entity_id, vector_values):
+    vec = np.array(vector_values, dtype=np.float32)
+    norm = np.linalg.norm(vec)
+    if norm > 0:
+        vec = vec / norm
+    session.add(EmbeddingRow(
+        item_type="entity",
+        item_id=entity_id,
+        model=SEARCH_EMBEDDING_MODEL,
+        dim=DIM,
+        content_hash="test",
+        vector=vec.tobytes(),
+    ))
+
+
+def test_search_entities_returns_ranked_results(session):
+    add_entity(session, "e-foyer", "Foyer")
+    add_entity(session, "e-roof", "Roof")
+    add_entity(session, "e-beam", "Beam")
+    _add_embedding(session, "e-foyer", [0.9, 0.1, 0.0, 0.0])
+    _add_embedding(session, "e-roof",  [0.0, 0.0, 0.0, 1.0])
+    _add_embedding(session, "e-beam",  [0.0, 0.0, 1.0, 0.0])
+    session.commit()
+
+    result = search_entities_tool(session, "entrance hall", _embedder=_StubEmbedder())
+    assert result["query"] == "entrance hall"
+    names = [r["name"] for r in result["results"]]
+    assert names[0] == "Foyer"
+    assert "Roof" in names or "Beam" in names
+
+
+def test_search_entities_respects_max_results(session):
+    for i in range(5):
+        add_entity(session, f"e{i}", f"Entity{i}")
+        _add_embedding(session, f"e{i}", [1.0, float(i) * 0.1, 0.0, 0.0])
+    session.commit()
+
+    result = search_entities_tool(session, "entrance hall", max_results=2, _embedder=_StubEmbedder())
+    assert len(result["results"]) <= 2
+
+
+def test_search_entities_skips_merged(session):
+    add_entity(session, "e-merged", "OldName")
+    session.get(EntityRow, "e-merged").status = "merged"
+    _add_embedding(session, "e-merged", [1.0, 0.0, 0.0, 0.0])
+    add_entity(session, "e-active", "ActiveName")
+    _add_embedding(session, "e-active", [0.9, 0.1, 0.0, 0.0])
+    session.commit()
+
+    result = search_entities_tool(session, "entrance hall", _embedder=_StubEmbedder())
+    names = [r["name"] for r in result["results"]]
+    assert "OldName" not in names
+    assert "ActiveName" in names
+
+
+def test_search_entities_min_score_filters(session):
+    add_entity(session, "e-close", "CloseMatch")
+    add_entity(session, "e-far", "FarMatch")
+    _add_embedding(session, "e-close", [1.0, 0.0, 0.0, 0.0])
+    _add_embedding(session, "e-far",   [0.0, 0.0, 1.0, 0.0])
+    session.commit()
+
+    result = search_entities_tool(
+        session, "entrance hall", min_score=0.8, _embedder=_StubEmbedder()
+    )
+    names = [r["name"] for r in result["results"]]
+    assert "CloseMatch" in names
+    assert "FarMatch" not in names

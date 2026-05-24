@@ -6,6 +6,7 @@ Tool logic is exposed as plain functions so tests can call them directly.
 import json as _json
 from collections import deque
 
+import numpy as np
 import networkx as nx
 from mcp.server.fastmcp import FastMCP
 from sqlmodel import Session, select
@@ -13,8 +14,20 @@ from sqlmodel import Session, select
 from bsos.persistence.database import create_db_engine
 from bsos.persistence.models import (
     AntiPatternRow, AssertionRow, ConstraintRow, EntityAliasRow, EntityRow,
-    ForceRow, PatternRow, ProcessRelationRow, SpatialRelationRow,
+    EmbeddingRow, ForceRow, PatternRow, ProcessRelationRow, SpatialRelationRow,
 )
+
+SEARCH_EMBEDDING_MODEL = "all-mpnet-base-v2"
+
+_embedder_model = None
+
+
+def _get_embedder():
+    global _embedder_model
+    if _embedder_model is None:
+        from sentence_transformers import SentenceTransformer
+        _embedder_model = SentenceTransformer(SEARCH_EMBEDDING_MODEL)
+    return _embedder_model
 from bsos.graph import build_lazy_subgraph
 
 REQUIREMENTS_PREDICATES = frozenset({"requires", "depends_on"})
@@ -407,6 +420,60 @@ def get_process_sequence_tool(
     }
 
 
+def search_entities_tool(
+    session: Session,
+    query: str,
+    max_results: int = 10,
+    min_score: float = 0.0,
+    _embedder=None,
+) -> dict:
+    """Semantic search over bsos entities using embedding similarity.
+
+    Accepts a free-text description or IFC element name and returns ranked
+    matching entities. Use this before other tools when you don't know the
+    exact bsos entity name.
+    """
+    embedder = _embedder or _get_embedder()
+    query_vec = np.array(embedder.encode([query])[0], dtype=np.float32)
+    query_norm = np.linalg.norm(query_vec)
+    if query_norm == 0:
+        return {"error": "empty_query", "query": query, "results": []}
+
+    rows = session.exec(
+        select(EmbeddingRow).where(
+            EmbeddingRow.item_type == "entity",
+            EmbeddingRow.model == SEARCH_EMBEDDING_MODEL,
+        )
+    ).all()
+
+    scores = []
+    for row in rows:
+        vec = np.frombuffer(row.vector, dtype=np.float32)
+        norm = np.linalg.norm(vec)
+        if norm == 0:
+            continue
+        score = float(np.dot(query_vec, vec) / (query_norm * norm))
+        if score >= min_score:
+            scores.append((score, row.item_id))
+
+    scores.sort(key=lambda x: -x[0])
+    top = scores[:max_results]
+
+    results = []
+    for score, entity_id in top:
+        entity = session.get(EntityRow, entity_id)
+        if entity is None or entity.status == "merged":
+            continue
+        results.append({
+            "name": entity.name,
+            "score": round(score, 4),
+            "entity_type": entity.entity_type,
+            "description": entity.description,
+        })
+
+    return {"query": query, "results": results}
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -480,5 +547,14 @@ def create_server(db_path: str) -> FastMCP:
     def get_process_sequence(entity: str, max_depth: int = 50) -> dict:
         with Session(engine) as session:
             return get_process_sequence_tool(session, entity, max_depth)
+
+    @mcp.tool(description=search_entities_tool.__doc__)
+    def search_entities(
+        query: str,
+        max_results: int = 10,
+        min_score: float = 0.0,
+    ) -> dict:
+        with Session(engine) as session:
+            return search_entities_tool(session, query, max_results, min_score)
 
     return mcp
