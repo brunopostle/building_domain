@@ -66,7 +66,7 @@ def extract(
             typer.echo(f"--seed-apl: {apl_path} not found", err=True)
             raise typer.Exit(1)
         raw = json.loads(apl_path.read_text())
-        apl_pattern_names = [p["name"].title() for p in raw]
+        apl_pattern_names = [" ".join(w.capitalize() for w in p["name"].split()) for p in raw]
         typer.echo(f"Loaded {len(apl_pattern_names)} APL pattern names for Pass 1 seeding.")
 
     _LLM_PASSES = {"1", "3", "4", "5", "6", "7", "8", "9", "11", "12"}
