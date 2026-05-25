@@ -56,7 +56,7 @@ def _process_entity(
             )
         except Exception as exc:
             log.warning("pass6_extraction_failed", entity=entity_name, error=str(exc))
-            response = ConstraintExtractionResponse(constraints=[])
+            return 0
 
         now = datetime.now(timezone.utc)
         written = 0

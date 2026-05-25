@@ -78,7 +78,7 @@ def _process_entity(
             )
         except Exception as exc:
             log.warning("pass4_extraction_failed", entity=entity_name, error=str(exc))
-            response = SpatialRelationExtractionResponse(spatial_relations=[])
+            return 0
 
         now = datetime.now(timezone.utc)
         written = 0

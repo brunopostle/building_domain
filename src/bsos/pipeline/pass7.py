@@ -52,7 +52,7 @@ def _process_entity(
             )
         except Exception as exc:
             log.warning("pass7_extraction_failed", entity=entity_name, error=str(exc))
-            response = AntiPatternExtractionResponse(anti_patterns=[])
+            return 0
 
         now = datetime.now(timezone.utc)
         written = 0

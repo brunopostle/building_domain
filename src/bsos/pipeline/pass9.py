@@ -102,7 +102,7 @@ def _process_entity(
             )
         except Exception as exc:
             log.warning("pass9_extraction_failed", entity=entity_name, error=str(exc))
-            response = ForceExtractionResponse(forces=[])
+            return 0, 0, 0
 
         now = datetime.now(timezone.utc)
         forces_written = 0

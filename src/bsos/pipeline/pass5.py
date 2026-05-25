@@ -111,7 +111,7 @@ def _process_entity(
             )
         except Exception as exc:
             log.warning("pass5_extraction_failed", entity=entity_name, error=str(exc))
-            response = ProcessRelationExtractionResponse(process_relations=[])
+            return 0, []
 
         now = datetime.now(timezone.utc)
         written = 0
