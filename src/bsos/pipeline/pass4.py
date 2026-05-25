@@ -16,6 +16,7 @@ import structlog
 from sqlmodel import Session, select
 
 from bsos.llm.protocol import LLMProvider
+from bsos.pipeline._name_utils import normalized_forms
 from bsos.persistence.models import (
     EntityAliasRow, EntityRow, PassProgressRow,
     SpatialRelationRow,
@@ -39,15 +40,24 @@ PROMPT_TEMPLATE = (
 
 
 def _build_name_lookup(engine) -> dict[str, tuple[str, str]]:
-    """Return lowercase_name → (entity_id, entity_type) for all active entities and aliases."""
+    """Return lowercase_name → (entity_id, entity_type) for all active entities and aliases.
+
+    Also indexes plural/singular variants. Exact names always take priority.
+    """
     lookup: dict[str, tuple[str, str]] = {}
     with Session(engine) as s:
         for row in s.exec(select(EntityRow).where(EntityRow.status != "merged")).all():
-            lookup[row.name.lower()] = (row.id, row.entity_type)
+            key = row.name.lower()
+            lookup[key] = (row.id, row.entity_type)
+            for alt in normalized_forms(key):
+                lookup.setdefault(alt, (row.id, row.entity_type))
         for alias_row in s.exec(select(EntityAliasRow)).all():
             entity = s.get(EntityRow, alias_row.entity_id)
             if entity and entity.status != "merged":
-                lookup[alias_row.alias.lower()] = (entity.id, entity.entity_type)
+                key = alias_row.alias.lower()
+                lookup[key] = (entity.id, entity.entity_type)
+                for alt in normalized_forms(key):
+                    lookup.setdefault(alt, (entity.id, entity.entity_type))
     return lookup
 
 
