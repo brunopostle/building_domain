@@ -182,6 +182,7 @@ def _process_entity(
             return 0
 
         framing_lists: list[list[ExtractedAssertion]] = []
+        successful_framings = 0
         for template in FRAMING_TEMPLATES[:n_framings]:
             prompt = template.format(name=entity_name, entity_type=entity_type)
             try:
@@ -189,9 +190,14 @@ def _process_entity(
                     prompt, AssertionExtractionResponse, entity_name=entity_name
                 )
                 framing_lists.append(response.assertions)
+                successful_framings += 1
             except Exception as exc:
                 log.warning("pass3_extraction_failed", entity=entity_name, error=str(exc))
                 framing_lists.append([])
+
+        if successful_framings == 0:
+            log.warning("pass3_entity_all_framings_failed", entity=entity_name)
+            return 0
 
         groups = _group_assertions(framing_lists, entity_name, embedder)
 
