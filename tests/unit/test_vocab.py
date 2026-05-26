@@ -71,7 +71,7 @@ def test_cluster_distance_threshold_range():
 
 
 def test_cluster_distance_threshold_value():
-    assert CLUSTER_DISTANCE_THRESHOLD == pytest.approx(0.20)
+    assert CLUSTER_DISTANCE_THRESHOLD == pytest.approx(0.04)
 
 
 def test_consistency_threshold_range():
