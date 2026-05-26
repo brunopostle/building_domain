@@ -1,0 +1,156 @@
+Graph: 253 nodes, 1754 edges (1327 from APL hierarchy, 427 from DB relationships)
+
+======================================================================
+  ALEXANDER PATTERN LANGUAGE — CONNECTIVITY ANALYSIS
+======================================================================
+
+253 patterns across 3 sections:
+  Town and Country: patterns 1–94
+  Buildings: patterns 95–204
+  Construction: patterns 205–253
+
+======================================================================
+  TOP 20 HUBS  (highest degree — most connections)
+======================================================================
+  #191  39 connections  THE SHAPE OF INDOOR SPACE  [Buildings]
+  # 95  38 connections  BUILDING COMPLEX  [Buildings]
+  #129  32 connections  COMMON AREAS AT THE HEART  [Buildings]
+  #119  31 connections  ARCADES  [Buildings]
+  #163  31 connections  OUTDOOR ROOM  [Buildings]
+  # 41  30 connections  WORK COMMUNITY  [Town and Country]
+  #100  28 connections  PEDESTRIAN STREET  [Buildings]
+  #159  28 connections  LIGHT ON TWO SIDES OF EVERY ROOM  [Buildings]
+  #243  27 connections  SITTING WALL  [Construction]
+  # 30  26 connections  ACTIVITY NODES  [Town and Country]
+  # 37  26 connections  HOUSE CLUSTER  [Town and Country]
+  #106  26 connections  POSITIVE OUTDOOR SPACE  [Buildings]
+  #107  26 connections  WINGS OF LIGHT  [Buildings]
+  # 69  25 connections  PUBLIC OUTDOOR ROOM  [Town and Country]
+  #180  25 connections  WINDOW PLACE  [Buildings]
+  # 14  24 connections  IDENTIFIABLE NEIGHBORHOOD  [Town and Country]
+  # 26  24 connections  LIFE CYCLE  [Town and Country]
+  # 13  23 connections  SUBCULTURE BOUNDARY  [Town and Country]
+  #101  23 connections  BUILDING THOROUGHFARE  [Buildings]
+  #140  23 connections  PRIVATE TERRACE ON THE STREET  [Buildings]
+
+======================================================================
+  BOTTOM 10 — least connected patterns
+======================================================================
+  #246   5 connections  CLIMBING PLANTS  [Construction]
+  #  4   4 connections  AGRICULTURAL VALLEYS  [Town and Country]
+  #  6   4 connections  COUNTRY TOWNS  [Town and Country]
+  # 50   4 connections  T JUNCTIONS  [Town and Country]
+  #184   4 connections  COOKING LAYOUT  [Buildings]
+  #229   4 connections  DUCT SPACE  [Construction]
+  #230   4 connections  RADIANT HEAT  [Construction]
+  #232   3 connections  ROOF CAPS  [Construction]
+  #253   3 connections  THINGS FROM YOUR LIFE  [Construction]
+  #  1   2 connections  INDEPENDENT REGIONS  [Town and Country]
+
+======================================================================
+  TOP 20 BRIDGES  (highest betweenness centrality)
+======================================================================
+  #191  0.0489  THE SHAPE OF INDOOR SPACE  [Buildings]
+  # 95  0.0379  BUILDING COMPLEX  [Buildings]
+  #119  0.0344  ARCADES  [Buildings]
+  #249  0.0331  ORNAMENT  [Construction]
+  #129  0.0300  COMMON AREAS AT THE HEART  [Buildings]
+  # 37  0.0237  HOUSE CLUSTER  [Town and Country]
+  #180  0.0224  WINDOW PLACE  [Buildings]
+  # 41  0.0221  WORK COMMUNITY  [Town and Country]
+  #159  0.0213  LIGHT ON TWO SIDES OF EVERY ROOM  [Buildings]
+  # 26  0.0210  LIFE CYCLE  [Town and Country]
+  #163  0.0208  OUTDOOR ROOM  [Buildings]
+  #243  0.0207  SITTING WALL  [Construction]
+  #205  0.0202  STRUCTURE FOLLOWS SOCIAL SPACES  [Construction]
+  # 97  0.0185  SHIELDED PARKING  [Buildings]
+  #106  0.0183  POSITIVE OUTDOOR SPACE  [Buildings]
+  #157  0.0180  HOME WORKSHOP  [Buildings]
+  #244  0.0174  CANVAS ROOFS  [Construction]
+  # 51  0.0173  GREEN STREETS  [Town and Country]
+  #  7  0.0171  THE COUNTRYSIDE  [Town and Country]
+  #101  0.0169  BUILDING THOROUGHFARE  [Buildings]
+
+======================================================================
+  COMMUNITY CLUSTERS  (Louvain method)
+======================================================================
+
+7 communities found:
+
+  Cluster  1 ( 72 patterns, dominant: Town and Country)
+          Key nodes: #41 WORK COMMUNITY, #100 PEDESTRIAN STREET, #30 ACTIVITY NODES
+          Patterns:  8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 36, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 58, 59, 60, 61, 62, 63, 64, 65, 66, 69, 70, 71, 72, 87, 88, 89, 90, 91, 92, 93, 94, 100, 103, 121, 122, 123, 124, 125, 126, 150, 164, 165
+
+  Cluster  2 ( 62 patterns, dominant: Buildings)
+          Key nodes: #191 THE SHAPE OF INDOOR SPACE, #129 COMMON AREAS AT THE HEART, #159 LIGHT ON TWO SIDES OF EVERY ROOM
+          Patterns:  80, 83, 101, 109, 112, 127, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 142, 143, 144, 146, 147, 148, 149, 151, 152, 159, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 191, 192, 193, 194, 196, 197, 198, 199, 200, 201, 202, 203, 204, 211, 221, 222, 223, 224, 225, 236, 237, 239, 251, 252
+
+  Cluster  3 ( 37 patterns, dominant: Buildings)
+          Key nodes: #163 OUTDOOR ROOM, #243 SITTING WALL, #106 POSITIVE OUTDOOR SPACE
+          Patterns:  67, 73, 104, 105, 106, 111, 114, 115, 118, 128, 140, 160, 161, 162, 163, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 226, 238, 241, 242, 243, 244, 245, 246, 247
+
+  Cluster  4 ( 36 patterns, dominant: Construction)
+          Key nodes: #219 FLOOR-CEILING VAULTS, #249 ORNAMENT, #212 COLUMNS AT THE CORNERS
+          Patterns:  96, 99, 116, 117, 145, 190, 195, 205, 206, 207, 208, 209, 210, 212, 213, 214, 215, 216, 217, 218, 219, 220, 227, 228, 229, 230, 231, 232, 233, 234, 235, 240, 248, 249, 250, 253
+
+  Cluster  5 ( 26 patterns, dominant: Town and Country)
+          Key nodes: #37 HOUSE CLUSTER, #26 LIFE CYCLE, #75 THE FAMILY
+          Patterns:  18, 26, 27, 35, 37, 38, 39, 40, 57, 68, 74, 75, 76, 77, 78, 79, 84, 85, 86, 141, 153, 154, 155, 156, 157, 158
+
+  Cluster  6 ( 12 patterns, dominant: Buildings)
+          Key nodes: #95 BUILDING COMPLEX, #119 ARCADES, #107 WINGS OF LIGHT
+          Patterns:  81, 82, 95, 97, 98, 102, 107, 108, 110, 113, 119, 120
+
+  Cluster  7 (  8 patterns, dominant: Town and Country)
+          Key nodes: #21 FOUR-STORY LIMIT, #3 CITY COUNTRY FINGERS, #7 THE COUNTRYSIDE
+          Patterns:  1, 2, 3, 4, 5, 6, 7, 21
+
+
+======================================================================
+  CROSS-SECTION BRIDGES  (edges connecting Town↔Buildings, Buildings↔Construction)
+======================================================================
+
+  Cross-section edges: 526
+    Buildings ↔ Town and Country: 294 edges
+    Buildings ↔ Construction: 207 edges
+    Construction ↔ Town and Country: 25 edges
+
+  Patterns with the most cross-section connections:
+  #243  21 cross-section  SITTING WALL  [Construction]
+  # 95  20 cross-section  BUILDING COMPLEX  [Buildings]
+  #241  18 cross-section  SEAT SPOTS  [Construction]
+  #244  16 cross-section  CANVAS ROOFS  [Construction]
+  #100  14 cross-section  PEDESTRIAN STREET  [Buildings]
+  # 69  14 cross-section  PUBLIC OUTDOOR ROOM  [Town and Country]
+  #205  13 cross-section  STRUCTURE FOLLOWS SOCIAL SPACES  [Construction]
+  #103  12 cross-section  SMALL PARKING LOTS  [Buildings]
+  #119  12 cross-section  ARCADES  [Buildings]
+  #165  11 cross-section  OPENING TO THE STREET  [Buildings]
+  #211  11 cross-section  THICKENING THE OUTER WALLS  [Construction]
+  #226  10 cross-section  COLUMN PLACE  [Construction]
+  #121  10 cross-section  PATH SHAPE  [Buildings]
+  # 75  10 cross-section  THE FAMILY  [Town and Country]
+  #107  10 cross-section  WINGS OF LIGHT  [Buildings]
+
+======================================================================
+  CONNECTIVITY SUMMARY
+======================================================================
+
+  Connected components: 1
+
+  Graph diameter:           6
+  Average shortest path:    2.64
+  Average clustering coeff: 0.2611
+  Graph density:            0.0550
+
+  Degree stats: min=2, max=39, mean=13.9, median=12
+
+  Degree distribution:
+     0- 4: █████████ (9)
+     5- 9: ████████████████████████████████████████████████ (48)
+    10-14: ██████████████████████████████████████████████████████████████████████████████████████████████████████ (102)
+    15-19: ███████████████████████████████████████████████ (47)
+    20-24: ████████████████████████████████ (32)
+    25-29: █████████ (9)
+    30-49: ██████ (6)
+    50+  :  (0)
