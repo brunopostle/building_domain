@@ -7,7 +7,7 @@ name = "bsos"
 version = "0.1.0"
 requires-python = ">=3.12"
 license = "GPL-3.0-or-later"
-license-files = ["LICENSE"]
+license-files = ["LICENSE", "DATABASE_LICENSE", "NOTICE"]
 dependencies = [
     "pydantic>=2.0",
     "sqlmodel",
@@ -24,6 +24,7 @@ dependencies = [
     "joblib",
     "mcp",
     "pypdf",
+    "platformdirs",
 ]
 
 [project.scripts]
@@ -31,3 +32,8 @@ bsos = "bsos.cli.main:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/bsos"]
+
+[tool.hatch.build.targets.wheel.shared-data]
+"bsos.db" = "share/bsos/bsos.db"
+"NOTICE" = "share/bsos/NOTICE"
+"DATABASE_LICENSE" = "share/bsos/DATABASE_LICENSE"

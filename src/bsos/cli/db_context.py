@@ -6,6 +6,27 @@ from pathlib import Path
 from bsos.persistence.database import create_db_engine, get_session
 
 BSOS_CONFIG_FILE = ".bsos_config"
+_SHIPPED_DB_NAME = "bsos.db"
+_SHARE_SUBDIR = "bsos"
+
+
+def _shipped_db_candidates() -> list[Path]:
+    """Return candidate paths for the shipped read-only database, in priority order.
+
+    Covers pip installs on all platforms (via sys.prefix/share/) and OS package
+    manager installs (via platformdirs.site_data_dirs, which gives the right
+    directory on Linux, macOS, and Windows).
+    """
+    candidates: list[Path] = [
+        Path(sys.prefix) / "share" / _SHARE_SUBDIR / _SHIPPED_DB_NAME,
+    ]
+    try:
+        from platformdirs import site_data_dirs
+        for d in site_data_dirs(_SHARE_SUBDIR):
+            candidates.append(Path(d) / _SHIPPED_DB_NAME)
+    except ImportError:
+        pass
+    return candidates
 
 
 def resolve_db_path(db_flag: str | None = None) -> str:
@@ -18,6 +39,9 @@ def resolve_db_path(db_flag: str | None = None) -> str:
         path = config_file.read_text().strip()
         if path:
             return path
+    for candidate in _shipped_db_candidates():
+        if candidate.exists():
+            return str(candidate)
     sys.exit(
         "No database configured. Pass --db, set BSOS_DB, or run 'bsos init' first."
     )
