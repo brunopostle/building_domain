@@ -253,14 +253,43 @@ def import_apl(
     path: str = typer.Argument("data/apl_patterns.json", help="Path to apl_patterns.json"),
     db: str = typer.Option(None, "--db"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Print what would be inserted without writing"),
+    model: Optional[str] = typer.Option(None, "--model", help="LLM model to paraphrase problem/solution prose before inserting"),
 ) -> None:
-    """Import Alexander's 253 patterns from apl_patterns.json as ground-truth Pattern records."""
+    """Import Alexander's 253 patterns from apl_patterns.json as ground-truth Pattern records.
+
+    With --model, problem and solution prose are paraphrased by the LLM before writing,
+    so the shipped database contains no text derived from the original book.
+    """
     import json as _json
     import uuid
     from datetime import datetime, timezone
     from bsos.cli.db_context import open_db
     from bsos.persistence.models import PatternRow
     from sqlmodel import select
+    from pydantic import BaseModel as _BaseModel
+
+    class _ParaphraseResult(_BaseModel):
+        problem: str
+        solution: str
+
+    _PARAPHRASE_PROMPT = (
+        "You are re-expressing descriptions of architectural patterns from Christopher Alexander's "
+        "'A Pattern Language'. The pattern is named \"{name}\".\n\n"
+        "PROBLEM:\n{problem}\n\n"
+        "SOLUTION:\n{solution}\n\n"
+        "Re-write both the problem and solution in your own words. Preserve the meaning and intent "
+        "of each pattern accurately — these descriptions are central to a building knowledge tool. "
+        "The re-written versions must be your own original expression, not traceable to any source "
+        "text. Keep a similar length and level of detail."
+    )
+
+    provider = None
+    if model:
+        from bsos.llm import make_provider
+        from bsos.llm.cache import LLMResponseCache
+        from bsos.cli.db_context import resolve_db_path
+        cache = LLMResponseCache(resolve_db_path(db))
+        provider = make_provider(model, cache=cache)
 
     with open(path) as f:
         patterns = _json.load(f)
@@ -269,58 +298,81 @@ def import_apl(
         return {("**"): 1.0, ("*"): 0.8}.get(sym, 0.5)
 
     _, session = open_db(db)
-    inserted = skipped = 0
+    inserted = updated = skipped = 0
 
     with session:
-        existing_names = {
-            r.name
-            for r in session.exec(
-                select(PatternRow).where(PatternRow.source_model == "human")
-            ).all()
+        existing: dict[str, PatternRow] = {
+            r.name: r
+            for r in session.exec(select(PatternRow)).all()
         }
 
         for p in patterns:
             name = p["name"]
-            if name in existing_names:
-                skipped += 1
-                continue
+            problem = p.get("problem", "")
+            solution = p.get("solution", "")
+
+            if provider is not None:
+                prompt = _PARAPHRASE_PROMPT.format(name=name, problem=problem, solution=solution)
+                if dry_run:
+                    typer.echo(f"  Would paraphrase: {name}")
+                else:
+                    result = provider.extract(prompt, _ParaphraseResult, entity_name=name)
+                    problem = result.problem
+                    solution = result.solution
 
             related_names = [r["name"] for r in p.get("higher_patterns", []) + p.get("lower_patterns", [])]
             related_ids = [r["id"] for r in p.get("higher_patterns", []) + p.get("lower_patterns", [])]
+            source_model = model if model else "human"
 
-            row = PatternRow(
-                id=str(uuid.uuid4()),
-                name=name,
-                subject_id=None,
-                context=_json.dumps([p["section"]] if p.get("section") else []),
-                problem=p.get("problem", ""),
-                force_descriptions=_json.dumps([]),
-                force_ids=_json.dumps([]),
-                solution=p.get("solution", ""),
-                consequences=_json.dumps([]),
-                related_pattern_names=_json.dumps(related_names),
-                related_pattern_ids=_json.dumps(related_ids),
-                emergent_properties=_json.dumps([]),
-                source_model="human",
-                source_prompt=None,
-                created_at=datetime.now(timezone.utc),
-                extraction_run_id=None,
-                confidence=_conf(p.get("confidence", "")),
-                status="accepted",
-                knowledge_origin="human",
-                rationale=None,
-            )
-            if dry_run:
-                typer.echo(f"  Would insert: {name}")
+            if name in existing and provider is not None:
+                # Update prose and source_model on existing row
+                row = existing[name]
+                if not dry_run:
+                    row.problem = problem
+                    row.solution = solution
+                    row.source_model = source_model
+                    session.add(row)
+                updated += 1
+            elif name in existing:
+                skipped += 1
             else:
-                session.add(row)
-            inserted += 1
+                row = PatternRow(
+                    id=str(uuid.uuid4()),
+                    name=name,
+                    subject_id=None,
+                    context=_json.dumps([p["section"]] if p.get("section") else []),
+                    problem=problem,
+                    force_descriptions=_json.dumps([]),
+                    force_ids=_json.dumps([]),
+                    solution=solution,
+                    consequences=_json.dumps([]),
+                    related_pattern_names=_json.dumps(related_names),
+                    related_pattern_ids=_json.dumps(related_ids),
+                    emergent_properties=_json.dumps([]),
+                    source_model=source_model,
+                    source_prompt=None,
+                    created_at=datetime.now(timezone.utc),
+                    extraction_run_id=None,
+                    confidence=_conf(p.get("confidence", "")),
+                    status="accepted",
+                    knowledge_origin="human",
+                    rationale=None,
+                )
+                if dry_run:
+                    typer.echo(f"  Would insert: {name}")
+                else:
+                    session.add(row)
+                inserted += 1
 
         if not dry_run:
             session.commit()
 
-    action = "Would insert" if dry_run else "Inserted"
-    typer.echo(f"{action} {inserted} pattern(s), skipped {skipped} already-present.")
+    if model:
+        action = "Would paraphrase+insert" if dry_run else "Inserted"
+        typer.echo(f"{action} {inserted} new, updated {updated} existing, skipped {skipped}.")
+    else:
+        action = "Would insert" if dry_run else "Inserted"
+        typer.echo(f"{action} {inserted} pattern(s), skipped {skipped} already-present.")
 
 
 @app.command("verify")
