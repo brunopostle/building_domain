@@ -4,7 +4,9 @@ Each tool call builds its own session from the engine for concurrency safety.
 Tool logic is exposed as plain functions so tests can call them directly.
 """
 import json as _json
+import uuid
 from collections import deque
+from datetime import datetime, timezone
 
 import numpy as np
 import networkx as nx
@@ -93,6 +95,25 @@ def _apply_shared_params(rows, min_confidence=0.0, include_proposed=True):
     return result
 
 
+def _apply_context_filter(rows, context: str | None) -> list:
+    """Filter rows by context string against their applicability list.
+
+    Rows with an empty applicability list are treated as universally applicable
+    and always included. Rows with a non-empty list are included only when
+    context matches any entry (case-insensitive substring). Rows without an
+    applicability attribute are always included.
+    """
+    if context is None:
+        return list(rows)
+    context_lower = context.strip().lower()
+    result = []
+    for row in rows:
+        applicability = _decode_list(getattr(row, "applicability", "[]"))
+        if not applicability or any(context_lower in a.lower() for a in applicability):
+            result.append(row)
+    return result
+
+
 def _sort_by_confidence_then_origin(rows):
     return sorted(
         rows,
@@ -104,8 +125,17 @@ def _sort_by_confidence_then_origin(rows):
 # Tool implementations (pure session-based, testable without MCP layer)
 # ---------------------------------------------------------------------------
 
-def get_requirements_tool(session: Session, entity: str) -> dict:
-    """Assertions where entity is subject and predicate is requires or depends_on."""
+def get_requirements_tool(
+    session: Session,
+    entity: str,
+    context: str | None = None,
+) -> dict:
+    """Assertions where entity is subject and predicate is requires or depends_on.
+
+    Pass context (e.g. 'healthcare', 'residential', 'hot_climate') to filter
+    results to those whose applicability list matches. Rows with an empty
+    applicability list are always included as universally applicable.
+    """
     entity_row = resolve_entity(session, entity)
     if entity_row is None:
         return {"error": "entity_not_found", "query": entity}
@@ -116,6 +146,7 @@ def get_requirements_tool(session: Session, entity: str) -> dict:
             AssertionRow.predicate.in_(list(REQUIREMENTS_PREDICATES)),
         )
     ).all()
+    rows = _apply_context_filter(rows, context)
 
     return {
         "entity": entity_row.name,
@@ -123,8 +154,17 @@ def get_requirements_tool(session: Session, entity: str) -> dict:
     }
 
 
-def get_dependencies_tool(session: Session, entity: str) -> dict:
-    """Assertions where predicate is depends_on and entity is subject or object."""
+def get_dependencies_tool(
+    session: Session,
+    entity: str,
+    context: str | None = None,
+) -> dict:
+    """Assertions where predicate is depends_on and entity is subject or object.
+
+    Pass context (e.g. 'healthcare', 'residential', 'hot_climate') to filter
+    results to those whose applicability list matches. Rows with an empty
+    applicability list are always included as universally applicable.
+    """
     entity_row = resolve_entity(session, entity)
     if entity_row is None:
         return {"error": "entity_not_found", "query": entity}
@@ -136,6 +176,7 @@ def get_dependencies_tool(session: Session, entity: str) -> dict:
             | (AssertionRow.object_id == entity_row.id),
         )
     ).all()
+    rows = _apply_context_filter(rows, context)
 
     return {
         "entity": entity_row.name,
@@ -149,6 +190,7 @@ def get_constraints_tool(
     min_confidence: float = 0.0,
     max_results: int = 100,
     include_proposed: bool = True,
+    context: str | None = None,
 ) -> dict:
     """Constraint rules where subject_id matches entity."""
     entity_row = resolve_entity(session, entity)
@@ -159,6 +201,7 @@ def get_constraints_tool(
         select(ConstraintRow).where(ConstraintRow.subject_id == entity_row.id)
     ).all()
     rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _apply_context_filter(rows, context)
     rows = _sort_by_confidence_then_origin(rows)[:max_results]
 
     return {
@@ -184,6 +227,7 @@ def get_failure_modes_tool(
     min_confidence: float = 0.0,
     max_results: int = 100,
     include_proposed: bool = True,
+    context: str | None = None,
 ) -> dict:
     """Anti-pattern failure modes where subject_id matches entity."""
     entity_row = resolve_entity(session, entity)
@@ -194,6 +238,7 @@ def get_failure_modes_tool(
         select(AntiPatternRow).where(AntiPatternRow.subject_id == entity_row.id)
     ).all()
     rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _apply_context_filter(rows, context)
     rows = _sort_by_confidence_then_origin(rows)[:max_results]
 
     return {
@@ -219,6 +264,7 @@ def get_patterns_tool(
     min_confidence: float = 0.0,
     max_results: int = 100,
     include_proposed: bool = True,
+    context: str | None = None,
 ) -> dict:
     """Architectural patterns where subject_id matches entity."""
     entity_row = resolve_entity(session, entity)
@@ -229,6 +275,7 @@ def get_patterns_tool(
         select(PatternRow).where(PatternRow.subject_id == entity_row.id)
     ).all()
     rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _apply_context_filter(rows, context)
     rows = _sort_by_confidence_then_origin(rows)[:max_results]
 
     result_patterns = []
@@ -273,6 +320,7 @@ def get_forces_tool(
     min_confidence: float = 0.0,
     max_results: int = 100,
     include_proposed: bool = True,
+    context: str | None = None,
 ) -> dict:
     """Forces (design pressures) where entity UUID appears in affects JSON array."""
     entity_row = resolve_entity(session, entity)
@@ -285,6 +333,7 @@ def get_forces_tool(
         if entity_row.id in _decode_list(r.affects)
     ]
     matching = _apply_shared_params(matching, min_confidence, include_proposed)
+    matching = _apply_context_filter(matching, context)
     matching = _sort_by_confidence_then_origin(matching)[:max_results]
 
     return {
@@ -309,6 +358,7 @@ def get_spatial_relations_tool(
     min_confidence: float = 0.0,
     max_results: int = 100,
     include_proposed: bool = True,
+    context: str | None = None,
 ) -> dict:
     """Spatial relations where entity is subject or object."""
     entity_row = resolve_entity(session, entity)
@@ -322,6 +372,7 @@ def get_spatial_relations_tool(
         )
     ).all()
     rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _apply_context_filter(rows, context)
     rows = _sort_by_confidence_then_origin(rows)[:max_results]
 
     def _name(eid: str) -> str:
@@ -474,6 +525,56 @@ def search_entities_tool(
     return {"query": query, "results": results}
 
 
+def propose_assertion_tool(
+    session: Session,
+    subject: str,
+    predicate: str,
+    obj: str,
+    rationale: str,
+    confidence: float = 0.7,
+    knowledge_origin: str = "architectural",
+) -> dict:
+    """Submit a candidate assertion for human review with status=proposed.
+
+    subject and obj are bsos entity names (resolved case-insensitively).
+    predicate should be a known bsos predicate (e.g. requires, depends_on).
+    confidence is 0.0–1.0; knowledge_origin is physical/engineering/architectural/cultural.
+    The assertion is stored immediately but will not appear in results where
+    include_proposed=False until a human promotes it to status=accepted.
+    """
+    subject_row = resolve_entity(session, subject)
+    if subject_row is None:
+        return {"error": "subject_not_found", "query": subject}
+
+    object_row = resolve_entity(session, obj)
+    if object_row is None:
+        return {"error": "object_not_found", "query": obj}
+
+    row = AssertionRow(
+        id=str(uuid.uuid4()),
+        subject_id=subject_row.id,
+        predicate=predicate,
+        object_id=object_row.id,
+        subject_type=subject_row.entity_type,
+        object_type=object_row.entity_type,
+        confidence=confidence,
+        knowledge_origin=knowledge_origin,
+        rationale=rationale,
+        status="proposed",
+        source_model="mcp_agent",
+        created_at=datetime.now(timezone.utc),
+    )
+    session.add(row)
+    session.commit()
+    session.refresh(row)
+
+    return {
+        "status": "proposed",
+        "assertion_id": row.id,
+        "assertion": _assertion_to_dict(session, row),
+    }
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -484,14 +585,14 @@ def create_server(db_path: str) -> FastMCP:
     engine = create_db_engine(db_path)
 
     @mcp.tool(description=get_requirements_tool.__doc__)
-    def get_requirements(entity: str) -> dict:
+    def get_requirements(entity: str, context: str | None = None) -> dict:
         with Session(engine) as session:
-            return get_requirements_tool(session, entity)
+            return get_requirements_tool(session, entity, context)
 
     @mcp.tool(description=get_dependencies_tool.__doc__)
-    def get_dependencies(entity: str) -> dict:
+    def get_dependencies(entity: str, context: str | None = None) -> dict:
         with Session(engine) as session:
-            return get_dependencies_tool(session, entity)
+            return get_dependencies_tool(session, entity, context)
 
     @mcp.tool(description=get_constraints_tool.__doc__)
     def get_constraints(
@@ -499,9 +600,10 @@ def create_server(db_path: str) -> FastMCP:
         min_confidence: float = 0.0,
         max_results: int = 100,
         include_proposed: bool = True,
+        context: str | None = None,
     ) -> dict:
         with Session(engine) as session:
-            return get_constraints_tool(session, entity, min_confidence, max_results, include_proposed)
+            return get_constraints_tool(session, entity, min_confidence, max_results, include_proposed, context)
 
     @mcp.tool(description=get_failure_modes_tool.__doc__)
     def get_failure_modes(
@@ -509,9 +611,10 @@ def create_server(db_path: str) -> FastMCP:
         min_confidence: float = 0.0,
         max_results: int = 100,
         include_proposed: bool = True,
+        context: str | None = None,
     ) -> dict:
         with Session(engine) as session:
-            return get_failure_modes_tool(session, entity, min_confidence, max_results, include_proposed)
+            return get_failure_modes_tool(session, entity, min_confidence, max_results, include_proposed, context)
 
     @mcp.tool(description=get_patterns_tool.__doc__)
     def get_patterns(
@@ -519,9 +622,10 @@ def create_server(db_path: str) -> FastMCP:
         min_confidence: float = 0.0,
         max_results: int = 100,
         include_proposed: bool = True,
+        context: str | None = None,
     ) -> dict:
         with Session(engine) as session:
-            return get_patterns_tool(session, entity, min_confidence, max_results, include_proposed)
+            return get_patterns_tool(session, entity, min_confidence, max_results, include_proposed, context)
 
     @mcp.tool(description=get_forces_tool.__doc__)
     def get_forces(
@@ -529,9 +633,10 @@ def create_server(db_path: str) -> FastMCP:
         min_confidence: float = 0.0,
         max_results: int = 100,
         include_proposed: bool = True,
+        context: str | None = None,
     ) -> dict:
         with Session(engine) as session:
-            return get_forces_tool(session, entity, min_confidence, max_results, include_proposed)
+            return get_forces_tool(session, entity, min_confidence, max_results, include_proposed, context)
 
     @mcp.tool(description=get_spatial_relations_tool.__doc__)
     def get_spatial_relations(
@@ -539,9 +644,10 @@ def create_server(db_path: str) -> FastMCP:
         min_confidence: float = 0.0,
         max_results: int = 100,
         include_proposed: bool = True,
+        context: str | None = None,
     ) -> dict:
         with Session(engine) as session:
-            return get_spatial_relations_tool(session, entity, min_confidence, max_results, include_proposed)
+            return get_spatial_relations_tool(session, entity, min_confidence, max_results, include_proposed, context)
 
     @mcp.tool(description=get_process_sequence_tool.__doc__)
     def get_process_sequence(entity: str, max_depth: int = 50) -> dict:
@@ -556,5 +662,17 @@ def create_server(db_path: str) -> FastMCP:
     ) -> dict:
         with Session(engine) as session:
             return search_entities_tool(session, query, max_results, min_score)
+
+    @mcp.tool(description=propose_assertion_tool.__doc__)
+    def propose_assertion(
+        subject: str,
+        predicate: str,
+        obj: str,
+        rationale: str,
+        confidence: float = 0.7,
+        knowledge_origin: str = "architectural",
+    ) -> dict:
+        with Session(engine) as session:
+            return propose_assertion_tool(session, subject, predicate, obj, rationale, confidence, knowledge_origin)
 
     return mcp
