@@ -4,6 +4,11 @@
       "type": "stdio",
       "command": "python3",
       "args": ["-m", "ifcmcp"]
+    },
+    "bsos": {
+      "type": "stdio",
+      "command": "bsos",
+      "args": ["serve"]
     }
   }
 }
