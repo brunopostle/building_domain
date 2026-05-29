@@ -10,5 +10,7 @@ build/
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db
+*.db-shm
+*.db-wal
 .beads-credential-key
 .bsos_config
