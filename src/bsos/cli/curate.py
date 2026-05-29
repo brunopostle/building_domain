@@ -248,6 +248,71 @@ def export_assertions(
         typer.echo(payload)
 
 
+@app.command("paraphrase-apl")
+def paraphrase_apl(
+    path: str = typer.Argument("data/apl_patterns.json", help="Path to apl_patterns.json"),
+    model: str = typer.Option(..., "--model", help="LLM model to use for paraphrasing"),
+    db: str = typer.Option(None, "--db", help="Path to bsos.db (for LLM cache)"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Print what would be paraphrased without writing"),
+) -> None:
+    """Rewrite problem/solution prose in apl_patterns.json in-place using an LLM.
+
+    Sets \"paraphrased\": true on each entry after rewriting. Already-paraphrased
+    entries are skipped so the command is safe to re-run without drifting the meaning.
+    Progress is saved after each pattern so a crashed run can be resumed.
+    """
+    import json as _json
+    from pydantic import BaseModel as _BaseModel
+    from bsos.llm import make_provider
+    from bsos.llm.cache import LLMResponseCache
+    from bsos.cli.db_context import resolve_db_path
+
+    class _ParaphraseResult(_BaseModel):
+        problem: str
+        solution: str
+
+    _PARAPHRASE_PROMPT = (
+        "You are re-expressing descriptions of architectural patterns from Christopher Alexander's "
+        "'A Pattern Language'. The pattern is named \"{name}\".\n\n"
+        "PROBLEM:\n{problem}\n\n"
+        "SOLUTION:\n{solution}\n\n"
+        "Re-write both the problem and solution in your own words. Preserve the meaning and intent "
+        "of each pattern accurately — these descriptions are central to a building knowledge tool. "
+        "The re-written versions must be your own original expression, not traceable to any source "
+        "text. Keep a similar length and level of detail."
+    )
+
+    cache = LLMResponseCache(resolve_db_path(db))
+    provider = make_provider(model, cache=cache)
+
+    with open(path) as f:
+        patterns = _json.load(f)
+
+    done = skipped = 0
+    for p in patterns:
+        if p.get("paraphrased"):
+            skipped += 1
+            continue
+        name = p["name"]
+        if dry_run:
+            typer.echo(f"  Would paraphrase: {name}")
+            done += 1
+            continue
+        prompt = _PARAPHRASE_PROMPT.format(name=name, problem=p.get("problem", ""), solution=p.get("solution", ""))
+        result = provider.extract(prompt, _ParaphraseResult, entity_name=name)
+        p["problem"] = result.problem
+        p["solution"] = result.solution
+        p["paraphrased"] = True
+        with open(path, "w") as f:
+            _json.dump(patterns, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+        done += 1
+        typer.echo(f"  Paraphrased: {name}")
+
+    action = "Would paraphrase" if dry_run else "Paraphrased"
+    typer.echo(f"{action} {done} pattern(s), skipped {skipped} already done.")
+
+
 @app.command("import-apl")
 def import_apl(
     path: str = typer.Argument("data/apl_patterns.json", help="Path to apl_patterns.json"),
