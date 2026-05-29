@@ -47,10 +47,11 @@ MEP_PRESENCE: dict[str, list[str]] = {
                                "IfcElectricAppliance", "IfcProtectiveDevice",
                                "IfcSwitchingDevice", "IfcOutlet"],
     "Lighting System":        ["IfcLightFixture"],
-    "Drainage System":        ["IfcPipeSegment", "IfcSanitaryTerminal",
-                               "IfcWasteTerminal", "IfcPipeFitting"],
-    "Rough-in Plumbing":      ["IfcPipeSegment", "IfcValve", "IfcSanitaryTerminal"],
-    "Plumbing System":        ["IfcPipeSegment", "IfcValve", "IfcSanitaryTerminal"],
+    # Fixtures (not pipe segments) are the reliable proxy — pipe segments can be
+    # rainwater gutters, which are unrelated to interior drainage.
+    "Drainage System":        ["IfcSanitaryTerminal", "IfcWasteTerminal"],
+    "Rough-in Plumbing":      ["IfcSanitaryTerminal", "IfcValve"],
+    "Plumbing System":        ["IfcSanitaryTerminal", "IfcValve"],
     "Fire Suppression System":["IfcFireSuppressionTerminal"],
     "Fire Protection System": ["IfcFireSuppressionTerminal", "IfcAlarm"],
     "Security System":        ["IfcAlarm"],
