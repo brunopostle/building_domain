@@ -389,7 +389,7 @@ def import_apl(
             related_ids = [r["id"] for r in p.get("higher_patterns", []) + p.get("lower_patterns", [])]
             source_model = model if model else "human"
 
-            if name in existing and provider is not None:
+            if name in existing and (provider is not None or p.get("paraphrased")):
                 # Update prose and source_model on existing row
                 row = existing[name]
                 if not dry_run:
@@ -432,12 +432,8 @@ def import_apl(
         if not dry_run:
             session.commit()
 
-    if model:
-        action = "Would paraphrase+insert" if dry_run else "Inserted"
-        typer.echo(f"{action} {inserted} new, updated {updated} existing, skipped {skipped}.")
-    else:
-        action = "Would insert" if dry_run else "Inserted"
-        typer.echo(f"{action} {inserted} pattern(s), skipped {skipped} already-present.")
+    action = "Would paraphrase+insert" if (dry_run and model) else ("Would insert" if dry_run else "Inserted")
+    typer.echo(f"{action} {inserted} new, updated {updated} existing, skipped {skipped}.")
 
 
 @app.command("verify")
