@@ -18,44 +18,92 @@ The knowledge base is populated by an LLM extraction pipeline (`bsos extract`) t
 
 ## Quick Start
 
-### New install (restore from snapshot)
+**Requires Python 3.12+**
+
+### 1. Install and restore the knowledge base
 
 The knowledge base is too large to store as a SQLite file in git. A JSON snapshot
 is checked in at `data/bsos_snapshot.json` (~20 MB). To set up a working database:
 
 ```bash
+git clone https://github.com/brunopostle/building_domain.git
+cd building_domain
 pip install -e .
 bsos init
 bsos import --input data/bsos_snapshot.json
-bsos query "Kitchen"   # verify
-bsos serve             # start MCP server
+bsos query "Kitchen"   # verify: should show ~20 assertions
 ```
 
-The snapshot contains entities, assertions, patterns, and all other knowledge records.
-It does **not** contain the LLM response cache (`bsos_cache.db`) — that file is
-gitignored and stays local. Embeddings are also excluded and are regenerated on demand.
+The snapshot contains entities, assertions, and patterns.
+It does **not** contain the LLM response cache or embeddings — those stay local.
 
-### Updating the snapshot
+### 2. Connect to an AI agent via MCP
 
-After running the extraction pipeline, regenerate the snapshot and commit it:
+The project `.mcp.json` is already configured for Claude Code. Enable the server:
 
-```bash
-bsos export --format json --output data/bsos_snapshot.json
-git add data/bsos_snapshot.json
-git commit -m "Update knowledge base snapshot"
+```json
+// .claude/settings.local.json
+{
+  "enabledMcpjsonServers": ["bsos"]
+}
 ```
+
+Then restart Claude Code — the `bsos` MCP tools become available immediately.
+
+For Claude Desktop and a full walkthrough of the available tools, see **[MCP_DEMO.md](MCP_DEMO.md)**.
 
 ### Development
 
 ```bash
-# Run tests
-pytest
-
-# Query the knowledge base
-bsos query "Kitchen"
-
-# Start the MCP server
-bsos serve
+pytest          # run tests
+bsos status     # show database state
+bsos serve      # start MCP server (stdio)
 ```
 
 See `CLAUDE.md` for extraction pipeline instructions and development notes.
+
+## Contributing Data
+
+The extraction pipeline (`bsos extract`) uses LLM API calls and is expensive to run.
+**Do not re-run passes 1–3** — they would generate ~10,000 entities with new random IDs
+that cannot be cleanly merged with the existing snapshot.
+
+**What contributors can usefully run:**
+
+- **Passes 4–12** — constraints, failure modes, forces, spatial relations, and process
+  sequences. These operate on the existing entity set (stable IDs) and add new assertion
+  rows that merge cleanly.
+- **Domain extension** — `bsos extract --seed-apl` with additional seed concepts for
+  under-represented domains (hospitals, data centres, industrial, heritage buildings).
+
+**Contribution workflow:**
+
+```bash
+# 1. Fork and clone, restore from snapshot (preserves entity IDs)
+git clone https://github.com/YOUR_FORK/building_domain.git
+cd building_domain
+pip install -e .
+bsos init
+bsos import --input data/bsos_snapshot.json
+
+# 2. Run additional extraction passes (needs ANTHROPIC_API_KEY in a separate terminal)
+bsos extract --models claude-haiku-4-5-20251001 --passes 4,5,6,7,8,9,10,11,12 \
+  --framings 1 --workers 2
+
+# 3. Export and open a PR
+bsos export --format json --output data/bsos_snapshot.json
+git add data/bsos_snapshot.json
+git commit -m "Add passes 4-12 extraction results"
+# open pull request
+```
+
+**Reviewing a contribution PR:**
+
+```bash
+# Preview what the incoming snapshot adds without touching your working database
+bsos export --format json --output /tmp/current.json
+# (review data/bsos_snapshot.json in the PR diff)
+
+# Merge into your working database (skips records you already have)
+bsos import --input data/bsos_snapshot.json --force
+```
