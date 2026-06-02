@@ -536,6 +536,107 @@ class TestExportCLI:
 
 
 # ---------------------------------------------------------------------------
+# Import CLI tests
+# ---------------------------------------------------------------------------
+
+class TestImportCLI:
+    def test_import_roundtrip_entities_and_assertions(self, tmp_path):
+        (tmp_path / "src").mkdir()
+        (tmp_path / "dst").mkdir()
+        src_db = _init_db(tmp_path / "src")
+        dst_db = _init_db(tmp_path / "dst")
+        eng = create_db_engine(src_db)
+        with Session(eng) as s:
+            _entity(s, "e1", "Roof", entity_type="component")
+            _entity(s, "e2", "Wall", entity_type="component")
+            _assertion(s, "a1", "e1", "requires", "e2")
+            s.commit()
+
+        snapshot = tmp_path / "snap.json"
+        runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
+
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--db", dst_db])
+        assert result.exit_code == 0, result.output
+        assert "entities: 2 added" in result.output
+        assert "assertions: 1 added" in result.output
+
+        dst_eng = create_db_engine(dst_db)
+        with Session(dst_eng) as s:
+            from bsos.persistence.models import AssertionRow as AR
+            rows = s.exec(select(AR)).all()
+        assert len(rows) == 1
+        assert rows[0].predicate == "requires"
+
+    def test_import_skip_existing_by_default(self, tmp_path):
+        db = _init_db(tmp_path)
+        eng = create_db_engine(db)
+        with Session(eng) as s:
+            _entity(s, "e1", "Roof")
+            s.commit()
+
+        snapshot = tmp_path / "snap.json"
+        runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", db])
+
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--db", db])
+        assert result.exit_code == 0
+        assert "skipped" in result.output
+
+    def test_import_replace_overwrites(self, tmp_path):
+        (tmp_path / "src").mkdir()
+        (tmp_path / "dst").mkdir()
+        src_db = _init_db(tmp_path / "src")
+        dst_db = _init_db(tmp_path / "dst")
+        eng_src = create_db_engine(src_db)
+        eng_dst = create_db_engine(dst_db)
+        with Session(eng_src) as s:
+            _entity(s, "e1", "Roof", entity_type="component")
+            s.commit()
+        with Session(eng_dst) as s:
+            _entity(s, "e1", "Roof", entity_type="space")  # different type
+            s.commit()
+
+        snapshot = tmp_path / "snap.json"
+        runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
+
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--replace", "--db", dst_db])
+        assert result.exit_code == 0
+        with Session(eng_dst) as s:
+            from bsos.persistence.models import EntityRow as ER
+            row = s.get(ER, "e1")
+        assert row.entity_type == "component"
+
+    def test_import_stdin(self, tmp_path):
+        (tmp_path / "src").mkdir()
+        (tmp_path / "dst").mkdir()
+        src_db = _init_db(tmp_path / "src")
+        dst_db = _init_db(tmp_path / "dst")
+        eng = create_db_engine(src_db)
+        with Session(eng) as s:
+            _entity(s, "e1", "Roof")
+            s.commit()
+
+        snapshot = tmp_path / "snap.json"
+        runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
+        json_text = snapshot.read_text()
+
+        result = runner.invoke(app, ["import", "--input", "-", "--db", dst_db], input=json_text)
+        assert result.exit_code == 0
+        assert "entities: 1 added" in result.output
+
+    def test_import_missing_file_errors(self, tmp_path):
+        db = _init_db(tmp_path)
+        result = runner.invoke(app, ["import", "--input", str(tmp_path / "nope.json"), "--db", db])
+        assert result.exit_code != 0
+
+    def test_import_bad_json_errors(self, tmp_path):
+        db = _init_db(tmp_path)
+        bad = tmp_path / "bad.json"
+        bad.write_text("not json")
+        result = runner.invoke(app, ["import", "--input", str(bad), "--db", db])
+        assert result.exit_code != 0
+
+
+# ---------------------------------------------------------------------------
 # Cache CLI smoke tests
 # ---------------------------------------------------------------------------
 

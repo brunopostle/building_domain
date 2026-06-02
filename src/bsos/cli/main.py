@@ -8,6 +8,7 @@ from bsos.cli.doctor import app as doctor_app
 from bsos.cli.purge import app as purge_app
 from bsos.cli.compress import app as compress_app
 from bsos.cli.export import app as export_app
+from bsos.cli.import_ import app as import_app
 from bsos.cli.cache import app as cache_app
 from bsos.cli.visualize import app as visualize_app
 from bsos.cli.db_context import open_db
@@ -26,6 +27,7 @@ app.add_typer(doctor_app, name="doctor", help="Run database integrity checks")
 app.add_typer(purge_app, name="purge", help="Deprecate all items from an extraction run")
 app.add_typer(compress_app, name="compress", help="Semantically compress knowledge base into abstraction nodes")
 app.add_typer(export_app, name="export", help="Export knowledge base to JSON or CSV")
+app.add_typer(import_app, name="import", help="Import knowledge base from a JSON snapshot")
 app.add_typer(cache_app, name="cache", help="Manage the LLM response cache")
 app.add_typer(visualize_app, name="visualize", help="Render knowledge graph to interactive HTML or PNG")
 
