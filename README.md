@@ -18,15 +18,44 @@ The knowledge base is populated by an LLM extraction pipeline (`bsos extract`) t
 
 ## Quick Start
 
+### New install (restore from snapshot)
+
+The knowledge base is too large to store as a SQLite file in git. A JSON snapshot
+is checked in at `data/bsos_snapshot.json` (~20 MB). To set up a working database:
+
 ```bash
+pip install -e .
+bsos init
+bsos import --input data/bsos_snapshot.json
+bsos query "Kitchen"   # verify
+bsos serve             # start MCP server
+```
+
+The snapshot contains entities, assertions, patterns, and all other knowledge records.
+It does **not** contain the LLM response cache (`bsos_cache.db`) — that file is
+gitignored and stays local. Embeddings are also excluded and are regenerated on demand.
+
+### Updating the snapshot
+
+After running the extraction pipeline, regenerate the snapshot and commit it:
+
+```bash
+bsos export --format json --output data/bsos_snapshot.json
+git add data/bsos_snapshot.json
+git commit -m "Update knowledge base snapshot"
+```
+
+### Development
+
+```bash
+# Run tests
+pytest
+
 # Query the knowledge base
 bsos query "Kitchen"
 
 # Start the MCP server
 bsos serve
-
-# Run tests
-pytest
 ```
 
 See `CLAUDE.md` for extraction pipeline instructions and development notes.

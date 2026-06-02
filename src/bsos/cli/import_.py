@@ -421,12 +421,21 @@ def import_cmd(
     input_path: str = typer.Option(..., "--input", "-i", help="JSON file to import, or - for stdin"),
     replace: bool = typer.Option(
         False, "--replace",
-        help="Overwrite existing records by ID (default: skip existing)",
+        help="Overwrite existing records by ID when the database is non-empty (requires --force)",
+    ),
+    force: bool = typer.Option(
+        False, "--force",
+        help="Allow import into a database that already has entities",
     ),
     db: Optional[str] = typer.Option(None, "--db"),
 ) -> None:
-    """Import knowledge base from a JSON snapshot (as produced by bsos export)."""
+    """Import knowledge base from a JSON snapshot (as produced by bsos export).
+
+    Refuses to import into a non-empty database unless --force is given.
+    The LLM response cache is never exported or imported and is always preserved.
+    """
     from bsos.cli.db_context import open_db
+    from bsos.persistence.models import EntityRow
 
     if input_path == "-":
         try:
@@ -447,6 +456,20 @@ def import_cmd(
 
     if not isinstance(data, dict):
         typer.echo("Expected a JSON object with keys like 'entities', 'assertions', …", err=True)
+        raise typer.Exit(1)
+
+    _, session = open_db(db)
+
+    # Guard: refuse to clobber a working database unless --force is explicit.
+    with session:
+        existing_count = len(session.exec(select(EntityRow)).all())
+    if existing_count > 0 and not force:
+        typer.echo(
+            f"Database already contains {existing_count} entities. "
+            "Pass --force to import anyway (existing records are skipped unless "
+            "you also pass --replace).",
+            err=True,
+        )
         raise typer.Exit(1)
 
     _, session = open_db(db)

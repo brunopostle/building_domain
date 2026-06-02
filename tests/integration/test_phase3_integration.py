@@ -567,7 +567,7 @@ class TestImportCLI:
         assert len(rows) == 1
         assert rows[0].predicate == "requires"
 
-    def test_import_skip_existing_by_default(self, tmp_path):
+    def test_import_refuses_non_empty_db_without_force(self, tmp_path):
         db = _init_db(tmp_path)
         eng = create_db_engine(db)
         with Session(eng) as s:
@@ -578,6 +578,20 @@ class TestImportCLI:
         runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", db])
 
         result = runner.invoke(app, ["import", "--input", str(snapshot), "--db", db])
+        assert result.exit_code != 0
+        assert "force" in result.stderr.lower() or "force" in result.output.lower()
+
+    def test_import_skip_existing_with_force(self, tmp_path):
+        db = _init_db(tmp_path)
+        eng = create_db_engine(db)
+        with Session(eng) as s:
+            _entity(s, "e1", "Roof")
+            s.commit()
+
+        snapshot = tmp_path / "snap.json"
+        runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", db])
+
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--force", "--db", db])
         assert result.exit_code == 0
         assert "skipped" in result.output
 
@@ -598,7 +612,7 @@ class TestImportCLI:
         snapshot = tmp_path / "snap.json"
         runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
 
-        result = runner.invoke(app, ["import", "--input", str(snapshot), "--replace", "--db", dst_db])
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--replace", "--force", "--db", dst_db])
         assert result.exit_code == 0
         with Session(eng_dst) as s:
             from bsos.persistence.models import EntityRow as ER
