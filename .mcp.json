@@ -8,7 +8,10 @@
     "bsos": {
       "type": "stdio",
       "command": "python3",
-      "args": ["-m", "bsos", "serve"]
+      "args": ["-m", "bsos", "serve"],
+      "env": {
+        "CUDA_VISIBLE_DEVICES": ""
+      }
     }
   }
 }
