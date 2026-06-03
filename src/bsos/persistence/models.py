@@ -359,3 +359,18 @@ class ProvenanceLogRow(SQLModel, table=True):
     new_status: str
     changed_at: datetime
     changed_by: str  # model identifier or "human" or "bsos purge"
+
+
+class IFCPropertySetRow(SQLModel, table=True):
+    __tablename__ = "ifc_pset_recommendations"
+
+    id: str = Field(primary_key=True)
+    entity_id: str = Field(index=True)
+    ifc_class: str          # e.g., "IfcSpace", "IfcWall"
+    pset_name: str          # e.g., "Pset_SpaceCommon"
+    property_name: str      # e.g., "OccupancyType"
+    value_type: str         # e.g., "IfcText", "IfcBoolean", "IfcReal"
+    description: str        # human-readable description of the property
+    rationale: Optional[str] = None
+    status: str = "proposed"
+    source_model: str = "seed"

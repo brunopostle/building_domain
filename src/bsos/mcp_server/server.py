@@ -16,7 +16,8 @@ from sqlmodel import Session, select
 from bsos.persistence.database import create_db_engine
 from bsos.persistence.models import (
     AntiPatternRow, AssertionRow, ConstraintRow, EntityAliasRow, EntityRow,
-    EmbeddingRow, ForceRow, PatternRow, ProcessRelationRow, SpatialRelationRow,
+    EmbeddingRow, ForceRow, IFCPropertySetRow, PatternRow, ProcessRelationRow,
+    SpatialRelationRow,
 )
 
 SEARCH_EMBEDDING_MODEL = "all-mpnet-base-v2"
@@ -525,6 +526,92 @@ def search_entities_tool(
     return {"query": query, "results": results}
 
 
+def get_ifc_psets_tool(
+    session: Session,
+    entity: str,
+) -> dict:
+    """IFC property set recommendations for a given bsos entity.
+
+    Returns the recommended IFC element class (e.g. IfcSpace), property set
+    names (e.g. Pset_SpaceCommon), and individual property names, value types,
+    and descriptions that should be populated when working with this entity in
+    an IFC model.
+
+    Use this tool to translate a bsos domain concept into concrete ifc_edit
+    calls. For example, to record that an Entrance Lobby has natural light,
+    query this tool to discover Pset_LightingDesign.ArtificialLighting.
+
+    When no entity-specific recommendations exist, returns entity-type defaults
+    as a fallback.
+    """
+    from bsos.persistence.ifc_pset_seed import ENTITY_TYPE_DEFAULTS
+
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    rows = session.exec(
+        select(IFCPropertySetRow).where(IFCPropertySetRow.entity_id == entity_row.id)
+    ).all()
+
+    if rows:
+        by_class: dict[str, list[dict]] = {}
+        for r in rows:
+            entry = {
+                "pset_name": r.pset_name,
+                "property_name": r.property_name,
+                "value_type": r.value_type,
+                "description": r.description,
+                "rationale": r.rationale or "",
+            }
+            by_class.setdefault(r.ifc_class, []).append(entry)
+
+        return {
+            "entity": entity_row.name,
+            "entity_type": entity_row.entity_type,
+            "ifc_mappings": [
+                {"ifc_class": cls, "properties": props}
+                for cls, props in by_class.items()
+            ],
+            "source": "curated",
+        }
+
+    # Fallback: return entity-type defaults
+    defaults = ENTITY_TYPE_DEFAULTS.get(entity_row.entity_type, [])
+    if not defaults:
+        return {
+            "entity": entity_row.name,
+            "entity_type": entity_row.entity_type,
+            "ifc_mappings": [],
+            "note": (
+                f"No IFC property set recommendations available for '{entity_row.name}'. "
+                "Run 'bsos seed-psets' to populate curated mappings, or use ifc_schema "
+                "to explore IFC property sets directly."
+            ),
+        }
+
+    by_class: dict[str, list[dict]] = {}
+    for ifc_class, pset_name, property_name, value_type, description, rationale in defaults:
+        entry = {
+            "pset_name": pset_name,
+            "property_name": property_name,
+            "value_type": value_type,
+            "description": description,
+            "rationale": rationale,
+        }
+        by_class.setdefault(ifc_class, []).append(entry)
+
+    return {
+        "entity": entity_row.name,
+        "entity_type": entity_row.entity_type,
+        "ifc_mappings": [
+            {"ifc_class": cls, "properties": props}
+            for cls, props in by_class.items()
+        ],
+        "source": "entity_type_default",
+    }
+
+
 def propose_assertion_tool(
     session: Session,
     subject: str,
@@ -662,6 +749,11 @@ def create_server(db_path: str) -> FastMCP:
     ) -> dict:
         with Session(engine) as session:
             return search_entities_tool(session, query, max_results, min_score)
+
+    @mcp.tool(description=get_ifc_psets_tool.__doc__)
+    def get_ifc_psets(entity: str) -> dict:
+        with Session(engine) as session:
+            return get_ifc_psets_tool(session, entity)
 
     @mcp.tool(description=propose_assertion_tool.__doc__)
     def propose_assertion(
