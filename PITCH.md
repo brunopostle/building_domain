@@ -1,4 +1,6 @@
-# BSOS — Building Domain Knowledge Base: Funding Pitch
+# BSOS — Building Domain Knowledge Base
+
+3rd June 2026
 
 ## The Problem
 
@@ -16,21 +18,6 @@ BSOS (Building System of Systems) is an open, queryable building domain knowledg
 - **22,548 typed assertions** across 9 relationship predicates: *requires*, *depends\_on*, *contains*, *supports*, *connects\_to*, *protects\_from*, *conflicts\_with*, *improves*, *unsuitable\_for*
 - **253 Christopher Alexander patterns** from *A Pattern Language* — with the first computational connectivity analysis of the full 253-pattern network: 1,754 edges, diameter 6, seven community clusters, and hub patterns identified for the first time quantitatively
 - **MCP server** (`bsos serve`) connecting the knowledge graph to Claude Code and Claude Desktop — agents query it live during building model analysis
-- **IFC compliance report** (`ifc_compliance_report.py`) — checks a real IFC model against knowledge base requirements, producing actionable findings like the excerpt below from a 4-storey mixed residential/retail test model:
-
-```
-▶  Kitchen  (3 spaces)
-   ✗ [99%] requires Electrical System    no MEP elements of this type found in model
-   ✗ [99%] requires Drainage System      no MEP elements of this type found in model
-   ✗ [98%] requires Ventilation System   no MEP elements of this type found in model
-   ✓ [95%] depends_on Flooring           floor material present: carpet
-
-▶  Living Room  (5 spaces)
-   ✗ [95%] depends_on Lighting System    no MEP elements of this type found in model
-   ✓ [95%] depends_on Foundation         system elements present in model
-   ✓ [95%] requires Flooring             floor material present: carpet
-   ✗ [85%] depends_on Insulation         no insulation layer in any wall assembly
-```
 
 This works today, with passes 1–3 data only. The knowledge base is entirely LLM-synthesised, ships under **ODbL 1.0**, and is hosted at [github.com/brunopostle/building_domain](https://github.com/brunopostle/building_domain).
 
