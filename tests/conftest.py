@@ -1,14 +1,14 @@
 from pathlib import Path
 import pytest
 
-_CONFIG_FILE = Path(".bsos_config")
-
 
 @pytest.fixture(autouse=True)
-def protect_bsos_config():
-    original = _CONFIG_FILE.read_text() if _CONFIG_FILE.exists() else None
-    yield
-    if original is not None:
-        _CONFIG_FILE.write_text(original)
-    elif _CONFIG_FILE.exists():
-        _CONFIG_FILE.unlink()
+def isolate_bsos_config(tmp_path, monkeypatch):
+    """Redirect all .bsos_config reads/writes to a per-test temp file.
+
+    Prevents tests from corrupting the project's .bsos_config even when
+    pytest is killed mid-run — monkeypatch reverts unconditionally.
+    """
+    isolated = str(tmp_path / ".bsos_config")
+    monkeypatch.setattr("bsos.cli.init.BSOS_CONFIG_FILE", isolated)
+    monkeypatch.setattr("bsos.cli.db_context.BSOS_CONFIG_FILE", isolated)
