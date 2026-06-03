@@ -35,7 +35,7 @@ log = structlog.get_logger()
 EMBEDDING_MODEL = "all-mpnet-base-v2"
 MIN_CLUSTER_SIZE = 3
 CLUSTER_DISTANCE_THRESHOLD = 0.25  # cosine distance; equiv. to cos_sim ≥ 0.75
-ABSTRACTION_QUEUE_CAP = 200
+ABSTRACTION_QUEUE_CAP = 5000
 
 
 # ---------------------------------------------------------------------------
