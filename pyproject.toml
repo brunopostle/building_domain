@@ -34,6 +34,5 @@ bsos = "bsos.cli.main:app"
 packages = ["src/bsos"]
 
 [tool.hatch.build.targets.wheel.shared-data]
-"bsos.db" = "share/bsos/bsos.db"
 "NOTICE" = "share/bsos/NOTICE"
 "DATABASE_LICENSE" = "share/bsos/DATABASE_LICENSE"

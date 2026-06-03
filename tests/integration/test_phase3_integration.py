@@ -555,7 +555,7 @@ class TestImportCLI:
         snapshot = tmp_path / "snap.json"
         runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
 
-        result = runner.invoke(app, ["import", "--input", str(snapshot), "--db", dst_db])
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--skip-index", "--db", dst_db])
         assert result.exit_code == 0, result.output
         assert "entities: 2 added" in result.output
         assert "assertions: 1 added" in result.output
@@ -591,7 +591,7 @@ class TestImportCLI:
         snapshot = tmp_path / "snap.json"
         runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", db])
 
-        result = runner.invoke(app, ["import", "--input", str(snapshot), "--force", "--db", db])
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--force", "--skip-index", "--db", db])
         assert result.exit_code == 0
         assert "skipped" in result.output
 
@@ -612,7 +612,7 @@ class TestImportCLI:
         snapshot = tmp_path / "snap.json"
         runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
 
-        result = runner.invoke(app, ["import", "--input", str(snapshot), "--replace", "--force", "--db", dst_db])
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--replace", "--force", "--skip-index", "--db", dst_db])
         assert result.exit_code == 0
         with Session(eng_dst) as s:
             from bsos.persistence.models import EntityRow as ER
@@ -633,7 +633,7 @@ class TestImportCLI:
         runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
         json_text = snapshot.read_text()
 
-        result = runner.invoke(app, ["import", "--input", "-", "--db", dst_db], input=json_text)
+        result = runner.invoke(app, ["import", "--input", "-", "--skip-index", "--db", dst_db], input=json_text)
         assert result.exit_code == 0
         assert "entities: 1 added" in result.output
 
@@ -648,6 +648,55 @@ class TestImportCLI:
         bad.write_text("not json")
         result = runner.invoke(app, ["import", "--input", str(bad), "--db", db])
         assert result.exit_code != 0
+
+    def test_import_builds_embeddings(self, tmp_path):
+        """After import (without --skip-index), EmbeddingRow records exist for entities."""
+        from bsos.cli.import_ import _build_entity_embeddings
+        from bsos.persistence.models import EmbeddingRow
+
+        db = _init_db(tmp_path)
+        eng = create_db_engine(db)
+        with Session(eng) as s:
+            _entity(s, "e1", "Roof", entity_type="component")
+            _entity(s, "e2", "Wall", entity_type="component")
+            s.commit()
+
+        def fake_embedder(texts):
+            return np.random.default_rng(0).random((len(texts), 16)).astype(np.float32)
+
+        with Session(eng) as s:
+            n = _build_entity_embeddings(s, _embedder=fake_embedder)
+
+        assert n == 2
+        with Session(eng) as s:
+            rows = s.exec(select(EmbeddingRow).where(EmbeddingRow.item_type == "entity")).all()
+        assert len(rows) == 2
+        names = {r.item_id for r in rows}
+        assert names == {"e1", "e2"}
+
+    def test_import_skip_index_omits_embeddings(self, tmp_path):
+        """--skip-index leaves EmbeddingRow table empty."""
+        from bsos.persistence.models import EmbeddingRow
+
+        (tmp_path / "src").mkdir()
+        (tmp_path / "dst").mkdir()
+        src_db = _init_db(tmp_path / "src")
+        dst_db = _init_db(tmp_path / "dst")
+        eng = create_db_engine(src_db)
+        with Session(eng) as s:
+            _entity(s, "e1", "Roof", entity_type="component")
+            s.commit()
+
+        snapshot = tmp_path / "snap.json"
+        runner.invoke(app, ["export", "--format", "json", "--output", str(snapshot), "--db", src_db])
+
+        result = runner.invoke(app, ["import", "--input", str(snapshot), "--skip-index", "--db", dst_db])
+        assert result.exit_code == 0, result.output
+
+        dst_eng = create_db_engine(dst_db)
+        with Session(dst_eng) as s:
+            rows = s.exec(select(EmbeddingRow)).all()
+        assert rows == []
 
 
 # ---------------------------------------------------------------------------

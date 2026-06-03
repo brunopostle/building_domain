@@ -1,8 +1,11 @@
 """bsos import command — restore knowledge base from a JSON snapshot (as produced by bsos export)."""
+import hashlib
 import json
 import sys
 from datetime import datetime, timezone
 from typing import Optional
+
+import numpy as np
 
 import typer
 from sqlmodel import select
@@ -413,6 +416,70 @@ def _import_abstraction_nodes(session, rows: list[dict], replace: bool) -> tuple
 
 
 # ---------------------------------------------------------------------------
+# Embedding index builder
+# ---------------------------------------------------------------------------
+
+SEARCH_EMBEDDING_MODEL = "all-mpnet-base-v2"
+_EMBED_BATCH_SIZE = 256
+
+
+def _build_entity_embeddings(session, embedding_model: str = SEARCH_EMBEDDING_MODEL, _embedder=None) -> int:
+    """Build EmbeddingRow records for all non-merged entities that lack one.
+
+    _embedder is a test seam; omit in production to use SentenceTransformer.
+    Returns the number of embeddings written.
+    """
+    from bsos.persistence.models import EmbeddingRow, EntityRow
+
+    entities = session.exec(
+        select(EntityRow).where(EntityRow.status != "merged")
+    ).all()
+
+    to_embed = []
+    for entity in entities:
+        chash = hashlib.sha256(entity.name.encode()).hexdigest()
+        existing = session.get(EmbeddingRow, ("entity", entity.id, embedding_model))
+        if existing and existing.content_hash == chash:
+            continue
+        to_embed.append(entity)
+
+    if not to_embed:
+        return 0
+
+    if _embedder is None:
+        from sentence_transformers import SentenceTransformer
+        model_obj = SentenceTransformer(embedding_model)
+        _embedder = model_obj.encode
+
+    added = 0
+    for i in range(0, len(to_embed), _EMBED_BATCH_SIZE):
+        batch = to_embed[i : i + _EMBED_BATCH_SIZE]
+        names = [e.name for e in batch]
+        vectors = np.array(_embedder(names), dtype=np.float32)
+        for j, entity in enumerate(batch):
+            chash = hashlib.sha256(entity.name.encode()).hexdigest()
+            vec = vectors[j]
+            existing = session.get(EmbeddingRow, ("entity", entity.id, embedding_model))
+            if existing:
+                existing.vector = vec.tobytes()
+                existing.content_hash = chash
+                existing.dim = int(vec.shape[0])
+            else:
+                session.add(EmbeddingRow(
+                    item_type="entity",
+                    item_id=entity.id,
+                    model=embedding_model,
+                    dim=int(vec.shape[0]),
+                    content_hash=chash,
+                    vector=vec.tobytes(),
+                ))
+            added += 1
+        session.commit()
+
+    return added
+
+
+# ---------------------------------------------------------------------------
 # Main command
 # ---------------------------------------------------------------------------
 
@@ -427,12 +494,17 @@ def import_cmd(
         False, "--force",
         help="Allow import into a database that already has entities",
     ),
+    skip_index: bool = typer.Option(
+        False, "--skip-index",
+        help="Skip building the entity embedding index after import (search_entities will return empty results)",
+    ),
     db: Optional[str] = typer.Option(None, "--db"),
 ) -> None:
     """Import knowledge base from a JSON snapshot (as produced by bsos export).
 
     Refuses to import into a non-empty database unless --force is given.
     The LLM response cache is never exported or imported and is always preserved.
+    After import, builds entity embeddings for search_entities (use --skip-index to disable).
     """
     from bsos.cli.db_context import open_db
     from bsos.persistence.models import EntityRow
@@ -530,3 +602,11 @@ def import_cmd(
             "and were reset to [] — re-run pass 11 to rebuild them.",
             err=True,
         )
+
+    if not skip_index:
+        entity_count = counts.get("entities", (0, 0))[0] + counts.get("entities", (0, 0))[1]
+        typer.echo(f"Building entity search index… ({entity_count} entities)")
+        _, idx_session = open_db(db)
+        with idx_session:
+            n = _build_entity_embeddings(idx_session)
+        typer.echo(f"  embeddings: {n} built")
