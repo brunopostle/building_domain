@@ -1,4 +1,5 @@
 """BaseRepository: generic to_persistence / from_persistence via model_dump."""
+from __future__ import annotations
 import json
 from typing import Generic, TypeVar, Type
 from pydantic import BaseModel

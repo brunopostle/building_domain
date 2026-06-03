@@ -7,8 +7,8 @@
     },
     "bsos": {
       "type": "stdio",
-      "command": "bsos",
-      "args": ["serve"]
+      "command": "python3",
+      "args": ["-m", "bsos", "serve"]
     }
   }
 }
