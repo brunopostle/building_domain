@@ -86,7 +86,32 @@ bsos extract --seed-apl --models claude-haiku-4-5-20251001 \
 | anything else | OpenAI-compatible | `OPENAI_API_KEY` |
 
 **Free local option:** `--models ollama/llama3.1` (requires Ollama running on localhost:11434).
-**Cheap cloud option:** any OpenAI-compatible provider (Groq, Together AI) via `OPENAI_API_KEY` + `OPENAI_BASE_URL`.
+**Cheap cloud option:** any OpenAI-compatible provider (DeepSeek, Groq, Together AI) via `OPENAI_API_KEY` + `OPENAI_BASE_URL`. See DeepSeek below — it is the recommended cheap cloud route.
+
+### DeepSeek (recommended cheap cloud provider)
+
+The Anthropic API is too expensive to complete the full 12-pass extraction. **DeepSeek** (`deepseek-chat` = V3) is OpenAI-compatible, so it routes through the existing `OpenAIProvider` with **zero code changes** (it matches neither the `claude-` nor `ollama/` prefix, so it falls through to OpenAI-compatible handling).
+
+```bash
+export OPENAI_API_KEY=sk-<deepseek key>
+export OPENAI_BASE_URL=https://api.deepseek.com
+
+bsos extract --seed-apl --models deepseek-chat \
+  --passes 1,2,3,4,5,6,7,8,9,10,11,12 \
+  --framings 1 --workers 2
+```
+
+**Smoke-test first.** Before committing to a full run, verify auth, schema validation, and assertion density:
+
+```bash
+export OPENAI_API_KEY=sk-<deepseek key>
+export OPENAI_BASE_URL=https://api.deepseek.com
+python scripts/smoke_test_deepseek.py     # exit 0 = HEALTHY, safe to run the pipeline
+```
+
+It drives the real Pass 3 framing + `AssertionExtractionResponse` schema through `OpenAIProvider` and fails (exit 1) if the mean falls below 5 assertions/entity or on an auth error.
+
+Unlike Groq/Llama-70B (which give sparse 1-2 assertions per entity and are unusable for Pass 3+), V3 handles `instructor` tool-calling / structured output cleanly — measured ~21 assertions/entity, comparable to Haiku.
 
 ### Known issues
 
