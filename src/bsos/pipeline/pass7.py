@@ -18,6 +18,12 @@ from bsos.pipeline.schemas import AntiPatternExtractionResponse
 
 log = structlog.get_logger()
 
+# Entity types excluded from anti-pattern extraction. 'activity' entities (the
+# bulk of the graph after pass 5's inline activity creation) carry ordering
+# knowledge, not failure anti-patterns; running them here only adds retrieval
+# noise. Mirrors the scoping that passes 8/9 already apply.
+SKIP_ENTITY_TYPES = frozenset({"activity"})
+
 PROMPT_TEMPLATE = (
     "For the building entity '{name}' (type: {entity_type}), describe known failure "
     "conditions, pathological configurations, and design mistakes that consistently "
@@ -110,7 +116,9 @@ def run_pass7(
     """
     with Session(engine) as session:
         entities = session.exec(
-            select(EntityRow).where(EntityRow.status != "merged")
+            select(EntityRow)
+            .where(EntityRow.status != "merged")
+            .where(EntityRow.entity_type.notin_(SKIP_ENTITY_TYPES))  # type: ignore[attr-defined]
         ).all()
         entity_tuples = [(e.id, e.name, e.entity_type) for e in entities]
 

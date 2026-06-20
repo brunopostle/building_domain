@@ -19,6 +19,12 @@ from bsos.pipeline.schemas import ConstraintExtractionResponse
 
 log = structlog.get_logger()
 
+# Entity types excluded from constraint extraction. 'activity' entities (the
+# bulk of the graph after pass 5's inline activity creation) carry ordering
+# knowledge, not dimensional constraints; running them here only adds retrieval
+# noise. Mirrors the scoping that passes 8/9 already apply.
+SKIP_ENTITY_TYPES = frozenset({"activity"})
+
 PROMPT_TEMPLATE = (
     "For the building entity '{name}' (type: {entity_type}), list only hard binary "
     "design constraints — rules where violation makes the design physically invalid, "
@@ -114,7 +120,9 @@ def run_pass6(
     """
     with Session(engine) as session:
         entities = session.exec(
-            select(EntityRow).where(EntityRow.status != "merged")
+            select(EntityRow)
+            .where(EntityRow.status != "merged")
+            .where(EntityRow.entity_type.notin_(SKIP_ENTITY_TYPES))  # type: ignore[attr-defined]
         ).all()
         entity_tuples = [(e.id, e.name, e.entity_type) for e in entities]
 
