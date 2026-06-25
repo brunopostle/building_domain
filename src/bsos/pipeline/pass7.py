@@ -14,6 +14,7 @@ from sqlmodel import Session, select
 
 from bsos.llm.protocol import LLMProvider
 from bsos.persistence.models import AntiPatternRow, EntityRow, PassProgressRow
+from bsos.pipeline import QUALITY_GUIDANCE
 from bsos.pipeline.schemas import AntiPatternExtractionResponse
 
 log = structlog.get_logger()
@@ -33,7 +34,7 @@ PROMPT_TEMPLATE = (
     "cause it, the consequences (what fails and how), mitigations (how to avoid or "
     "recover), confidence (0-1), knowledge_origin "
     "(physical/engineering/architectural/cultural), and rationale."
-)
+) + QUALITY_GUIDANCE
 
 
 def _process_entity(

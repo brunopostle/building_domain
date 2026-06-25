@@ -19,6 +19,7 @@ from sqlmodel import Session, select
 
 from bsos.llm.protocol import LLMProvider
 from bsos.persistence.models import EntityRow, PassProgressRow, PatternRow
+from bsos.pipeline import QUALITY_GUIDANCE
 from bsos.pipeline.schemas import PatternExtractionResponse
 
 log = structlog.get_logger()
@@ -37,7 +38,7 @@ PROMPT_TEMPLATE = (
     "- related_pattern_names: names of other patterns that complement or conflict\n"
     "- confidence (0-1), knowledge_origin (physical/engineering/architectural/cultural), "
     "and rationale."
-)
+) + QUALITY_GUIDANCE
 
 
 def _process_entity(

@@ -15,6 +15,7 @@ from sqlmodel import Session, select
 
 from bsos.llm.protocol import LLMProvider
 from bsos.persistence.models import ConstraintRow, EntityRow, PassProgressRow
+from bsos.pipeline import QUALITY_GUIDANCE
 from bsos.pipeline.schemas import ConstraintExtractionResponse
 
 log = structlog.get_logger()
@@ -37,7 +38,7 @@ PROMPT_TEMPLATE = (
     "any conditions that narrow its applicability, any genuine exceptions, "
     "confidence (0-1), knowledge_origin (physical/engineering/architectural/cultural), "
     "and rationale."
-)
+) + QUALITY_GUIDANCE
 
 
 def _process_entity(

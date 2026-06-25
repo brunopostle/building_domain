@@ -23,6 +23,7 @@ from bsos.persistence.models import (
     EntityAliasRow, EntityRow, ForceRow, PassProgressRow,
     PendingEntityRefRow, PendingForceRefRow,
 )
+from bsos.pipeline import QUALITY_GUIDANCE
 from bsos.pipeline.schemas import ForceExtractionResponse
 
 log = structlog.get_logger()
@@ -54,7 +55,7 @@ PROMPT_TEMPLATE = (
     "3. List the building entities this force acts upon.\n"
     "4. Provide confidence (0-1), knowledge_origin "
     "(physical/engineering/architectural/cultural), and rationale."
-)
+) + QUALITY_GUIDANCE
 
 
 def _validate_direction(name: str, direction: str) -> bool:
