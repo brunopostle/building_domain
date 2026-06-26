@@ -19,6 +19,24 @@ from bsos.pipeline.schemas import (
 
 log = structlog.get_logger()
 
+# Appended to every concept-discovery prompt. Without it the expansion step
+# drifts out of the built environment: expanding a space (bedroom, office)
+# yields loose furniture (mattress, armchair, headboard) and consumer goods
+# (paintbrush, compost bin), and "related activities" for those objects become
+# off-site manufacturing steps (Seat Cushion Foam Molding, Cut Headboard
+# Lumber). See building_domain-5if.
+SCOPE_NOTE = (
+    "\n\nSCOPE: Stay within the built environment — the building fabric, its "
+    "systems, spaces, materials, and the fixed or building-integrated equipment "
+    "and furniture a BIM/IFC model would contain (e.g. fitted/auditorium "
+    "seating, reception desks, built-in benches). Do NOT include loose consumer "
+    "goods, personal items, tableware, toys, gardening or composting equipment, "
+    "or other movable products that merely happen to be used in a building. "
+    "Activities must be on-site construction, installation, or commissioning "
+    "activities that produce the building — never the off-site manufacturing or "
+    "fabrication of products, furniture, or equipment."
+)
+
 BOOTSTRAP_PROMPT = (
     "List all major building concepts found in a typical building, covering:\n"
     "- structural and envelope components (roof, wall, foundation, beam, column, slab, window, door)\n"
@@ -30,7 +48,7 @@ BOOTSTRAP_PROMPT = (
     "For each concept provide its name, type (component/system/space/material/activity), "
     "and a one-sentence description. Be comprehensive — include sub-systems and activities "
     "that are prerequisites for later construction stages."
-)
+) + SCOPE_NOTE
 
 DOMAIN_PROMPT_TEMPLATE = (
     "List all building concepts relevant to the following domain:\n\n"
@@ -38,7 +56,7 @@ DOMAIN_PROMPT_TEMPLATE = (
     "Cover components, systems, spaces, materials, and construction activities. "
     "For each concept provide its name, type (component/system/space/material/activity), "
     "and a one-sentence description."
-)
+) + SCOPE_NOTE
 
 EXPANSION_PROMPT_TEMPLATE = (
     "For the building concept '{name}' (type: {entity_type}), list all sub-components, "
@@ -46,7 +64,7 @@ EXPANSION_PROMPT_TEMPLATE = (
     "tracked separately in a building knowledge system. "
     "For each sub-concept provide its name, type (component/system/space/material/activity), "
     "and a one-sentence description. Omit concepts already covered by the parent name."
-)
+) + SCOPE_NOTE
 
 APL_SEED_PROMPT = "apl_pattern_seed"
 
