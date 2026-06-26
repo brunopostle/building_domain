@@ -19,6 +19,7 @@ from bsos.persistence.models import (
     EmbeddingRow, ForceRow, IFCPropertySetRow, PatternRow, ProcessRelationRow,
     SpatialRelationRow,
 )
+from bsos import validation
 
 SEARCH_EMBEDDING_MODEL = "all-mpnet-base-v2"
 
@@ -662,6 +663,66 @@ def propose_assertion_tool(
     }
 
 
+def validate_element_tool(
+    session: Session,
+    entity: str,
+    facts: dict,
+    min_confidence: float = 0.0,
+    include_proposed: bool = True,
+) -> dict:
+    """Validate a modelled element against this entity's BSOS constraints.
+
+    Use this after extracting concrete facts about an element from the model
+    (e.g. via the `ifc` server's ifc_select / ifc_quantify / pset tools) to get
+    a structured pass / fail verdict per constraint — instead of retrieving
+    prose constraints and judging compliance yourself.
+
+    entity is a bsos entity name (e.g. "Kitchen", resolved case-insensitively).
+    facts is a dict of concrete properties extracted from the model. Recognised
+    keys (all optional; an absent fact yields status "unchecked" for checks that
+    need it, distinct from an empty fact yielding "fail"):
+
+        floor_materials : list[str]  lower-case floor-covering material names
+        window_count    : int        operable windows bounding the element
+        door_count      : int        doors bounding the element
+        systems_present : list[str]  BSOS system names modelled, e.g.
+                                     ["Drainage System", "Ventilation System"]
+        has_insulation  : bool        a wall assembly has an insulation layer
+
+    Returns per-constraint results with the matched check_object, status
+    (pass/fail/unchecked) and a human-readable detail, plus a summary count.
+    Constraints the deterministic engine cannot yet map return status
+    "unchecked" with detail "no_deterministic_matcher".
+    """
+    entity_row = resolve_entity(session, entity)
+    if entity_row is None:
+        return {"error": "entity_not_found", "query": entity}
+
+    rows = session.exec(
+        select(ConstraintRow).where(ConstraintRow.subject_id == entity_row.id)
+    ).all()
+    rows = _apply_shared_params(rows, min_confidence, include_proposed)
+    rows = _sort_by_confidence_then_origin(rows)
+
+    constraints = [
+        {"rule": r.rule, "constraint_type": r.constraint_type,
+         "confidence": r.confidence}
+        for r in rows
+    ]
+    results = validation.validate_constraints(constraints, facts)
+
+    summary = {"pass": 0, "fail": 0, "unchecked": 0}
+    for res in results:
+        summary[res["status"]] += 1
+
+    return {
+        "entity": entity_row.name,
+        "facts_received": facts,
+        "results": results,
+        "summary": summary,
+    }
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -766,5 +827,15 @@ def create_server(db_path: str) -> FastMCP:
     ) -> dict:
         with Session(engine) as session:
             return propose_assertion_tool(session, subject, predicate, obj, rationale, confidence, knowledge_origin)
+
+    @mcp.tool(description=validate_element_tool.__doc__)
+    def validate_element(
+        entity: str,
+        facts: dict,
+        min_confidence: float = 0.0,
+        include_proposed: bool = True,
+    ) -> dict:
+        with Session(engine) as session:
+            return validate_element_tool(session, entity, facts, min_confidence, include_proposed)
 
     return mcp

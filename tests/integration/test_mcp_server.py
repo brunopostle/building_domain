@@ -334,3 +334,67 @@ def test_search_entities_min_score_filters(session):
     names = [r["name"] for r in result["results"]]
     assert "CloseMatch" in names
     assert "FarMatch" not in names
+
+
+# ---------------------------------------------------------------------------
+# validate_element
+# ---------------------------------------------------------------------------
+
+def _add_constraint(session, cid, subject_id, rule, constraint_type="must",
+                    confidence=0.9):
+    from bsos.persistence.models import ConstraintRow
+    session.add(ConstraintRow(
+        id=cid, subject_id=subject_id, rule=rule,
+        constraint_type=constraint_type, confidence=confidence,
+        status="proposed", knowledge_origin="physical",
+        source_model="test", created_at=NOW,
+    ))
+
+
+def test_validate_element_pass_fail_unchecked(session):
+    from bsos.mcp_server.server import validate_element_tool
+    add_entity(session, "k", "Kitchen")
+    _add_constraint(session, "c1", "k", "Kitchen must have a waterproof floor surface")
+    _add_constraint(session, "c2", "k", "Kitchen must have plumbing supply and drainage for the sink")
+    _add_constraint(session, "c3", "k", "Kitchen must have a 20-amp branch circuit")
+    _add_constraint(session, "c4", "k", "Kitchen must not have outlets above the sink",
+                    constraint_type="must_not")
+    session.commit()
+
+    facts = {"floor_materials": ["carpet"], "systems_present": []}
+    out = validate_element_tool(session, "Kitchen", facts)
+
+    assert out["entity"] == "Kitchen"
+    by_object = {r["check_object"]: r for r in out["results"]}
+    assert by_object["Waterproof Flooring"]["status"] == "fail"   # carpet
+    assert by_object["Drainage System"]["status"] == "fail"       # no system
+    # The dimensional rule and the must_not prohibition are typed unchecked.
+    unchecked = [r for r in out["results"] if r["status"] == "unchecked"]
+    assert len(unchecked) == 2
+    assert all(r["detail"] == "no_deterministic_matcher" for r in unchecked)
+    assert out["summary"] == {"pass": 0, "fail": 2, "unchecked": 2}
+
+
+def test_validate_element_pass_with_good_facts(session):
+    from bsos.mcp_server.server import validate_element_tool
+    add_entity(session, "k", "Kitchen")
+    _add_constraint(session, "c1", "k", "Kitchen must have a waterproof floor surface")
+    session.commit()
+
+    out = validate_element_tool(session, "Kitchen", {"floor_materials": ["tiles"]})
+    assert out["summary"]["pass"] == 1
+    assert out["results"][0]["status"] == "pass"
+
+
+def test_validate_element_unknown_entity(session):
+    from bsos.mcp_server.server import validate_element_tool
+    out = validate_element_tool(session, "Nonexistent", {})
+    assert out["error"] == "entity_not_found"
+
+
+def test_validate_element_registered_on_server(engine, tmp_path):
+    db = tmp_path / "reg.db"
+    server = create_server(str(db))
+    import asyncio
+    tools = asyncio.run(server.list_tools())
+    assert "validate_element" in {t.name for t in tools}
