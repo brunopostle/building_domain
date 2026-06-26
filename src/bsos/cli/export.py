@@ -2,6 +2,7 @@
 import csv
 import io
 import json
+import os
 import sys
 from typing import Optional
 
@@ -308,14 +309,26 @@ def export_cmd(
         data = _gather(session, types, status_filter)
 
     if fmt == "json":
-        text = json.dumps(data, indent=2, ensure_ascii=False)
-        if output:
+        # Directory output: write one <table>.json file per type. This keeps each
+        # file under hosting limits (e.g. GitHub's 100 MB/file) for large snapshots.
+        # A directory target is requested by an existing dir or a trailing separator.
+        as_dir = bool(output) and (os.path.isdir(output) or output.endswith(("/", os.sep)))
+        if as_dir:
+            os.makedirs(output, exist_ok=True)
+            for type_name, rows in data.items():
+                path = os.path.join(output, f"{type_name}.json")
+                with open(path, "w", encoding="utf-8") as f:
+                    json.dump(rows, f, indent=2, ensure_ascii=False)
+            total = sum(len(v) for v in data.values())
+            typer.echo(f"Exported {total} records to {output}/ ({len(data)} files)")
+        elif output:
+            text = json.dumps(data, indent=2, ensure_ascii=False)
             with open(output, "w", encoding="utf-8") as f:
                 f.write(text)
             total = sum(len(v) for v in data.values())
             typer.echo(f"Exported {total} records to {output}")
         else:
-            typer.echo(text)
+            typer.echo(json.dumps(data, indent=2, ensure_ascii=False))
     else:
         # CSV — single type guaranteed above
         type_name = types[0]

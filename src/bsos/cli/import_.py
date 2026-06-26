@@ -1,6 +1,8 @@
 """bsos import command — restore knowledge base from a JSON snapshot (as produced by bsos export)."""
+import glob
 import hashlib
 import json
+import os
 import sys
 from datetime import datetime, timezone
 from typing import Optional
@@ -485,7 +487,7 @@ def _build_entity_embeddings(session, embedding_model: str = SEARCH_EMBEDDING_MO
 
 @app.callback(invoke_without_command=True)
 def import_cmd(
-    input_path: str = typer.Option(..., "--input", "-i", help="JSON file to import, or - for stdin"),
+    input_path: str = typer.Option(..., "--input", "-i", help="JSON file, a directory of per-table <table>.json files, or - for stdin"),
     replace: bool = typer.Option(
         False, "--replace",
         help="Overwrite existing records by ID when the database is non-empty (requires --force)",
@@ -515,6 +517,23 @@ def import_cmd(
         except json.JSONDecodeError as e:
             typer.echo(f"Invalid JSON on stdin: {e}", err=True)
             raise typer.Exit(1)
+    elif os.path.isdir(input_path):
+        # Split snapshot: a directory of per-table files (<table>.json), each
+        # holding that table's array of records. Produced by `bsos export -o <dir>`.
+        data = {}
+        json_files = sorted(glob.glob(os.path.join(input_path, "*.json")))
+        if not json_files:
+            typer.echo(f"No .json files found in directory: {input_path}", err=True)
+            raise typer.Exit(1)
+        for path in json_files:
+            table = os.path.splitext(os.path.basename(path))[0]
+            try:
+                with open(path, encoding="utf-8") as f:
+                    rows = json.load(f)
+            except json.JSONDecodeError as e:
+                typer.echo(f"Invalid JSON in {path}: {e}", err=True)
+                raise typer.Exit(1)
+            data[table] = rows
     else:
         try:
             with open(input_path, encoding="utf-8") as f:

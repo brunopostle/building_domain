@@ -7,6 +7,11 @@ dist/
 build/
 .venv/
 
+# Monolithic snapshot — superseded by the per-table files in data/snapshot/.
+# Kept ignorable so a local `bsos export -o data/bsos_snapshot.json` is never
+# accidentally committed (it exceeds GitHub's 100 MB/file limit).
+data/bsos_snapshot.json
+
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db

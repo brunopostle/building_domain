@@ -23,16 +23,21 @@ The knowledge base is populated by an LLM extraction pipeline (`bsos extract`) t
 ### 1. Install and restore the knowledge base
 
 The knowledge base is too large to store as a SQLite file in git. A JSON snapshot
-is checked in at `data/bsos_snapshot.json` (~20 MB). To set up a working database:
+is checked in under `data/snapshot/` as one file per table (`entities.json`,
+`assertions.json`, …) so no single file exceeds GitHub's 100 MB limit. To set up
+a working database:
 
 ```bash
 git clone https://github.com/brunopostle/building_domain.git
 cd building_domain
 pip install -e .
 bsos init
-bsos import --input data/bsos_snapshot.json
+bsos import --input data/snapshot
 bsos query "Kitchen"   # verify: should show ~20 assertions
 ```
+
+`bsos import` accepts either a directory of per-table files (as above) or a single
+combined `.json` file.
 
 The snapshot contains entities, assertions, and patterns.
 It does **not** contain the LLM response cache or embeddings — those stay local.
@@ -84,15 +89,15 @@ git clone https://github.com/YOUR_FORK/building_domain.git
 cd building_domain
 pip install -e .
 bsos init
-bsos import --input data/bsos_snapshot.json
+bsos import --input data/snapshot
 
 # 2. Run additional extraction passes (needs ANTHROPIC_API_KEY in a separate terminal)
 bsos extract --models claude-haiku-4-5-20251001 --passes 4,5,6,7,8,9,10,11,12 \
   --framings 1 --workers 2
 
-# 3. Export and open a PR
-bsos export --format json --output data/bsos_snapshot.json
-git add data/bsos_snapshot.json
+# 3. Export and open a PR (trailing slash → one file per table)
+bsos export --format json --output data/snapshot/
+git add data/snapshot
 git commit -m "Add passes 4-12 extraction results"
 # open pull request
 ```
@@ -102,8 +107,8 @@ git commit -m "Add passes 4-12 extraction results"
 ```bash
 # Preview what the incoming snapshot adds without touching your working database
 bsos export --format json --output /tmp/current.json
-# (review data/bsos_snapshot.json in the PR diff)
+# (review data/snapshot/*.json in the PR diff)
 
 # Merge into your working database (skips records you already have)
-bsos import --input data/bsos_snapshot.json --force
+bsos import --input data/snapshot --force
 ```
