@@ -12,6 +12,7 @@ from bsos.cli.import_ import app as import_app
 from bsos.cli.cache import app as cache_app
 from bsos.cli.visualize import app as visualize_app
 from bsos.cli.seed_psets import app as seed_psets_app
+from bsos.cli.seed_ifc_classes import app as seed_ifc_classes_app
 from bsos.cli.db_context import open_db
 
 app = typer.Typer(name="bsos", help="Building Semantic Ontology System", no_args_is_help=True)
@@ -32,6 +33,7 @@ app.add_typer(import_app, name="import", help="Import knowledge base from a JSON
 app.add_typer(cache_app, name="cache", help="Manage the LLM response cache")
 app.add_typer(visualize_app, name="visualize", help="Render knowledge graph to interactive HTML or PNG")
 app.add_typer(seed_psets_app, name="seed-psets", help="Populate IFC property set recommendations from curated seed data")
+app.add_typer(seed_ifc_classes_app, name="seed-ifc-classes", help="Populate canonical ifc_class entities from the authoritative IFC schema")
 
 
 @app.command("status")

@@ -78,42 +78,33 @@ def _read_pdf_chunks(pdf_path: Path, pages_per_chunk: int) -> list[tuple[str, st
     return chunks
 
 
-def _get_or_create_entity(
+def _resolve_ifc_class(
     session: Session,
     name: str,
-    description: str,
-    provider: LLMProvider,
-    run_id: str,
-    now: datetime,
     name_cache: dict[str, str],
-) -> str:
-    """Return entity_id for an IFC class, creating it if absent."""
+) -> str | None:
+    """Return the entity_id of a pre-seeded IFC class, or None if not seeded.
+
+    IFC classes are canonical-by-construction (`bsos seed-ifc-classes`), so Pass
+    12 maps onto that set and never invents new ifc_class entities from free text
+    (building_domain-y30). Relations/constraints referencing an unknown class are
+    skipped rather than minting a hallucinated entity.
+    """
     key = name.lower().strip()
     if key in name_cache:
         return name_cache[key]
 
     existing = session.exec(
-        select(EntityRow).where(EntityRow.name == name)
+        select(EntityRow).where(
+            EntityRow.entity_type == "ifc_class",
+            EntityRow.name == name,
+            EntityRow.status != "merged",
+        )
     ).first()
     if existing:
         name_cache[key] = existing.id
         return existing.id
-
-    entity_id = str(uuid.uuid4())
-    session.add(EntityRow(
-        id=entity_id,
-        name=name,
-        entity_type="ifc_class",
-        description=description,
-        status="proposed",
-        source_model=provider.model_id,
-        source_prompt="ifc_schema_extraction",
-        created_at=now,
-        extraction_run_id=run_id,
-    ))
-    name_cache[key] = entity_id
-    log.debug("pass12_entity_created", name=name)
-    return entity_id
+    return None
 
 
 def run_pass12(
@@ -186,16 +177,15 @@ def run_pass12(
             chunk_entities = 0
             chunk_assertions = 0
             chunk_constraints = 0
+            chunk_unknown = 0
 
-            # Write IFC class entities
+            # IFC classes are seeded deterministically from the schema; Pass 12 no
+            # longer mints them. Only flag any the LLM names that aren't canonical.
             for cls in response.ifc_classes:
                 if not cls.name.startswith("Ifc"):
                     continue
-                _get_or_create_entity(
-                    session, cls.name, cls.description,
-                    provider, run_id, now, name_cache,
-                )
-                chunk_entities += 1
+                if _resolve_ifc_class(session, cls.name, name_cache) is None:
+                    chunk_unknown += 1
 
             session.flush()
 
@@ -205,14 +195,11 @@ def run_pass12(
                     continue
                 if not rel.object_class.startswith("Ifc"):
                     continue
-                subject_id = _get_or_create_entity(
-                    session, rel.subject_class, "",
-                    provider, run_id, now, name_cache,
-                )
-                object_id = _get_or_create_entity(
-                    session, rel.object_class, "",
-                    provider, run_id, now, name_cache,
-                )
+                subject_id = _resolve_ifc_class(session, rel.subject_class, name_cache)
+                object_id = _resolve_ifc_class(session, rel.object_class, name_cache)
+                if subject_id is None or object_id is None:
+                    chunk_unknown += 1
+                    continue
                 session.flush()
 
                 subject_row = session.get(EntityRow, subject_id)
@@ -242,10 +229,10 @@ def run_pass12(
             for con in response.schema_constraints:
                 if not con.subject_class.startswith("Ifc"):
                     continue
-                subject_id = _get_or_create_entity(
-                    session, con.subject_class, "",
-                    provider, run_id, now, name_cache,
-                )
+                subject_id = _resolve_ifc_class(session, con.subject_class, name_cache)
+                if subject_id is None:
+                    chunk_unknown += 1
+                    continue
                 session.flush()
 
                 session.add(ConstraintRow(
@@ -289,6 +276,7 @@ def run_pass12(
                 entities=chunk_entities,
                 assertions=chunk_assertions,
                 constraints=chunk_constraints,
+                unknown_classes_skipped=chunk_unknown,
             )
 
     log.info(

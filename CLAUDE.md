@@ -67,11 +67,22 @@ The pipeline must run in a **separate terminal** with `ANTHROPIC_API_KEY` set (c
 
 ### Recommended command (cost-optimised)
 
+Seed canonical IFC classes **before** extraction so the ifc_class layer is
+schema-authoritative and the LLM never invents class names:
+
 ```bash
+bsos seed-ifc-classes            # one-time; deterministic, no API key needed
 bsos extract --seed-apl --models claude-haiku-4-5-20251001 \
   --passes 1,2,3,4,5,6,7,8,9,10,11,12 \
   --framings 1 --workers 2
 ```
+
+`seed-ifc-classes` enumerates real IFC4 entity classes via ifcopenshell and
+writes one `ifc_class` EntityRow each (`source_model='ifc-schema'`, `status='accepted'`).
+Pass 1 now drops any LLM-minted `ifc_class` concepts and Pass 12 maps only onto
+the seeded set, so hallucinated names ('IfcHotel') never enter the DB. Add
+`--schema IFC4X3` for infrastructure classes. This is the root-cause fix that
+makes the old reactive purge (building_domain-4se) a one-time historical cleanup.
 
 - `--framings 1` — single prompt framing per entity (3× cheaper than default 3)
 - `--workers 2` — **do not exceed 2**: SQLite WAL shared-memory (-shm) fails with SQLITE_CANTOPEN under 3+ concurrent writers regardless of pool settings

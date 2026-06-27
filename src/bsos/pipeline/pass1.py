@@ -128,6 +128,14 @@ def run_pass1(
         except Exception as exc:
             log.warning("pass1_expansion_failed", concept=concept.name, error=str(exc))
 
+    # Drop LLM-minted ifc_class concepts: IFC classes are canonical-by-construction,
+    # seeded deterministically from the schema (`bsos seed-ifc-classes`). Letting the
+    # LLM invent them here reintroduces hallucinated names (building_domain-y30).
+    dropped_ifc = sum(1 for c in all_concepts if c.entity_type == "ifc_class")
+    if dropped_ifc:
+        all_concepts = [c for c in all_concepts if c.entity_type != "ifc_class"]
+        log.info("pass1_ifc_class_dropped", count=dropped_ifc)
+
     # Deduplicate by name (case-insensitive)
     seen: dict[str, DiscoveredConcept] = {}
     for c in all_concepts:
