@@ -68,6 +68,21 @@ MEP_PRESENCE: dict[str, list[str]] = {
     "Foundation":             ["IfcFooting"],
 }
 
+# ── Space-local MEP systems ──────────────────────────────────────────────────
+# Some systems are only meaningfully "present" for a space if a serving fixture
+# actually bounds that space. Checking these building-wide produces false
+# passes: a building with a single sanitary terminal would otherwise show
+# Drainage System PASS for every kitchen and toilet (building_domain-d91). For
+# the systems below, presence is decided per-space from the space's BoundedBy
+# fixtures instead of `ifc.by_type` across the whole model. Distribution-only
+# classes (e.g. IfcValve in a riser) are excluded — they do not give the
+# bounded space the service. Systems not listed here remain building-wide.
+SYSTEM_SPACE_FIXTURES: dict[str, list[str]] = {
+    "Drainage System":   ["IfcSanitaryTerminal", "IfcWasteTerminal"],
+    "Rough-in Plumbing": ["IfcSanitaryTerminal"],
+    "Plumbing System":   ["IfcSanitaryTerminal"],
+}
+
 # ── BSOS query ────────────────────────────────────────────────────────────────
 
 def get_requirements(db_path: Path, entity_name: str) -> list[tuple]:
@@ -182,6 +197,26 @@ def mep_present(ifc, system: str) -> bool:
     return _mep_cache[system]
 
 
+def space_has_system(space, system: str) -> bool:
+    """True if a fixture serving `system` bounds this space.
+
+    Used for space-local MEP systems (SYSTEM_SPACE_FIXTURES) so that, e.g.,
+    Drainage passes for a space only when a sanitary/waste terminal appears in
+    its BoundedBy relations — not merely because one exists elsewhere in the
+    model. Returns False for systems that are not space-local.
+    """
+    return any(count_bounded_by_type(space, c)
+               for c in SYSTEM_SPACE_FIXTURES.get(system, ()))
+
+
+def system_present_for_space(ifc, space, system: str) -> bool:
+    """Per-space presence: space-local fixtures for plumbing/drainage,
+    building-wide presence for distribution systems."""
+    if system in SYSTEM_SPACE_FIXTURES:
+        return space_has_system(space, system)
+    return mep_present(ifc, system)
+
+
 def wall_has_insulation(ifc) -> bool:
     for wall in ifc.by_type("IfcWall"):
         mat = ifcopenshell.util.element.get_material(wall)
@@ -201,7 +236,8 @@ def build_facts(ifc, space) -> dict:
         "floor_materials": sorted(get_floor_materials(space)),
         "window_count":    count_bounded_by_type(space, "IfcWindow"),
         "door_count":      count_bounded_by_type(space, "IfcDoor"),
-        "systems_present": [s for s in MEP_PRESENCE if mep_present(ifc, s)],
+        "systems_present": [s for s in MEP_PRESENCE
+                            if system_present_for_space(ifc, space, s)],
         "has_insulation":  wall_has_insulation(ifc),
     }
 
