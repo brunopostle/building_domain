@@ -1,0 +1,93 @@
+[
+  {
+    "entity": "window",
+    "entity_type": "component",
+    "predicate": "requires",
+    "expected_exception": "A window normally requires glazing/glass panes, but louvred, jalousie and solid-panel 'windows' admit no glass; fixed (non-operable) windows are an exception to the openable-light requirement."
+  },
+  {
+    "entity": "door",
+    "entity_type": "component",
+    "expected_exception": "A door normally requires a fire rating only on escape routes and compartment lines; ordinary internal doors are exempt, and some openings use shutters or curtains rather than a hinged leaf."
+  },
+  {
+    "entity": "roof",
+    "entity_type": "component",
+    "expected_exception": "A roof normally requires falls to drainage, but inverted/ballasted and green roofs handle water differently; pitched roofs shed water without internal outlets."
+  },
+  {
+    "entity": "staircase",
+    "entity_type": "component",
+    "expected_exception": "A staircase normally requires guarding and uniform risers, but loft and spiral stairs, and stairs serving limited-use areas, are subject to relaxed dimensional rules."
+  },
+  {
+    "entity": "foundation",
+    "entity_type": "component",
+    "expected_exception": "A foundation normally requires bearing below the frost line on firm strata, but raft and piled foundations on poor ground, and rock sites, are recognised exceptions."
+  },
+  {
+    "entity": "load-bearing wall",
+    "entity_type": "component",
+    "expected_exception": "A load-bearing wall must not be removed without substitute support, except where a beam or transfer structure is introduced to carry the load above."
+  },
+  {
+    "entity": "beam",
+    "entity_type": "component",
+    "expected_exception": "A beam normally requires support at both ends, but cantilever beams are supported at one end only; deflection limits relax for non-brittle finishes."
+  },
+  {
+    "entity": "lintel",
+    "entity_type": "component",
+    "expected_exception": "A lintel is normally required over an opening in masonry, except where an arch or a structural frame already spans the opening."
+  },
+  {
+    "entity": "damp-proof course",
+    "entity_type": "component",
+    "expected_exception": "A damp-proof course is normally required 150mm above ground, except for cavity-tray and integral-DPM constructions and certain solid-wall heritage repairs."
+  },
+  {
+    "entity": "balcony",
+    "entity_type": "component",
+    "expected_exception": "A balcony edge above a drop normally requires 1100mm guarding, except for low-level thresholds and Juliet balconies where the door itself forms the barrier."
+  },
+  {
+    "entity": "Kitchen",
+    "entity_type": "space",
+    "expected_exception": "A kitchen normally requires mechanical extract, except where adequate openable windows or a passive stack provide equivalent ventilation."
+  },
+  {
+    "entity": "Bathroom",
+    "entity_type": "space",
+    "expected_exception": "A bathroom normally requires extract ventilation, except where it has an openable window of adequate area in some codes."
+  },
+  {
+    "entity": "Bedroom",
+    "entity_type": "space",
+    "expected_exception": "A bedroom normally requires an escape window, except where it opens onto a protected stair or is on the ground floor with a final exit door."
+  },
+  {
+    "entity": "Corridor",
+    "entity_type": "space",
+    "expected_exception": "A corridor on an escape route normally requires fire protection and minimum width, except for short dead-end lengths within the permitted travel distance."
+  },
+  {
+    "entity": "Drainage System",
+    "entity_type": "system",
+    "expected_exception": "A drainage system normally requires falls to a sewer, except where pumped/sump systems serve below-sewer levels and soakaways serve surface water on permeable ground."
+  },
+  {
+    "entity": "HVAC System",
+    "entity_type": "system",
+    "expected_exception": "An HVAC system normally requires mechanical heating and cooling, except in passive/naturally-ventilated buildings and mild climates where one or both are omitted."
+  },
+  {
+    "entity": "Ventilation System",
+    "entity_type": "system",
+    "expected_exception": "A ventilation system normally requires mechanical supply and extract, except where natural ventilation through openable windows meets the requirement."
+  },
+  {
+    "entity": "Fire Suppression System",
+    "entity_type": "system",
+    "expected_exception": "A fire suppression system (sprinklers) is normally required in large or high-rise buildings, except for small buildings and uses below the floor-area and height thresholds."
+  }
+]
