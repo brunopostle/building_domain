@@ -78,6 +78,19 @@ def _load_grouped_assertions(session: Session) -> dict[str, list[AssertionRow]]:
     return groups
 
 
+def _covered_assertion_ids(session: Session) -> set[str]:
+    """Return the set of assertion UUIDs already referenced by an AbstractionNode.
+
+    Used to make re-runs incremental: a subject group whose assertions are all
+    already abstracted is skipped, and individual clusters fully contained in an
+    existing node are not re-synthesized (no duplicate nodes)."""
+    from sqlmodel import text
+    rows = session.exec(
+        text("SELECT DISTINCT c.value FROM abstraction_nodes an, json_each(an.child_ids) c")
+    ).all()
+    return {r[0] for r in rows}
+
+
 def _cosine_distance_matrix(vecs: np.ndarray) -> np.ndarray:
     """Return (N×N) pairwise cosine distance matrix."""
     norms = np.linalg.norm(vecs, axis=1, keepdims=True)
@@ -215,6 +228,26 @@ def _process_cluster(
 
 
 # ---------------------------------------------------------------------------
+# Outstanding-work detection
+# ---------------------------------------------------------------------------
+
+def has_outstanding_work(engine, min_cluster_size: int = MIN_CLUSTER_SIZE) -> bool:
+    """True if any eligible subject has assertions not yet abstracted.
+
+    Passes 4-9 can add assertions after 10c's global completion flag was set.
+    A subject is outstanding when it has ≥ min_cluster_size assertions and at
+    least one of them is not already referenced by an existing AbstractionNode,
+    so the pass must re-run rather than be silently skipped."""
+    with Session(engine) as session:
+        groups = _load_grouped_assertions(session)
+        covered = _covered_assertion_ids(session)
+    for rows in groups.values():
+        if len(rows) >= min_cluster_size and any(r.id not in covered for r in rows):
+            return True
+    return False
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -236,8 +269,10 @@ def run_pass10c(
     """
     with Session(engine) as session:
         progress = session.get(PassProgressRow, ("10c", "__global__", embedding_model))
-        if progress and progress.status == "completed":
-            log.info("pass10c_skip", reason="already completed")
+        if progress and progress.status == "completed" and not has_outstanding_work(
+            engine, min_cluster_size
+        ):
+            log.info("pass10c_skip", reason="already completed, no un-abstracted assertions")
             return {"status": "already_completed"}
 
     log.info("pass10c_start", embedding_model=embedding_model, min_cluster_size=min_cluster_size)
@@ -245,11 +280,14 @@ def run_pass10c(
     with Session(engine) as session:
         subject_groups = _load_grouped_assertions(session)
         entity_names = _load_entity_names(session)
+        covered_ids = _covered_assertion_ids(session)
 
-    # Prune groups that cannot produce any qualifying cluster.
+    # Prune groups that cannot produce any qualifying cluster, and groups whose
+    # assertions are already fully abstracted (incremental re-run support).
     eligible_groups = {
         sid: rows for sid, rows in subject_groups.items()
         if len(rows) >= min_cluster_size
+        and any(r.id not in covered_ids for r in rows)
     }
 
     if dry_run:
@@ -296,6 +334,11 @@ def run_pass10c(
 
         for label, indices in cluster_groups.items():
             if len(indices) < min_cluster_size:
+                continue
+
+            # Skip clusters already fully captured by an existing node so a
+            # re-run does not create duplicate abstractions.
+            if all(rows[i].id in covered_ids for i in indices):
                 continue
 
             # Re-check cap before each node.

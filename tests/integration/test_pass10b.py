@@ -322,20 +322,41 @@ class TestPassProgress:
             assert row is not None
             assert row.status == "completed"
 
-    def test_already_completed_skips(self, engine):
+    def test_clean_rerun_skips(self, engine):
+        """Re-running with no new non-core predicates returns already_completed."""
         with Session(engine) as s:
             _add_assertion(s, "demands")
             s.commit()
 
         run_pass10b(engine, _embedder=fake_embedder)
 
-        # Add a new non-core assertion — should NOT be processed on second run.
+        # No new un-normalized data → the global flag still short-circuits.
+        result = run_pass10b(engine, _embedder=fake_embedder)
+        assert result.get("status") == "already_completed"
+
+    def test_new_predicate_after_completion_is_processed(self, engine):
+        """A non-core predicate added after completion must not be silently skipped.
+
+        Regression for building_domain-5ut: passes 4-9 can write new assertions
+        after 10b's global completion flag is set; those must re-trigger the pass.
+        """
         with Session(engine) as s:
             _add_assertion(s, "demands")
             s.commit()
 
+        run_pass10b(engine, _embedder=fake_embedder)
+
+        # Add an assertion reusing the already-mapped predicate after completion.
+        with Session(engine) as s:
+            new_aid = _add_assertion(s, "demands")
+            s.commit()
+
         result = run_pass10b(engine, _embedder=fake_embedder)
-        assert result.get("status") == "already_completed"
+        assert result.get("status") != "already_completed"
+
+        # The new assertion's predicate was rewritten to the canonical core form.
+        with Session(engine) as s:
+            assert s.get(AssertionRow, new_aid).predicate == "requires"
 
     def test_already_mapped_predicate_skipped(self, engine):
         """If predicate_mappings already has a row for the predicate, skip it."""

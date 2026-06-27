@@ -14,7 +14,7 @@ from typing import Callable
 
 import numpy as np
 import structlog
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 
 from bsos.config import set_config
 from bsos.persistence.models import (
@@ -299,6 +299,42 @@ def _resolve_entity_refs(engine) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Outstanding-work detection
+# ---------------------------------------------------------------------------
+
+def has_outstanding_work(engine) -> bool:
+    """True if any Pattern still carries un-resolved free-text refs.
+
+    Passes 4-9 may add new Patterns with non-empty force_descriptions /
+    related_pattern_names after 10a's global completion flag was set. Resolution
+    clears those fields to '[]', so a non-empty field is a reliable signal that
+    new data needs normalizing — the global flag alone must not gate the pass.
+    Pending entity refs are best-effort retries and deliberately do not count
+    (they may never resolve, which would prevent the pass from ever settling).
+    """
+    from sqlalchemy import and_, or_
+
+    with Session(engine) as session:
+        unresolved = session.exec(
+            select(func.count())
+            .select_from(PatternRow)
+            .where(
+                or_(
+                    and_(
+                        PatternRow.force_descriptions.is_not(None),
+                        PatternRow.force_descriptions.notin_(("[]", "")),
+                    ),
+                    and_(
+                        PatternRow.related_pattern_names.is_not(None),
+                        PatternRow.related_pattern_names.notin_(("[]", "")),
+                    ),
+                )
+            )
+        ).one()
+    return unresolved > 0
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -315,8 +351,8 @@ def run_pass10a(
     """
     with Session(engine) as session:
         progress = session.get(PassProgressRow, ("10a", "__global__", embedding_model))
-        if progress and progress.status == "completed":
-            log.info("pass10a_skip", reason="already completed")
+        if progress and progress.status == "completed" and not has_outstanding_work(engine):
+            log.info("pass10a_skip", reason="already completed, no outstanding refs")
             return {"status": "already_completed"}
 
     log.info("pass10a_start", embedding_model=embedding_model)

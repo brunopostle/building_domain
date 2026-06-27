@@ -399,7 +399,29 @@ class TestPassProgress:
             assert row is not None
             assert row.status == "completed"
 
-    def test_already_completed_skips(self, engine):
+    def test_clean_rerun_skips(self, engine):
+        """Re-running with no un-abstracted assertions returns already_completed."""
+        with Session(engine) as s:
+            subj = _add_entity(s, "roof")
+            for i in range(3):
+                obj = _add_entity(s, f"e{i}")
+                _add_assertion(s, subj, obj, rationale=f"cluster:A{i+1}")
+            s.commit()
+
+        run_pass10c(engine, FakeProviderA(), _embedder=fake_embedder)
+
+        # All assertions are now abstracted → second run short-circuits.
+        result = run_pass10c(engine, FakeProviderA(), _embedder=fake_embedder)
+        assert result.get("status") == "already_completed"
+
+    def test_new_assertions_after_completion_are_abstracted(self, engine):
+        """Assertions added after completion must not be silently skipped.
+
+        Regression for building_domain-5ut: passes 4-9 add assertions after 10c's
+        global flag is set; those subjects must re-run and produce nodes without
+        duplicating already-abstracted clusters.
+        """
+        # First run on an empty DB sets the global completion flag.
         run_pass10c(engine, FakeProviderA(), _embedder=fake_embedder)
 
         with Session(engine) as s:
@@ -410,7 +432,17 @@ class TestPassProgress:
             s.commit()
 
         result = run_pass10c(engine, FakeProviderA(), _embedder=fake_embedder)
-        assert result.get("status") == "already_completed"
+        assert result.get("status") != "already_completed"
+        assert result["nodes_created"] == 1
+
+        with Session(engine) as s:
+            assert len(s.exec(select(AbstractionNodeRow)).all()) == 1
+
+        # A further clean re-run creates no duplicate node.
+        again = run_pass10c(engine, FakeProviderA(), _embedder=fake_embedder)
+        assert again.get("status") == "already_completed"
+        with Session(engine) as s:
+            assert len(s.exec(select(AbstractionNodeRow)).all()) == 1
 
     def test_llm_a_error_no_node_created(self, engine):
         """Synthesis LLM error → cluster skipped, no node."""

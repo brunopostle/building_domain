@@ -47,6 +47,7 @@ def run_normalize(
 ) -> None:
     """Shared normalize logic used by both bsos normalize and bsos extract --passes 10."""
     from bsos.llm import make_provider
+    from bsos.normalization import pass10a, pass10b, pass10c
     from bsos.normalization.pass10a import run_pass10a
     from bsos.normalization.pass10b import run_pass10b
     from bsos.normalization.pass10c import run_pass10c
@@ -85,7 +86,7 @@ def run_normalize(
         status = _sub_pass_status(session, embedding_model)
 
     # Pass 10a — ref resolution (embedding-only, no LLM needed)
-    if status.get("10a"):
+    if status.get("10a") and not pass10a.has_outstanding_work(engine):
         typer.echo("Pass 10a: already completed, skipping.")
     else:
         typer.echo("Pass 10a: resolving force/pattern/entity refs…")
@@ -107,7 +108,7 @@ def run_normalize(
     if not dry_run:
         with Session(engine) as session:
             status = _sub_pass_status(session, embedding_model)
-    if status.get("10b"):
+    if status.get("10b") and not pass10b.has_outstanding_work(engine):
         typer.echo("Pass 10b: already completed, skipping.")
     else:
         typer.echo("Pass 10b: stabilizing predicates…")
@@ -134,7 +135,7 @@ def run_normalize(
     if not dry_run:
         with Session(engine) as session:
             status = _sub_pass_status(session, embedding_model)
-    if status.get("10c"):
+    if status.get("10c") and not pass10c.has_outstanding_work(engine):
         typer.echo("Pass 10c: already completed, skipping.")
     else:
         typer.echo("Pass 10c: synthesising abstractions…")

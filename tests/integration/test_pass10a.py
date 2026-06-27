@@ -369,8 +369,8 @@ class TestPassProgressAndConfig:
             val = get_config(s, "passes_3_9_refs_resolved")
             assert val == "1"
 
-    def test_already_completed_is_skipped(self, engine):
-        """Running pass10a twice: second run returns early without re-processing."""
+    def test_clean_rerun_is_skipped(self, engine):
+        """Re-running with no outstanding refs returns early."""
         with Session(engine) as s:
             _add_force(s, "increased daylighting")
             _add_pattern(s, "p1", force_descriptions=["increased daylighting"])
@@ -378,13 +378,36 @@ class TestPassProgressAndConfig:
 
         run_pass10a(engine, _embedder=fake_embedder)
 
-        # Add a new unresolved description — should NOT be processed on second run
+        # Nothing new to resolve → global flag short-circuits.
+        result = run_pass10a(engine, _embedder=fake_embedder)
+        assert result.get("status") == "already_completed"
+
+    def test_new_refs_after_completion_are_resolved(self, engine):
+        """A pattern added after completion must not be silently skipped.
+
+        Regression for building_domain-5ut: passes 4-9 add new patterns with
+        force_descriptions after 10a's global flag is set; those must re-run.
+        """
         with Session(engine) as s:
-            _add_pattern(s, "p2", force_descriptions=["increased daylighting"])
+            _add_force(s, "increased daylighting")
+            _add_pattern(s, "p1", force_descriptions=["increased daylighting"])
+            s.commit()
+
+        run_pass10a(engine, _embedder=fake_embedder)
+
+        # Add a new pattern with an unresolved description after completion.
+        with Session(engine) as s:
+            p2_id = _add_pattern(s, "p2", force_descriptions=["increased daylighting"])
             s.commit()
 
         result = run_pass10a(engine, _embedder=fake_embedder)
-        assert result.get("status") == "already_completed"
+        assert result.get("status") != "already_completed"
+
+        # p2's description was resolved (cleared) and its force_ids populated.
+        with Session(engine) as s:
+            p2 = s.get(PatternRow, p2_id)
+            assert json.loads(p2.force_descriptions or "[]") == []
+            assert json.loads(p2.force_ids or "[]")
 
     def test_dry_run_makes_no_changes(self, engine):
         with Session(engine) as s:

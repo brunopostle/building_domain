@@ -135,7 +135,18 @@ def _run_phase1(
         with Session(engine) as session:
             canonical = _already_mapped(session, pred)
             if canonical:
-                log.debug("pass10b_phase1_skip_already_mapped", predicate=pred, canonical=canonical)
+                # Predicate was mapped on a prior run but reappears as a live
+                # assertion predicate — new assertions from passes 4-9 reused the
+                # stale value. Rewrite them so the mapping is actually applied.
+                count = _update_assertions(session, pred, canonical)
+                if count:
+                    session.commit()
+                log.debug(
+                    "pass10b_phase1_skip_already_mapped",
+                    predicate=pred,
+                    canonical=canonical,
+                    assertions_updated=count,
+                )
                 auto_mapped[pred] = canonical
                 continue
 
@@ -226,6 +237,32 @@ def _run_phase2(
 
 
 # ---------------------------------------------------------------------------
+# Outstanding-work detection
+# ---------------------------------------------------------------------------
+
+def has_outstanding_work(engine) -> bool:
+    """True if any non-core predicate has not yet been mapped or queued.
+
+    A non-core predicate is "handled" once it is either rewritten to a core
+    predicate (so it no longer appears as a distinct assertion predicate) or
+    recorded in pending_predicates. New assertions from passes 4-9 can introduce
+    fresh non-core predicates after 10b's global completion flag was set; those
+    must re-trigger the pass rather than being silently skipped.
+    """
+    with Session(engine) as session:
+        non_core = set(_non_core_predicates(session))
+        pending = {
+            r.value
+            for r in session.exec(
+                select(PendingPredicateRow).where(
+                    PendingPredicateRow.vocabulary_type == "predicate"
+                )
+            ).all()
+        }
+    return bool(non_core - pending)
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -244,8 +281,8 @@ def run_pass10b(
     """
     with Session(engine) as session:
         progress = session.get(PassProgressRow, ("10b", "__global__", embedding_model))
-        if progress and progress.status == "completed":
-            log.info("pass10b_skip", reason="already completed")
+        if progress and progress.status == "completed" and not has_outstanding_work(engine):
+            log.info("pass10b_skip", reason="already completed, no new predicates")
             return {"status": "already_completed"}
 
     log.info("pass10b_start", embedding_model=embedding_model)
