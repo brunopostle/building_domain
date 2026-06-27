@@ -41,6 +41,84 @@ def test_classify_constraint_dimensional_is_unchecked(rule):
     assert v.classify_constraint(rule, "must") is None
 
 
+# ── classify_dimensional_constraint ──────────────────────────────────────────
+
+@pytest.mark.parametrize("rule,kind,threshold", [
+    ("must have a minimum floor area of at least 0.9 m x 1.2 m",
+     "min_floor_area", 1.08),
+    ("Bedroom must have a minimum floor area of 7 m²",
+     "min_floor_area", 7.0),
+    ("Plant room must have a minimum floor area of 4.5 square metres",
+     "min_floor_area", 4.5),
+    ("must have a ceiling height of at least 7 feet 6 inches (2286 mm)",
+     "min_ceiling_height", 2.286),
+    ("Living room must have a minimum ceiling height of at least 2.1 m (7 ft)",
+     "min_ceiling_height", 2.1),
+    ("Staircase must have a minimum headroom clearance of 2.0 m",
+     "min_ceiling_height", 2.0),
+])
+def test_classify_dimensional_constraint(rule, kind, threshold):
+    result = v.classify_dimensional_constraint(rule, "must")
+    assert result is not None
+    assert result[0] == kind
+    assert result[1] == pytest.approx(threshold)
+
+
+def test_ceiling_rule_mentioning_floor_area_classifies_as_height():
+    # "...in at least 50% of the floor area" must not be read as an area check.
+    rule = ("Living room must have a minimum ceiling height of at least 2.1 m "
+            "(7 ft) in at least 50% of the floor area")
+    assert v.classify_dimensional_constraint(rule, "must") == ("min_ceiling_height", 2.1)
+
+
+@pytest.mark.parametrize("rule", [
+    "must have a minimum clear width of at least 36 inches (914 mm)",  # width, not area/height
+    "tread depth and riser height must be within a safe ratio",
+    "must have a dedicated 20-amp small-appliance branch circuit",
+])
+def test_classify_dimensional_constraint_non_area_height_is_none(rule):
+    assert v.classify_dimensional_constraint(rule, "must") is None
+
+
+def test_classify_dimensional_constraint_skips_must_not():
+    rule = "must not exceed a maximum floor area of 50 m²"
+    assert v.classify_dimensional_constraint(rule, "must_not") is None
+
+
+# ── evaluate_dimensional ──────────────────────────────────────────────────────
+
+def test_evaluate_dimensional_floor_area_pass_fail_unchecked():
+    assert v.evaluate_dimensional("min_floor_area", 1.08,
+                                  {"floor_area_m2": 12.2})[0] == v.PASS
+    assert v.evaluate_dimensional("min_floor_area", 10.0,
+                                  {"floor_area_m2": 4.0})[0] == v.FAIL
+    assert v.evaluate_dimensional("min_floor_area", 1.08, {})[0] == v.UNCHECKED
+
+
+def test_evaluate_dimensional_ceiling_height_pass_fail_unchecked():
+    assert v.evaluate_dimensional("min_ceiling_height", 2.1,
+                                  {"ceiling_height_m": 3.0})[0] == v.PASS
+    assert v.evaluate_dimensional("min_ceiling_height", 2.4,
+                                  {"ceiling_height_m": 2.1})[0] == v.FAIL
+    assert v.evaluate_dimensional("min_ceiling_height", 2.1, {})[0] == v.UNCHECKED
+
+
+def test_evaluate_dimensional_at_threshold_passes():
+    # Exact-equal measurement must pass despite mesh round-off.
+    assert v.evaluate_dimensional("min_ceiling_height", 2.4,
+                                  {"ceiling_height_m": 2.4})[0] == v.PASS
+
+
+def test_validate_constraints_routes_dimensional():
+    constraints = [
+        {"rule": "must have a minimum floor area of at least 0.9 m x 1.2 m",
+         "constraint_type": "must", "confidence": 0.95},
+    ]
+    [result] = v.validate_constraints(constraints, {"floor_area_m2": 12.2})
+    assert result["check_object"] == "min_floor_area"
+    assert result["status"] == v.PASS
+
+
 def test_classify_constraint_must_not_is_never_checked():
     rule = "must not have electrical outlets within 300mm of a sink basin"
     assert v.classify_constraint(rule, "must_not") is None

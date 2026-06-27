@@ -21,7 +21,9 @@ from collections import defaultdict
 from pathlib import Path
 
 import ifcopenshell
+import ifcopenshell.geom
 import ifcopenshell.util.element
+import ifcopenshell.util.shape
 
 # The deterministic check engine is shared with the bsos `validate_element` MCP
 # tool, so the report and the tool can never disagree. This script's job is to
@@ -217,6 +219,50 @@ def system_present_for_space(ifc, space, system: str) -> bool:
     return mep_present(ifc, system)
 
 
+_GEOM_SETTINGS = ifcopenshell.geom.settings()
+_geom_cache: dict[int, tuple[float | None, float | None]] = {}
+
+
+def _footprint_area(geom) -> float:
+    """Plan-projected floor area (m²) from a triangulated space mesh.
+
+    Sums the XY-projected area of upward-facing triangles only. Unlike a
+    bounding box this is correct for L-shaped rooms and rooms whose plan is not
+    aligned to the X/Y axes — a rotation about the vertical axis leaves the
+    horizontal projection of the floor face unchanged.
+    """
+    v, idx = geom.verts, geom.faces
+    total = 0.0
+    for i in range(0, len(idx), 3):
+        a, b, c = idx[i], idx[i + 1], idx[i + 2]
+        cross = ((v[3 * b] - v[3 * a]) * (v[3 * c + 1] - v[3 * a + 1])
+                 - (v[3 * b + 1] - v[3 * a + 1]) * (v[3 * c] - v[3 * a]))
+        if cross > 0:  # upward-facing → contributes to the footprint
+            total += cross
+    return total / 2.0
+
+
+def space_dimensions(space) -> tuple[float | None, float | None]:
+    """(floor_area_m2, ceiling_height_m) for a space, or (None, None).
+
+    Height is the world-Z extent, so it too is independent of plan rotation.
+    Cached per space id — shape creation is the expensive part of the report.
+    """
+    sid = space.id()
+    if sid not in _geom_cache:
+        dims: tuple[float | None, float | None] = (None, None)
+        if getattr(space, "Representation", None) is not None:
+            try:
+                shape = ifcopenshell.geom.create_shape(_GEOM_SETTINGS, space)
+                geom = shape.geometry  # keep `shape` alive while reading buffers
+                dims = (_footprint_area(geom),
+                        ifcopenshell.util.shape.get_z(geom))
+            except Exception:
+                dims = (None, None)
+        _geom_cache[sid] = dims
+    return _geom_cache[sid]
+
+
 def wall_has_insulation(ifc) -> bool:
     for wall in ifc.by_type("IfcWall"):
         mat = ifcopenshell.util.element.get_material(wall)
@@ -232,6 +278,7 @@ def wall_has_insulation(ifc) -> bool:
 # consumes. An MCP agent populates the same shape from the `ifc` server tools.
 
 def build_facts(ifc, space) -> dict:
+    area, height = space_dimensions(space)
     return {
         "floor_materials": sorted(get_floor_materials(space)),
         "window_count":    count_bounded_by_type(space, "IfcWindow"),
@@ -239,6 +286,8 @@ def build_facts(ifc, space) -> dict:
         "systems_present": [s for s in MEP_PRESENCE
                             if system_present_for_space(ifc, space, s)],
         "has_insulation":  wall_has_insulation(ifc),
+        "floor_area_m2":   area,
+        "ceiling_height_m": height,
     }
 
 
@@ -360,19 +409,26 @@ def report_constraints(ifc, usage, entity, spaces, constraints,
     unchecked = 0
     for ctype, rule, confidence in constraints:
         obj = validation.classify_constraint(rule, ctype)
-        if obj is None:
+        dim = validation.classify_dimensional_constraint(rule, ctype) if obj is None else None
+        if obj is None and dim is None:
             unchecked += 1
             continue
         space_statuses = []
         for space in spaces:
-            status, detail = check(obj, build_facts(ifc, space))
+            facts = build_facts(ifc, space)
+            if obj is not None:
+                status, detail = check(obj, facts)
+            else:
+                kind, threshold = dim
+                status, detail = validation.evaluate_dimensional(kind, threshold, facts)
+                status = status.upper()
             space_statuses.append((space.Name or "?", status, detail))
         _emit(f"{ctype} — {rule}", confidence, space_statuses, totals, all_rows,
               {"category": "constraint", "space_type": usage, "entity": entity,
-               "object": obj, "rule": rule})
+               "object": obj if obj is not None else dim[0], "rule": rule})
     if unchecked:
         print(f"   ·  {unchecked} constraint(s) not mechanically checkable "
-              f"(dimensional / code)")
+              f"(non-dimensional / code)")
 
 
 def report_spatial(ifc, usage, entity, spaces, rels, adj, id_to_usage,
@@ -439,6 +495,7 @@ def report_antipatterns(ifc, usage, entity, spaces, aps,
 def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB) -> list[dict]:
     ifc = ifcopenshell.open(str(ifc_path))
     _mep_cache.clear()
+    _geom_cache.clear()
 
     spaces_by_usage: dict[str, list] = defaultdict(list)
     for space in ifc.by_type("IfcSpace"):

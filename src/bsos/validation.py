@@ -15,12 +15,14 @@ Facts schema (every key optional; a fact that is absent yields UNCHECKED for
 checks that need it, which is distinct from a fact that is present-but-empty
 yielding FAIL):
 
-    floor_materials : list[str]   lower-case covering material names
-    window_count    : int         operable windows bounding the space
-    door_count      : int         doors bounding the space
-    systems_present : list[str]   BSOS system names modelled ("Drainage System")
-    has_insulation  : bool        any wall assembly has an insulation layer
-    adjacent_usages : list[str]   space usages sharing a boundary
+    floor_materials  : list[str]  lower-case covering material names
+    window_count     : int        operable windows bounding the space
+    door_count       : int        doors bounding the space
+    systems_present  : list[str]  BSOS system names modelled ("Drainage System")
+    has_insulation   : bool       any wall assembly has an insulation layer
+    adjacent_usages  : list[str]  space usages sharing a boundary
+    floor_area_m2    : float      true (plan-projected) floor area in m²
+    ceiling_height_m : float      floor-to-ceiling height in m
 
 The deterministic engine only covers rule shapes it has patterns for. Anything
 it cannot map returns status UNCHECKED with reason ``no_deterministic_matcher``
@@ -28,6 +30,8 @@ it cannot map returns status UNCHECKED with reason ``no_deterministic_matcher``
 contract.
 """
 from __future__ import annotations
+
+import re
 
 PASS, FAIL, UNCHECKED = "pass", "fail", "unchecked"
 
@@ -93,6 +97,62 @@ def classify_constraint(rule: str, constraint_type: str) -> str | None:
         return "Doors"
     if "insulation" in r:
         return "Insulation"
+    return None
+
+
+# ── Dimensional constraint rule → (check kind, SI threshold) ─────────────────
+# Rules that classify_constraint cannot reduce to a presence test but that *do*
+# reduce to a numeric threshold checkable against space geometry: minimum floor
+# area and minimum floor-to-ceiling height. Other dimensional rules (clear
+# corridor width, tread/riser ratios, sill heights, nosing projections) need
+# geometry the space record does not expose and remain unchecked.
+
+# Length tokens give a value + metric unit. Imperial values ("36 inches",
+# "7 feet") are deliberately ignored: every rule in the corpus restates the
+# metric equivalent, usually in a parenthetical, so taking only metric tokens
+# avoids unit-conversion guesswork. ``m`` requires a following non-letter so it
+# never swallows the "m" of "mm"/"m²".
+_LEN_RE = re.compile(r"(\d+(?:\.\d+)?)\s*(mm|cm|m)(?![a-z²])", re.I)
+# Area as an explicit "N m²" / "N square metres" token …
+_AREA_RE = re.compile(
+    r"(\d+(?:\.\d+)?)\s*(?:m²|m2|sq\.?\s*m|square\s+met(?:re|er)s?)", re.I)
+# … or as a "0.9 m x 1.2 m" plan-dimension product.
+_DIM_PRODUCT_RE = re.compile(
+    r"(\d+(?:\.\d+)?)\s*m\s*[x×]\s*(\d+(?:\.\d+)?)\s*m", re.I)
+
+
+def _metric_lengths_m(text: str) -> list[float]:
+    """All metric length tokens in ``text``, normalised to metres."""
+    scale = {"mm": 0.001, "cm": 0.01, "m": 1.0}
+    return [float(v) * scale[u.lower()] for v, u in _LEN_RE.findall(text)]
+
+
+def classify_dimensional_constraint(
+        rule: str, constraint_type: str) -> tuple[str, float] | None:
+    """Map a constraint rule to (kind, SI threshold), or None if not numeric.
+
+    kind is one of ``min_floor_area`` (m²) or ``min_ceiling_height`` (m). Only
+    ``must`` minimums are returned; ``must_not`` maxima and non-dimensional
+    rules yield None so the caller can fall back to the unchecked bucket.
+    """
+    if constraint_type == "must_not":
+        return None
+    r = rule.lower()
+
+    if "floor area" in r or ("area" in r and ("m²" in r or "m2" in r)):
+        m = _DIM_PRODUCT_RE.search(rule)
+        if m:
+            return "min_floor_area", round(float(m.group(1)) * float(m.group(2)), 3)
+        m = _AREA_RE.search(rule)
+        if m:
+            return "min_floor_area", float(m.group(1))
+
+    if ("ceiling height" in r or "headroom" in r) and (
+            "least" in r or "minimum" in r or "min " in r):
+        lengths = _metric_lengths_m(rule)
+        if lengths:
+            return "min_ceiling_height", max(lengths)
+
     return None
 
 
@@ -164,6 +224,32 @@ def evaluate(check_object: str, facts: dict) -> tuple[str, str]:
     return UNCHECKED, NO_MATCHER
 
 
+def evaluate_dimensional(kind: str, threshold: float, facts: dict) -> tuple[str, str]:
+    """Compare a measured space dimension against a minimum threshold.
+
+    ``kind`` / ``threshold`` come from :func:`classify_dimensional_constraint`.
+    A missing measurement yields UNCHECKED (distinct from a measured value that
+    falls short, which is FAIL). A small tolerance absorbs meshing round-off.
+    """
+    if kind == "min_floor_area":
+        area = facts.get("floor_area_m2")
+        if area is None:
+            return UNCHECKED, "floor_area_m2 not supplied"
+        if area + 1e-6 >= threshold:
+            return PASS, f"floor area {area:.1f} m² ≥ required {threshold:.2f} m²"
+        return FAIL, f"floor area {area:.1f} m² < required {threshold:.2f} m²"
+
+    if kind == "min_ceiling_height":
+        h = facts.get("ceiling_height_m")
+        if h is None:
+            return UNCHECKED, "ceiling_height_m not supplied"
+        if h + 1e-6 >= threshold:
+            return PASS, f"ceiling height {h:.2f} m ≥ required {threshold:.2f} m"
+        return FAIL, f"ceiling height {h:.2f} m < required {threshold:.2f} m"
+
+    return UNCHECKED, NO_MATCHER
+
+
 def validate_constraints(constraints: list[dict], facts: dict) -> list[dict]:
     """Validate a list of constraint dicts against facts.
 
@@ -173,15 +259,23 @@ def validate_constraints(constraints: list[dict], facts: dict) -> list[dict]:
     out: list[dict] = []
     for c in constraints:
         obj = classify_constraint(c["rule"], c["constraint_type"])
-        if obj is None:
-            status, detail = UNCHECKED, NO_MATCHER
-        else:
+        if obj is not None:
+            check_object = obj
             status, detail = evaluate(obj, facts)
+        else:
+            dim = classify_dimensional_constraint(c["rule"], c["constraint_type"])
+            if dim is not None:
+                kind, threshold = dim
+                check_object = kind
+                status, detail = evaluate_dimensional(kind, threshold, facts)
+            else:
+                check_object = None
+                status, detail = UNCHECKED, NO_MATCHER
         out.append({
             "rule": c["rule"],
             "constraint_type": c["constraint_type"],
             "confidence": c.get("confidence"),
-            "check_object": obj,
+            "check_object": check_object,
             "status": status,
             "detail": detail,
         })

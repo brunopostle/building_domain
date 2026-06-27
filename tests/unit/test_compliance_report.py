@@ -19,6 +19,47 @@ cr = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(cr)
 
 
+# ── footprint area from triangulated mesh ────────────────────────────────────
+
+import math
+
+
+class _FakeGeom:
+    """Minimal stand-in for an ifcopenshell triangulation (flat verts/faces)."""
+    def __init__(self, verts, faces):
+        self.verts = verts
+        self.faces = faces
+
+
+def _square_floor(side: float, angle: float = 0.0) -> _FakeGeom:
+    """A horizontal square floor of `side`, rotated `angle` rad about Z,
+    as two upward-facing (CCW-from-above) triangles."""
+    pts = [(0, 0), (side, 0), (side, side), (0, side)]
+    ca, sa = math.cos(angle), math.sin(angle)
+    verts = []
+    for x, y in pts:
+        verts += [x * ca - y * sa, x * sa + y * ca, 0.0]
+    return _FakeGeom(verts, [0, 1, 2, 0, 2, 3])
+
+
+def test_footprint_area_of_axis_aligned_square():
+    assert cr._footprint_area(_square_floor(3.0)) == pytest.approx(9.0)
+
+
+def test_footprint_area_is_rotation_invariant():
+    # A room whose plan is not aligned to X/Y must report its true area, not an
+    # inflated bounding-box footprint.
+    assert cr._footprint_area(_square_floor(3.0, math.radians(30))) == pytest.approx(9.0)
+
+
+def test_footprint_area_ignores_downward_faces():
+    # A floor face (CCW, upward) plus its reversed copy (downward) — only the
+    # upward face counts, so the footprint is the floor area, not double.
+    g = _square_floor(2.0)
+    g.faces = list(g.faces) + [2, 1, 0, 3, 2, 0]  # reversed winding = downward
+    assert cr._footprint_area(g) == pytest.approx(4.0)
+
+
 @pytest.mark.parametrize("name,usage", [
     ("Kitchen", "kitchen"),
     ("Living Room", "living"),
