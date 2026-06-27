@@ -76,6 +76,27 @@ def format_assertions(results: list[dict], entity: str) -> str:
     return "\n".join(lines)
 
 
+def format_patterns(result: dict) -> str:
+    if "error" in result:
+        return f"Entity '{result.get('query', '?')}' not found."
+    items = result.get("patterns", [])
+    entity = result.get("entity", "?")
+    if not items:
+        return f"No patterns found for '{entity}'."
+    lines = [f"Patterns for '{entity}'  ({len(items)} results)\n"]
+    for p in items:
+        lines.append(f"  {p['name']}")
+        lines.append(f"    confidence={p['confidence']:.2f}  origin={p['knowledge_origin']}  status={p['status']}")
+        if p.get("problem"):
+            lines.append(f"    problem: {p['problem']}")
+        if p.get("solution"):
+            lines.append(f"    solution: {p['solution']}")
+        if p.get("forces"):
+            lines.append(f"    forces: {'; '.join(p['forces'])}")
+        lines.append("")
+    return "\n".join(lines)
+
+
 def format_constraints(result: dict) -> str:
     items = result.get("constraints", [])
     entity = result.get("entity", "?")

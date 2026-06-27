@@ -1,0 +1,74 @@
+[
+  {
+    "entity": "Sitting / Lounge Area",
+    "context_description": "A lounge where the chairs are lined up in a row against the walls facing a television, with no grouped seating and a single window high on one wall.",
+    "expected_patterns": [
+      {
+        "name": "Sitting Circle",
+        "rationale": "Chairs ranged along the walls give no natural grouping; a sitting circle is the pattern that turns a row of seats into a place where people face one another and talk."
+      },
+      {
+        "name": "Different Chairs",
+        "rationale": "A uniform row of identical chairs ignores that people are different sizes and want different postures; the pattern calls for a variety of chairs."
+      },
+      {
+        "name": "Sequence of Sitting Spaces",
+        "rationale": "A single undifferentiated lounge offers no gradient from public to intimate seating; the pattern asks for a sequence of distinct sitting places."
+      },
+      {
+        "name": "Window Place",
+        "rationale": "With only a high single window and seats turned to a screen, the room lacks a place to sit in the light by the window."
+      }
+    ],
+    "notes": "Space-type case. All four expected patterns are attached to this entity in the extracted corpus and should be returned by `bsos query --type pattern --include-proposed`."
+  },
+  {
+    "entity": "Detached House",
+    "context_description": "A deep-plan two-storey detached house: rooms strung off a central corridor, most rooms lit from one side only, and a flat roof with no sheltering overhang.",
+    "expected_patterns": [
+      {
+        "name": "Wings of Light",
+        "rationale": "A deep plan forces single-aspect rooms; wings of light keeps every room narrow enough to be daylit from two sides."
+      },
+      {
+        "name": "The Flow Through Rooms",
+        "rationale": "Rooms hung off a dead corridor break the movement of the house; the pattern restores a looping flow from room to room."
+      },
+      {
+        "name": "Sheltering Roof",
+        "rationale": "A flat roof with no overhang denies the house its sheltering form; the pattern wants a roof that comes down low around the building."
+      }
+    ],
+    "notes": "Space-type case (a dwelling configuration). All three expected patterns are attached to this entity in the extracted corpus."
+  },
+  {
+    "entity": "Bench / Seating Element",
+    "context_description": "A single bench bolted to a blank corridor wall, facing the opposite wall, with nothing to look at and no other seats nearby.",
+    "expected_patterns": [
+      {
+        "name": "Sequence of Sitting Spaces",
+        "rationale": "An isolated bench is not part of any graded sequence of places to rest; the pattern places seats along a journey rather than singly."
+      },
+      {
+        "name": "Windows Overlooking Life",
+        "rationale": "A bench facing a blank wall has nothing worth watching; seating should be placed where it overlooks activity. Domain judgement; may be absent from the extracted corpus and reported as missing."
+      }
+    ],
+    "notes": "Component-type case. 'Sequence of Sitting Spaces' is attached to this entity in the corpus; 'Windows Overlooking Life' is a reviewer expectation that may be reported missing — that gap is the regression signal."
+  },
+  {
+    "entity": "Staircase System",
+    "context_description": "An enclosed dog-leg fire stair tucked into a corner, dark and purely utilitarian, with no daylight and no relation to the life of the building.",
+    "expected_patterns": [
+      {
+        "name": "Staircase as a Stage",
+        "rationale": "A hidden utilitarian stair misses the chance for the staircase to be a social place; the pattern makes the stair a stage onto the room it serves."
+      },
+      {
+        "name": "Light on Two Sides of Every Room",
+        "rationale": "A dark enclosed stair shaft is unpleasant and feels unsafe; daylight from more than one direction makes it usable. Domain judgement; may be absent and reported as missing."
+      }
+    ],
+    "notes": "System-type case. 'Staircase as a Stage' is attached in the corpus; the lighting expectation may be reported missing."
+  }
+]

@@ -53,7 +53,7 @@ def cmd_query(
     entity: str = typer.Argument(..., help="Entity name to query"),
     type_filter: list[str] = typer.Option(
         [], "--type", "-t",
-        help="Item type: assertion, constraint, antipattern, force, spatial, process",
+        help="Item type: assertion, constraint, pattern, antipattern, force, spatial, process",
     ),
     min_confidence: float = typer.Option(0.0, "--min-confidence"),
     include_proposed: bool = typer.Option(False, "--include-proposed"),
@@ -70,7 +70,7 @@ def cmd_query(
     from bsos.cli.query import (
         resolve_entity, get_assertions, format_assertions,
         format_constraints, format_failure_modes, format_forces,
-        format_spatial_relations, format_process_sequence,
+        format_spatial_relations, format_process_sequence, format_patterns,
     )
     from sqlmodel import Session as _Session
 
@@ -104,6 +104,14 @@ def cmd_query(
             typer.echo(json.dumps(r, indent=2))
         else:
             typer.echo(format_constraints(r))
+
+    if "pattern" in types:
+        with _Session(engine) as s:
+            r = get_patterns_tool(s, entity, **kw)
+        if json_out:
+            typer.echo(json.dumps(r, indent=2))
+        else:
+            typer.echo(format_patterns(r))
 
     if "antipattern" in types:
         with _Session(engine) as s:
