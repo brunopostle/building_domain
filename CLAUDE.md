@@ -55,6 +55,35 @@ bd close <id>         # Complete work
 <!-- END BEADS INTEGRATION -->
 
 
+## Persisting Database Changes
+
+`bsos.db` (and `bsos_cache.db`, `.bsos_config`) are **git-ignored** — they are too
+large for GitHub. The git-tracked form of the knowledge base is the per-table JSON
+serialization in `data/snapshot/`. **If a session mutates `bsos.db`, the change is
+NOT persisted until you regenerate the affected snapshot file(s) and push them.**
+Closing a beads issue without doing this strands the DB work on your local disk.
+
+As part of session completion, whenever you have changed the database:
+
+```bash
+# Regenerate only the table(s) you changed (keeps the diff small).
+# Directory output writes one <type>.json per type; a trailing slash forces dir mode.
+bsos export --format json --type entities --output data/snapshot/
+# Repeat --type for each changed table: assertions, constraints, patterns,
+# forces, antipatterns, abstraction_nodes, spatial_relations, process_relations.
+# Omit --type to regenerate the entire snapshot.
+
+git add data/snapshot/
+git commit -m "snapshot: <what changed>"
+git push
+```
+
+The snapshot includes **all** statuses (proposed/accepted/deprecated/merged) — there is
+no status filter — so deprecations and in-place adoptions are captured, not just accepted
+rows. `data/snapshot/antipatterns.json` and `patterns.json` are ~75–95 MB; each stays
+under GitHub's 100 MB/file limit, which is why the export splits per-table rather than
+writing a single `bsos_snapshot.json`.
+
 ## Build & Test
 
 ```bash
