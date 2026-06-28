@@ -92,30 +92,77 @@ pytest
 
 ## Running the Extraction Pipeline
 
-The pipeline must run in a **separate terminal** with `ANTHROPIC_API_KEY` set (cannot be set inside a Claude Code session).
+The pipeline must run in a **separate terminal** with the provider API key set
+(cannot be set inside a Claude Code session).
 
-### Recommended command (cost-optimised)
+### Clean-by-construction procedure (from an empty DB)
 
-Seed canonical IFC classes **before** extraction so the ifc_class layer is
-schema-authoritative and the LLM never invents class names:
+This is the documented procedure that reproduces a clean knowledge base from
+scratch with **no manual SQL cleanup afterwards**. The pipeline's guardrails
+(below) keep junk out by construction; run the steps in order:
 
 ```bash
-bsos seed-ifc-classes            # one-time; deterministic, no API key needed
-bsos extract --seed-apl --models claude-haiku-4-5-20251001 \
+# 1. Create the database and run migrations (deterministic, no API key).
+bsos init
+
+# 2. Seed canonical IFC classes from the authoritative schema BEFORE extraction,
+#    so the ifc_class layer is schema-authoritative and the LLM never invents
+#    class names. Add `--schema IFC4X3` (repeatable) for infrastructure classes.
+bsos seed-ifc-classes
+
+# 3. (Recommended) populate curated IFC property-set recommendations.
+bsos seed-psets
+
+# 4. Smoke-test the provider before committing to a long run (see DeepSeek below).
+python scripts/smoke_test_deepseek.py     # exit 0 = HEALTHY
+
+# 5. Run all 12 passes. deepseek-chat (V3) is the production model — it completed
+#    the full run at feasible cost (Anthropic is too expensive for all 12 passes).
+export OPENAI_API_KEY=sk-<deepseek key>
+export OPENAI_BASE_URL=https://api.deepseek.com
+bsos extract --seed-apl --models deepseek-chat \
   --passes 1,2,3,4,5,6,7,8,9,10,11,12 \
   --framings 1 --workers 2
 ```
 
-`seed-ifc-classes` enumerates real IFC4 entity classes via ifcopenshell and
-writes one `ifc_class` EntityRow each (`source_model='ifc-schema'`, `status='accepted'`).
-Pass 1 now drops any LLM-minted `ifc_class` concepts and Pass 12 maps only onto
-the seeded set, so hallucinated names ('IfcHotel') never enter the DB. Add
-`--schema IFC4X3` for infrastructure classes. This is the root-cause fix that
-makes the old reactive purge (building_domain-4se) a one-time historical cleanup.
+After this completes the graph is fully normalized and needs no cleanup. The
+output is `status='proposed'`; review/accept it separately (building_domain-lfy).
+
+`claude-haiku-4-5-20251001` is a quality-equivalent drop-in for step 5 (measured
+~21 assertions/entity, same as V3) if budget allows; it needs `ANTHROPIC_API_KEY`
+instead of the OpenAI-compatible vars.
 
 - `--framings 1` — single prompt framing per entity (3× cheaper than default 3)
 - `--workers 2` — **do not exceed 2**: SQLite WAL shared-memory (-shm) fails with SQLITE_CANTOPEN under 3+ concurrent writers regardless of pool settings
 - `--passes` — omit to run all, or specify e.g. `3,4,5,6,7,8,9,10,11,12` to resume after a crash
+
+### Why the run stays clean (guardrails, no manual cleanup)
+
+These pipeline fixes (epic building_domain-27w) mean the documented run does not
+reproduce the junk earlier runs needed manual SQL to remove:
+
+- **Canonical IFC classes** — `seed-ifc-classes` writes one `ifc_class` EntityRow
+  per real IFC type (`source_model='ifc-schema'`, `status='accepted'`). Pass 1
+  drops any LLM-minted `ifc_class` concepts and Pass 12 maps only onto the seeded
+  set, so hallucinated names ('IfcHotel') never enter the DB (building_domain-y30).
+- **In-domain concepts** — Pass 1's concept-discovery prompts carry a SCOPE note
+  that keeps entities within the built environment and restricts activities to
+  on-site construction/installation/commissioning, so loose consumer objects and
+  off-site manufacturing activities ('Paintbrush Assembly') are not seeded
+  (building_domain-5if, supersedes the proposed Pass 5 bound in building_domain-yms).
+- **Scoped passes** — Passes 6 (constraints) and 7 (anti-patterns) skip
+  `entity_type='activity'`; passes 8/9 already scope to component/space/system.
+  Activity knowledge is captured as ordering by Pass 5, not as constraints
+  (building_domain-zu4). No manual scoping needed.
+- **No quota-padding** — Passes 6/7/8/9 prompts include quality-over-quantity
+  guidance: include only genuinely-applicable items, return few/none when
+  appropriate, do not split one item into near-duplicate variants. This stops the
+  "exactly 8 patterns per entity" padding (building_domain-8tk). *Caveat: this
+  guidance is part of the per-pass cache key, so it only affects a fresh run.*
+- **Resume-safe normalization** — Passes 10a/b/c re-run when un-normalized data
+  exists rather than trusting a single global "completed" flag, so a multi-stage
+  or resumed run normalizes everything with no manual DELETE-from-`pass_progress`
+  step (building_domain-5ut).
 
 ### Model routing (`bsos/llm/__init__.py`)
 
@@ -128,20 +175,15 @@ makes the old reactive purge (building_domain-4se) a one-time historical cleanup
 **Free local option:** `--models ollama/llama3.1` (requires Ollama running on localhost:11434).
 **Cheap cloud option:** any OpenAI-compatible provider (DeepSeek, Groq, Together AI) via `OPENAI_API_KEY` + `OPENAI_BASE_URL`. See DeepSeek below — it is the recommended cheap cloud route.
 
-### DeepSeek (recommended cheap cloud provider)
+### DeepSeek (production model — cheap cloud provider)
 
-The Anthropic API is too expensive to complete the full 12-pass extraction. **DeepSeek** (`deepseek-chat` = V3) is OpenAI-compatible, so it routes through the existing `OpenAIProvider` with **zero code changes** (it matches neither the `claude-` nor `ollama/` prefix, so it falls through to OpenAI-compatible handling).
+The Anthropic API is too expensive to complete the full 12-pass extraction, so the
+documented production run (step 5 above) uses **DeepSeek** (`deepseek-chat` = V3).
+It is OpenAI-compatible, so it routes through the existing `OpenAIProvider` with
+**zero code changes** (it matches neither the `claude-` nor `ollama/` prefix, so it
+falls through to OpenAI-compatible handling).
 
-```bash
-export OPENAI_API_KEY=sk-<deepseek key>
-export OPENAI_BASE_URL=https://api.deepseek.com
-
-bsos extract --seed-apl --models deepseek-chat \
-  --passes 1,2,3,4,5,6,7,8,9,10,11,12 \
-  --framings 1 --workers 2
-```
-
-**Smoke-test first.** Before committing to a full run, verify auth, schema validation, and assertion density:
+**Smoke-test first** (step 4 above). Before committing to a full run, verify auth, schema validation, and assertion density:
 
 ```bash
 export OPENAI_API_KEY=sk-<deepseek key>
@@ -163,9 +205,12 @@ Unlike Groq/Llama-70B (which give sparse 1-2 assertions per entity and are unusa
 - **Groq provider:** Set `OPENAI_API_KEY=gsk_...` and `OPENAI_BASE_URL=https://api.groq.com/openai/v1` then use `--models llama-3.3-70b-versatile`. Quality is significantly lower than Haiku for complex structured output schemas — use Haiku or Sonnet for production runs.
 - **Open-weight models (Llama, Groq):** Produce very sparse assertions (1-2 per entity vs 10-20 for Haiku). Not suitable for pass 3+.
 
-### Recovering from phantom progress records
+### Recovering from a hard crash mid-pass (extraction passes 3–9)
 
-If the pipeline crashes mid-pass, some entities may have `pass_progress` records but no assertions. Clean up before restarting:
+Normalization (passes 10a/b/c) is now resume-safe (building_domain-5ut) and needs
+no manual intervention. The extraction passes resume from the LLM cache, but a
+process killed mid-write can leave an entity with a `pass_progress` record yet no
+assertions. If a restart skips such entities, clear the phantom records first:
 
 ```bash
 sqlite3 bsos.db "
@@ -178,11 +223,3 @@ sqlite3 bsos.db "
 ```
 
 Replace `'3'` with the relevant pass number. Then restart normally — resume logic fills the gaps.
-
-### Pass 3 missing entities (Roof, Foundation, Beam, Wall)
-
-These 4 entities had their assertions deleted during an earlier cleanup but their progress records persisted. After the current run completes, patch with:
-
-```bash
-bsos extract --seed-apl --models claude-haiku-4-5-20251001 --passes 3 --framings 1 --workers 2
-```
