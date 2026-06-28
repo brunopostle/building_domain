@@ -22,6 +22,7 @@ from bsos.persistence.models import (
     SpatialRelationRow,
 )
 from bsos.persistence.repos.pending import upsert_pending_spatial_relation_type
+from bsos.persistence.retry import with_db_retry
 from bsos.pipeline.schemas import SpatialRelationExtractionResponse
 from bsos.vocab import SPATIAL_RELATION_TYPES
 
@@ -182,6 +183,7 @@ def run_pass4(
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
         futures = {
             pool.submit(
+                with_db_retry,
                 _process_entity,
                 engine, eid, ename, etype,
                 provider, name_lookup, run_id,

@@ -19,6 +19,7 @@ from sqlmodel import Session, select
 
 from bsos.llm.protocol import LLMProvider
 from bsos.persistence.models import EntityRow, PassProgressRow, PatternRow
+from bsos.persistence.retry import with_db_retry
 from bsos.pipeline import QUALITY_GUIDANCE
 from bsos.pipeline.schemas import PatternExtractionResponse
 
@@ -151,6 +152,7 @@ def run_pass8(
     with ThreadPoolExecutor(max_workers=max_workers) as pool:
         futures = {
             pool.submit(
+                with_db_retry,
                 _process_entity,
                 engine, eid, ename, etype, provider, run_id,
             ): ename
