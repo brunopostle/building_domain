@@ -12,18 +12,33 @@ materials, spaces, systems, or IFC schema classes.
 """
 import threading
 import uuid
+from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
+from typing import Callable
 
+import numpy as np
 import structlog
-from sqlmodel import Session, select
+from sqlmodel import Session, func, select
 
 from bsos.llm.protocol import LLMProvider
-from bsos.persistence.models import EntityAliasRow, EntityRow, PassProgressRow, ProcessRelationRow
+from bsos.persistence.merge import merge_entity
+from bsos.persistence.models import (
+    AssertionRow, EntityAliasRow, EntityRow, PassProgressRow, ProcessRelationRow,
+)
 from bsos.persistence.retry import with_db_retry
 from bsos.pipeline.schemas import ProcessRelationExtractionResponse
 
 log = structlog.get_logger()
+
+# Embedding-clustering threshold for the activity-dedup step (run_activity_dedup).
+# Calibrated against the production activity set (building_domain-e9k): 0.04 (Pass
+# 2's value) is too timid for activity wording variants — it leaves "Install Roof
+# Decking" distinct from "Roof Decking Installation". 0.12+ starts collapsing
+# genuinely-distinct construction phases (preparation vs installation vs
+# completion). 0.08 folds word-order / punctuation / "Install X" ≈ "X Installation"
+# / decking ≈ sheathing variants while keeping distinct phases apart.
+ACTIVITY_DEDUP_THRESHOLD = 0.08
 
 PROMPT_TEMPLATE = (
     "For the building activity or entity '{name}' (type: {entity_type}), describe its "
@@ -262,4 +277,133 @@ def run_pass5(
         "entities_processed": len(entity_tuples),
         "relations_written": total_written,
         "hard_constraint_divergences": len(all_divergences),
+    }
+
+
+def _activity_degree(session: Session, entity_id: str) -> tuple[int, int]:
+    """Return (process_relation_degree, assertion_count) for canonical election.
+
+    Pass 5 mints most duplicate activities inline with zero assertions, so the
+    process-relation degree (how many sequencing edges touch the entity) is the
+    more meaningful signal of which wording the graph actually settled on.
+    """
+    proc = session.exec(
+        select(func.count(ProcessRelationRow.id)).where(
+            (ProcessRelationRow.predecessor_id == entity_id)
+            | (ProcessRelationRow.successor_id == entity_id)
+        )
+    ).one()
+    asrt = session.exec(
+        select(func.count(AssertionRow.id)).where(
+            (AssertionRow.subject_id == entity_id) | (AssertionRow.object_id == entity_id)
+        )
+    ).one()
+    return proc, asrt
+
+
+def _elect_activity_canonical(session: Session, members: list[EntityRow]) -> str:
+    """Pick the canonical activity: most process edges, then most assertions,
+    then oldest, then lexicographically-smallest name (deterministic tiebreak)."""
+    def sort_key(e: EntityRow) -> tuple:
+        proc, asrt = _activity_degree(session, e.id)
+        # Sorted ascending; the element that sorts LAST is canonical, so we want
+        # high proc/asrt, old created_at, and small name to land at the end.
+        return (proc, asrt, -e.created_at.timestamp(), [-ord(c) for c in e.name])
+
+    return max(members, key=sort_key).id
+
+
+def run_activity_dedup(
+    session: Session,
+    run_id: str,
+    embedding_model: str = "all-mpnet-base-v2",
+    distance_threshold: float = ACTIVITY_DEDUP_THRESHOLD,
+    _embedder: Callable[[list[str]], np.ndarray] | None = None,
+    dry_run: bool = False,
+) -> dict:
+    """Fold near-duplicate ``activity`` entities minted by Pass 5 into canonicals.
+
+    Pass 5's ``_get_or_create_activity`` matches existing activities by exact
+    (case-insensitive) name only, so every wording variant the LLM returns
+    ('Roof Sheathing Installation', 'Install Roof Sheathing', 'Roof Decking /
+    Sheathing', ...) becomes a distinct entity (building_domain-e9k). This step
+    runs after Pass 5: it embeds every active activity name, clusters with the
+    same Agglomerative(cosine, average) machinery as Pass 2, and merges each
+    cluster into one canonical via :func:`merge_entity` — which repoints the
+    ``process_relations`` FKs so the sequencing graph is not stranded.
+
+    Scoped to ``entity_type='activity'`` so it never touches components, spaces,
+    systems, materials or seeded ifc_class rows. ``_embedder`` is a test seam.
+    """
+    from sklearn.cluster import AgglomerativeClustering
+
+    from bsos.pipeline.pass2 import _load_or_compute_embeddings
+
+    activities = session.exec(
+        select(EntityRow).where(
+            EntityRow.status != "merged",
+            EntityRow.entity_type == "activity",
+        )
+    ).all()
+
+    log.info("activity_dedup_start", activity_count=len(activities),
+             threshold=distance_threshold)
+
+    if len(activities) < 2:
+        return {"clusters_found": 0, "entities_merged": 0,
+                "activities_before": len(activities)}
+
+    if _embedder is None:
+        from sentence_transformers import SentenceTransformer
+        model_obj = SentenceTransformer(embedding_model)
+        embedder: Callable[[list[str]], np.ndarray] = lambda texts: model_obj.encode(
+            texts, show_progress_bar=False
+        )
+    else:
+        embedder = _embedder
+
+    vectors = _load_or_compute_embeddings(session, activities, embedding_model, embedder)
+
+    clustering = AgglomerativeClustering(
+        n_clusters=None,
+        metric="cosine",
+        linkage="average",
+        distance_threshold=distance_threshold,
+    )
+    labels = clustering.fit_predict(vectors)
+
+    clusters: dict[int, list[EntityRow]] = defaultdict(list)
+    for entity, label in zip(activities, labels):
+        clusters[label].append(entity)
+
+    merge_clusters = [m for m in clusters.values() if len(m) >= 2]
+    log.info("activity_dedup_clusters", total_clusters=len(clusters),
+             merge_clusters=len(merge_clusters))
+
+    entities_merged = 0
+    for members in merge_clusters:
+        canonical_id = _elect_activity_canonical(session, members)
+        canonical_name = next(m.name for m in members if m.id == canonical_id)
+        dup_names = [m.name for m in members if m.id != canonical_id]
+        log.info("activity_dedup_merge", canonical=canonical_name, duplicates=dup_names)
+        entities_merged += len(members) - 1
+
+        if not dry_run:
+            for dup in members:
+                if dup.id == canonical_id:
+                    continue
+                if session.get(EntityRow, dup.id) is None:
+                    continue
+                # Same concept, different wording — keep canonical's entity_type.
+                merge_entity(session, canonical_id, dup.id, update_types=False)
+
+    if not dry_run:
+        session.commit()
+
+    log.info("activity_dedup_complete", clusters_found=len(merge_clusters),
+             entities_merged=entities_merged)
+    return {
+        "clusters_found": len(merge_clusters),
+        "entities_merged": entities_merged,
+        "activities_before": len(activities),
     }

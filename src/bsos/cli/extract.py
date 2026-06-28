@@ -203,6 +203,34 @@ def extract(
                         + "."
                     )
 
+            # Activity dedup runs ONCE after all Pass 5 models, on the merged
+            # activity layer. Pass 5's get_or_create matches activity names
+            # exactly, so wording variants accumulate as distinct entities
+            # (building_domain-e9k); fold the near-duplicates into canonicals
+            # before the constraint/anti-pattern passes consume them.
+            from bsos.pipeline.pass5 import run_activity_dedup
+            from bsos.pipeline.pass2 import EMBEDDING_MODEL as _EMB_MODEL
+            with Session(engine5) as dedup_session:
+                if dry_run:
+                    rd = run_activity_dedup(dedup_session, "__dry_run__",
+                                            embedding_model=_EMB_MODEL, dry_run=True)
+                    typer.echo(
+                        f"Activity dedup (dry-run): {rd['clusters_found']} clusters, "
+                        f"{rd['entities_merged']} activities would be merged "
+                        f"(of {rd['activities_before']})."
+                    )
+                else:
+                    dedup_run_id = start_run(dedup_session, [], ["5"], seed_text)
+                    rd = run_activity_dedup(dedup_session, dedup_run_id,
+                                            embedding_model=_EMB_MODEL)
+                    complete_run(dedup_session, dedup_run_id)
+                    typer.echo(
+                        f"Activity dedup complete: {rd['entities_merged']} "
+                        f"near-duplicate activities merged into "
+                        f"{rd['clusters_found']} canonicals "
+                        f"(of {rd['activities_before']})."
+                    )
+
         if requested_passes is None or "6" in requested_passes:
             from bsos.pipeline.pass6 import run_pass6
             from bsos.persistence.database import create_db_engine

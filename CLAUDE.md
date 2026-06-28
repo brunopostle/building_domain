@@ -163,6 +163,17 @@ reproduce the junk earlier runs needed manual SQL to remove:
   exists rather than trusting a single global "completed" flag, so a multi-stage
   or resumed run normalizes everything with no manual DELETE-from-`pass_progress`
   step (building_domain-5ut).
+- **Activity dedup after Pass 5** — Pass 5's `_get_or_create_activity` matches
+  existing activities by exact name only, so every LLM wording variant ('Install
+  Roof Decking' / 'Roof Decking Installation' / 'Roof Decking / Sheathing')
+  became a distinct entity. `run_activity_dedup` runs once after Pass 5 (wired in
+  `cli/extract.py`): it embeds active `activity` names and clusters them with the
+  same Agglomerative(cosine, average) machinery as Pass 2 at a looser threshold
+  (`ACTIVITY_DEDUP_THRESHOLD = 0.08`, calibrated against the production set — 0.04
+  is too timid for wording variants, 0.12+ collapses distinct construction
+  phases), folding each cluster into one canonical via `merge_entity` (which
+  repoints the `process_relations` FKs). Scoped to `entity_type='activity'`
+  only (building_domain-e9k).
 
 ### Model routing (`bsos/llm/__init__.py`)
 
