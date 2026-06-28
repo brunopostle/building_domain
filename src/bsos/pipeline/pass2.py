@@ -17,6 +17,7 @@ from sqlmodel import Session, select, func
 from bsos.persistence.models import (
     AssertionRow, EmbeddingRow, EntityAliasRow, EntityRow, PassProgressRow,
 )
+from bsos.persistence.merge import merge_entity
 
 log = structlog.get_logger()
 
@@ -97,24 +98,12 @@ def _elect_canonical(session: Session, entity_ids: list[str]) -> str:
 
 
 def _merge_cluster(session: Session, canonical_id: str, duplicate_ids: list[str]) -> None:
+    # Pass 2 merges near-duplicate entities of the *same* concept, so the
+    # canonical's entity_type already applies — keep assertion types as-is.
     for dup_id in duplicate_ids:
-        dup = session.get(EntityRow, dup_id)
-        if dup is None:
+        if session.get(EntityRow, dup_id) is None:
             continue
-
-        session.add(EntityAliasRow(entity_id=canonical_id, alias=dup.name))
-
-        for row in session.exec(
-            select(AssertionRow).where(AssertionRow.subject_id == dup_id)
-        ).all():
-            row.subject_id = canonical_id
-
-        for row in session.exec(
-            select(AssertionRow).where(AssertionRow.object_id == dup_id)
-        ).all():
-            row.object_id = canonical_id
-
-        dup.status = "merged"
+        merge_entity(session, canonical_id, dup_id, update_types=False)
 
     session.commit()
 

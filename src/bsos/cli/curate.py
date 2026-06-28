@@ -49,10 +49,14 @@ def merge(
             typer.echo("Source and target are the same entity.", err=True)
             raise typer.Exit(1)
 
-        src_row.status = "merged"
-        session.add(EntityAliasRow(entity_id=tgt_row.id, alias=src_row.name))
+        from bsos.persistence.merge import merge_entity
+
+        counts = merge_entity(session, tgt_row.id, src_row.id)
         session.commit()
-        typer.echo(f"Merged '{src_row.name}' → '{tgt_row.name}'")
+        typer.echo(
+            f"Merged '{src_row.name}' → '{tgt_row.name}' "
+            f"({counts['repointed']} refs repointed, {counts['deleted']} duplicates removed)"
+        )
 
 
 @app.command("set-entrance")
