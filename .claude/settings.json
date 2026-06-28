@@ -21,17 +21,6 @@
         ],
         "matcher": ""
       }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bsos export --format json --output data/snapshot/ --db bsos.db || true",
-            "statusMessage": "Updating data/snapshot/…"
-          }
-        ]
-      }
     ]
   }
 }
