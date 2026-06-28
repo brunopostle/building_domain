@@ -4324,7 +4324,7 @@
     "name": "IfcWall (Foundation Wall)",
     "entity_type": "ifc_class",
     "description": "The IFC wall class as applied to below-grade foundation or basement retaining walls.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -4333,7 +4333,7 @@
     "name": "IfcSlab (Basement / Raft)",
     "entity_type": "ifc_class",
     "description": "The IFC slab class as applied to raft foundations or basement floor slabs.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -7033,7 +7033,7 @@
     "name": "IfcCovering (Coping)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to represent coping or capping elements placed on top of a parapet wall in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -7321,7 +7321,7 @@
     "name": "IfcSlab (Landing)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model a stair landing as a horizontal slab element within the building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -8257,7 +8257,7 @@
     "name": "IFCReinforcingBar",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing individual rebar elements embedded within concrete wall and footing components.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -8608,7 +8608,7 @@
     "name": "IFC Footing",
     "entity_type": "ifc_class",
     "description": "The IFC schema class (IfcFooting) used to model pile caps and other isolated foundation elements in BIM authoring tools.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -9796,7 +9796,7 @@
     "name": "IfcCovering (Soffit)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model soffit elements as a covering object applied to the underside of slabs, beams, or eave structures.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -10489,7 +10489,7 @@
     "name": "IFC Roof Drainage Element (IfcPipeSegment)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model pipe segments within a building's roof drainage and stormwater system in BIM environments.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -12370,7 +12370,7 @@
     "name": "IfcSpace (Lift Shaft)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to define and bound the spatial volume of a lift shaft within a building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -12622,7 +12622,7 @@
     "name": "IFC Fire Alarm Device (IfcFireSuppressionTerminal)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model fire alarm and detection terminal devices within a Building Information Model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -12631,7 +12631,7 @@
     "name": "IFC Alarm (IfcAlarm)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing notification appliances and alarm output devices within a BIM authoring environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -14188,7 +14188,7 @@
     "name": "IfcDistributionSystem (Gas)",
     "entity_type": "ifc_class",
     "description": "IFC classification representing the logical gas distribution system entity within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -14197,7 +14197,7 @@
     "name": "IfcFlowSegment (Gas Pipe)",
     "entity_type": "ifc_class",
     "description": "IFC class representing a straight segment of gas pipe as a flow distribution element in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -14206,7 +14206,7 @@
     "name": "IfcValve (Gas)",
     "entity_type": "ifc_class",
     "description": "IFC class used to model gas shutoff, pressure relief, and control valves within the gas distribution network.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -14215,7 +14215,7 @@
     "name": "IfcFlowMeter (Gas)",
     "entity_type": "ifc_class",
     "description": "IFC class representing the gas meter device that measures consumption within the building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -14863,7 +14863,7 @@
     "name": "IfcSystem (Security)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model and group security system components and their relationships within a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -15106,7 +15106,7 @@
     "name": "IFC:IfcCableCarrierSegment",
     "entity_type": "ifc_class",
     "description": "The IFC class representing physical cable carrier elements such as conduit segments, cable trays, and trunking runs modelled in BIM.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -15115,7 +15115,7 @@
     "name": "IFC:IfcCableSegment",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model individual cable runs — copper or fibre — as geometric and semantic objects within a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -17869,7 +17869,7 @@
     "name": "IFC Class: IfcBoiler",
     "entity_type": "ifc_class",
     "description": "IFC schema class representing a boiler object within a building information model, carrying geometry, performance data, and system connectivity.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -17878,7 +17878,7 @@
     "name": "IFC Class: IfcChiller",
     "entity_type": "ifc_class",
     "description": "IFC schema class for a chiller unit, enabling BIM-based coordination of chilled water plant with structural and architectural models.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -17887,7 +17887,7 @@
     "name": "IFC Class: IfcPump",
     "entity_type": "ifc_class",
     "description": "IFC schema class for pumping equipment, used to model circulating pumps and their connections within hydronic distribution systems.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -17896,7 +17896,7 @@
     "name": "IFC Class: IfcHeatExchanger",
     "entity_type": "ifc_class",
     "description": "IFC schema class representing heat exchanger components and their fluid port connections in an IFC-compliant BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -17905,7 +17905,7 @@
     "name": "IFC Class: IfcTank",
     "entity_type": "ifc_class",
     "description": "IFC schema class for storage and buffer tanks, covering cold water tanks, calorifiers, expansion vessels, and fuel oil tanks.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -18715,7 +18715,7 @@
     "name": "IFC Class: IfcSpace (Office)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent the geometric and semantic boundary of an office space in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -18724,7 +18724,7 @@
     "name": "IFC Class: IfcFurniture",
     "entity_type": "ifc_class",
     "description": "The IFC class capturing individual furniture objects such as desks, chairs, and storage units within the office.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -18742,7 +18742,7 @@
     "name": "IFC Class: IfcZone",
     "entity_type": "ifc_class",
     "description": "An IFC grouping construct used to aggregate multiple office spaces into functional or service zones for analysis.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -19021,7 +19021,7 @@
     "name": "IFC Sanitary Terminal (IfcSanitaryTerminal)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model individual sanitary fixtures such as WC pans, washbasins, and urinals in BIM authoring tools.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -19300,7 +19300,7 @@
     "name": "IfcSpace (Lobby)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity used to represent the lobby as a named, bounded spatial unit within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -20074,7 +20074,7 @@
     "name": "IfcSpace (Basement)",
     "entity_type": "ifc_class",
     "description": "IFC schema class representing the basement as a defined spatial zone within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -20083,7 +20083,7 @@
     "name": "IfcSlab (Basement Slab)",
     "entity_type": "ifc_class",
     "description": "IFC class representing the basement floor slab element within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -21154,7 +21154,7 @@
     "name": "IfcSpace – Lift Machine Room",
     "entity_type": "ifc_class",
     "description": "IFC schema space entity used to model and tag the lift machine room volume in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -22387,7 +22387,7 @@
     "name": "IfcZone (Controlled Environment Zone)",
     "entity_type": "ifc_class",
     "description": "IFC grouping entity that aggregates cleanroom spaces and adjacent ancillary rooms into a single controlled-environment zone for facility management purposes.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -25546,7 +25546,7 @@
     "name": "IfcCovering (Floor)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent screed and other floor covering layers within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -27211,7 +27211,7 @@
     "name": "IfcCovering (Waterproofing)",
     "entity_type": "ifc_class",
     "description": "The IFC classification used to model bituminous waterproofing membranes and coatings as covering elements within a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -27436,7 +27436,7 @@
     "name": "IfcCovering (Polystyrene Ceiling/Wall Tile)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model polystyrene ceiling tiles, cove mouldings, or decorative surface coverings in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -27769,7 +27769,7 @@
     "name": "IfcProfileDef (Aluminium)",
     "entity_type": "ifc_class",
     "description": "The IFC class defining cross-sectional profile geometry for extruded aluminium sections used in structural and facade BIM elements.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -30721,7 +30721,7 @@
     "name": "IFC Structural Member (IfcMember)",
     "entity_type": "ifc_class",
     "description": "IFC entity used to model generic structural members such as braces, purlins, and secondary framing that do not fit column or beam classifications.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -34735,7 +34735,7 @@
     "name": "IFC Space",
     "entity_type": "ifc_class",
     "description": "The IFC entity used to represent any bounded spatial unit, including independently defined building regions, in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -34744,7 +34744,7 @@
     "name": "IFC Zone",
     "entity_type": "ifc_class",
     "description": "An IFC grouping construct that aggregates related spaces (e.g., a thermal or fire zone) into a named independent region.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -34753,7 +34753,7 @@
     "name": "IFC Building Storey",
     "entity_type": "ifc_class",
     "description": "The IFC entity representing a horizontal slice of a building that may contain one or more independent spatial regions.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -34762,7 +34762,7 @@
     "name": "IFC Wall",
     "entity_type": "ifc_class",
     "description": "The IFC entity for vertical planar elements, including fire-rated and demising walls that define region boundaries.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -34771,7 +34771,7 @@
     "name": "IFC Door",
     "entity_type": "ifc_class",
     "description": "The IFC entity representing door openings in zone boundaries, including rated fire and security doors.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -35032,7 +35032,7 @@
     "name": "IfcRoad",
     "entity_type": "ifc_class",
     "description": "The IFC class representing road infrastructure elements that form the street network of a town.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -37282,7 +37282,7 @@
     "name": "IfcSpace (Transport Zone)",
     "entity_type": "ifc_class",
     "description": "An IFC space entity used to define and bound discrete functional zones within a local transport area.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -37291,7 +37291,7 @@
     "name": "IfcSite (Transport Precinct)",
     "entity_type": "ifc_class",
     "description": "The IFC site-level entity representing the geographic and boundary extent of a transport precinct or interchange.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -37840,7 +37840,7 @@
     "name": "IFC Space Boundary Element",
     "entity_type": "ifc_class",
     "description": "The IfcRelSpaceBoundary IFC entity used to formally model the relationship between a space and its bounding construction elements in a BIM environment.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -38317,7 +38317,7 @@
     "name": "IFC Site Boundary Element (IfcSite)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent the overall site geometry and boundary extents within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -38866,7 +38866,7 @@
     "name": "IFC Road Element (IfcRoad)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing a road spatial structure element, used to model the ring road geometry and data in BIM workflows.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -39136,7 +39136,7 @@
     "name": "IFC Class: IfcSpace",
     "entity_type": "ifc_class",
     "description": "The IFC entity used to model and classify all discrete room and zone volumes within the learning network for BIM data exchange.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -39145,7 +39145,7 @@
     "name": "IFC Class: IfcWallStandardCase (Operable)",
     "entity_type": "ifc_class",
     "description": "The IFC entity used to represent moveable and operable partition walls within flexible learning space configurations.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -39541,7 +39541,7 @@
     "name": "IFC IfcSpace (Retail Unit)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model and exchange individual retail tenancy space boundaries within a BIM-compliant building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -39550,7 +39550,7 @@
     "name": "IFC IfcZone (Fire Compartment)",
     "entity_type": "ifc_class",
     "description": "The IFC class grouping IfcSpaces into fire-compartmentation zones for life-safety analysis and regulatory compliance documentation.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -40900,7 +40900,7 @@
     "name": "IFC Site (IfcSite)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing the land and geographic context within which a sacred site is situated.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -40909,7 +40909,7 @@
     "name": "IFC Building (IfcBuilding)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model the overall sacred building as a discrete structure within a project.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -41107,7 +41107,7 @@
     "name": "IFC: IfcPipeSegment",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model straight or curved pipe segments within a building's water supply network.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -41116,7 +41116,7 @@
     "name": "IFC: IfcValve",
     "entity_type": "ifc_class",
     "description": "The IFC class representing valves (including stopcocks and isolation valves) within a piped distribution system.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -41125,7 +41125,7 @@
     "name": "IFC: IfcSanitaryTerminal",
     "entity_type": "ifc_class",
     "description": "The IFC class that models sanitary fixtures such as drinking fountains, sinks, and wash stations providing water access.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -41962,7 +41962,7 @@
     "name": "IFC Site",
     "entity_type": "ifc_class",
     "description": "The IFC class defining the overall site boundary within which density rings are spatially organised and referenced.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -41971,7 +41971,7 @@
     "name": "IFC Building",
     "entity_type": "ifc_class",
     "description": "The IFC class representing individual buildings within a density ring, aggregated to calculate ring-level density metrics.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -42241,7 +42241,7 @@
     "name": "IfcSpace (Activity Node)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model and exchange the bounded spatial unit representing a discrete activity node within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -42250,7 +42250,7 @@
     "name": "IfcSignal / IfcSign",
     "entity_type": "ifc_class",
     "description": "IFC class used to represent signage and wayfinding elements positioned at activity nodes within the building information model.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -42502,7 +42502,7 @@
     "name": "IfcPavement",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model the paved surface and its layer composition within a BIM environment.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -42736,7 +42736,7 @@
     "name": "IfcRetailUnit (IfcSpace)",
     "entity_type": "ifc_class",
     "description": "IFC space entity representing each individual shop or retail bay within the building knowledge model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -42745,7 +42745,7 @@
     "name": "IfcFurniture (Street Furniture)",
     "entity_type": "ifc_class",
     "description": "IFC furniture class used to model benches, bins, bollards, and other installed street furniture elements.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -42997,7 +42997,7 @@
     "name": "IfcSpace – Assembly Occupancy",
     "entity_type": "ifc_class",
     "description": "The IFC schema space classification for assembly and entertainment occupancies used in BIM models of nightlife venues.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -45076,7 +45076,7 @@
     "name": "IfcSpace (Work Community Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity used to model and classify each discrete space or zone within the work community in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -46894,7 +46894,7 @@
     "name": "IfcSpace (Interstitial)",
     "entity_type": "ifc_class",
     "description": "An IFC schema entity representing a named spatial zone classified as interstitial, enabling BIM-based tracking of non-habitable service or buffer spaces.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -47866,7 +47866,7 @@
     "name": "IfcSpace (Entrance)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing the bounded spatial zone of the entrance lobby or gateway area within a BIM dataset.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -49414,7 +49414,7 @@
     "name": "IfcSpace (Quiet Back)",
     "entity_type": "ifc_class",
     "description": "IFC schema class used to model the rear quiet-back space as a defined spatial zone within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -49423,7 +49423,7 @@
     "name": "IfcWall (Boundary)",
     "entity_type": "ifc_class",
     "description": "IFC class representing masonry or composite boundary walls enclosing the rear space in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -50071,7 +50071,7 @@
     "name": "IfcSlab (Roof Type)",
     "entity_type": "ifc_class",
     "description": "An IFC slab element designated as a roof slab, capturing the structural deck at the uppermost levels of a building.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -50080,7 +50080,7 @@
     "name": "IfcSpace (High Zone)",
     "entity_type": "ifc_class",
     "description": "An IFC space entity used to define and bound high-level occupied or technical zones within a building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -50674,7 +50674,7 @@
     "name": "IfcDistributionSystem (Water Feature)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model the piped water circulation and filtration networks associated with pools and streams.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -52366,7 +52366,7 @@
     "name": "IfcSpace (Grave Plot)",
     "entity_type": "ifc_class",
     "description": "The IFC spatial element used to represent a defined grave plot boundary within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -52375,7 +52375,7 @@
     "name": "IfcCivil / IfcSite (Cemetery Grounds)",
     "entity_type": "ifc_class",
     "description": "The IFC site element representing the overall cemetery land parcel and its geographic context in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -54976,7 +54976,7 @@
     "name": "IfcSpace – Informal Service Zone",
     "entity_type": "ifc_class",
     "description": "IFC building model entity representing the bounded spatial unit of the informal, low-bureaucracy service area.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -55120,7 +55120,7 @@
     "name": "IFC Door (IfcDoor)",
     "entity_type": "ifc_class",
     "description": "The IFC entity representing door openings that provide physical access connections between office spaces.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -56335,7 +56335,7 @@
     "name": "IFC Class IfcSpace (Retail Unit)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model each individually owned shop unit as a bounded space within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -56344,7 +56344,7 @@
     "name": "IFC Class IfcDoor (Shop Entrance)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing the shop entrance door element within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -56353,7 +56353,7 @@
     "name": "IFC Class IfcWall (Demise Partition)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model tenant demise boundary walls and internal shopfitting partitions in the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -56596,7 +56596,7 @@
     "name": "IfcSpace (Café Zone)",
     "entity_type": "ifc_class",
     "description": "IFC entity representing a named spatial unit within the café building model for area scheduling and compliance.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -56605,7 +56605,7 @@
     "name": "IfcFurniture (Café Table & Chair Sets)",
     "entity_type": "ifc_class",
     "description": "IFC class used to model and schedule loose furniture items such as dining tables and chairs in the café.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -58234,7 +58234,7 @@
     "name": "IfcFurniture (Sleep Unit)",
     "entity_type": "ifc_class",
     "description": "The IFC classification for furnishing elements such as pods, cots, and recliners that constitute the sleeping unit within a building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -58243,7 +58243,7 @@
     "name": "IfcSpace (Rest Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC spatial element used to formally define and bound a dedicated rest or sleeping zone within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -58756,7 +58756,7 @@
     "name": "IFC IfcBuildingStorey",
     "entity_type": "ifc_class",
     "description": "The IFC schema class that digitally represents each individual story of a building in a BIM model, enabling software interoperability across all story levels.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -59836,7 +59836,7 @@
     "name": "IFC Space (Entrance Zone)",
     "entity_type": "ifc_class",
     "description": "The IfcSpace class used to define and bound entrance, lobby, and vestibule spatial units within a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -60043,7 +60043,7 @@
     "name": "IFC Site Pavement",
     "entity_type": "ifc_class",
     "description": "Represented via IfcCovering or IfcPavement in IFC4x3, used to model the hardscape pavement layer of a parking lot in a BIM model.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -60430,7 +60430,7 @@
     "name": "IfcSpace (Outdoor Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model and represent defined south-facing outdoor spatial zones within a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -60439,7 +60439,7 @@
     "name": "IfcSlab (Terrace/Balcony)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing the structural slab element forming the floor of a south-facing balcony or terrace.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -60637,7 +60637,7 @@
     "name": "IfcSpace (Outdoor)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model and represent defined outdoor spatial zones within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -61078,7 +61078,7 @@
     "name": "IfcBuildingStorey (Shared Level)",
     "entity_type": "ifc_class",
     "description": "An IFC entity representing a storey level that is common to or shared across multiple connected building instances within the same site model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -61357,7 +61357,7 @@
     "name": "IFC Wall (IfcWall)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing both the long party walls and short gable walls that define the long-thin house envelope.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -61366,7 +61366,7 @@
     "name": "IFC Roof (IfcRoof)",
     "entity_type": "ifc_class",
     "description": "The IFC class capturing the longitudinal roof geometry spanning the narrow width of the house.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -61375,7 +61375,7 @@
     "name": "IFC Opening Element (IfcOpeningElement)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing apertures cut through walls and roof planes for windows, doors, and roof lights in the narrow elevations.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -61753,7 +61753,7 @@
     "name": "IfcWall (Retaining)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing the retaining wall components enclosing the sunken garden in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -62347,7 +62347,7 @@
     "name": "IfcSpace (Open Space)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model and represent discrete open space zones within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -62698,7 +62698,7 @@
     "name": "IfcSpace (Courtyard)",
     "entity_type": "ifc_class",
     "description": "The IFC space entity used to model and tag the courtyard void as a distinct bounded space within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -62707,7 +62707,7 @@
     "name": "IfcWall (Courtyard Perimeter)",
     "entity_type": "ifc_class",
     "description": "The IFC wall entity applied to the internal-facing enclosure walls that bound and define the courtyard space.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -62716,7 +62716,7 @@
     "name": "IfcColumn (Arcade)",
     "entity_type": "ifc_class",
     "description": "The IFC column entity used to model colonnade or arcade columns that structure the courtyard perimeter walkway.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -62725,7 +62725,7 @@
     "name": "IfcRoof (Atrium Cover)",
     "entity_type": "ifc_class",
     "description": "The IFC roof entity representing any overhead cover—glass, membrane, or solid—placed over the courtyard opening.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -62734,7 +62734,7 @@
     "name": "IfcOpeningElement (Courtyard Void)",
     "entity_type": "ifc_class",
     "description": "The IFC opening entity that formally registers the courtyard void cut through the building volume in the BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -63544,7 +63544,7 @@
     "name": "IfcSpace (Circulation)",
     "entity_type": "ifc_class",
     "description": "An IFC Space instance typed or zoned as a circulation area, used to track net circulation area in building models.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -63778,7 +63778,7 @@
     "name": "IFC Spatial Zone",
     "entity_type": "ifc_class",
     "description": "The IFC class used to represent defined spatial zones or path extents within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64075,7 +64075,7 @@
     "name": "IfcSpace (Pedestrian Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity used to represent and exchange pedestrian-designated spatial zones within a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64084,7 +64084,7 @@
     "name": "IfcSensor (OccupancySensor)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity representing occupancy and people-counting sensor objects within a federated building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64372,7 +64372,7 @@
     "name": "IfcSpace (Activity Pocket Instance)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model each discrete activity pocket as a bounded, named space within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64381,7 +64381,7 @@
     "name": "IfcWall (Partial-Height)",
     "entity_type": "ifc_class",
     "description": "IFC wall entity used to model the low or partial-height partition elements that bound activity pockets spatially.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64696,7 +64696,7 @@
     "name": "IFC Stair",
     "entity_type": "ifc_class",
     "description": "IFC schema class (IfcStair) used to model the stair geometry and properties of stair seat assemblies in BIM environments.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64705,7 +64705,7 @@
     "name": "IFC Ramp",
     "entity_type": "ifc_class",
     "description": "IFC schema class (IfcRamp) applicable when accessible ramp elements are integrated within the stair seating layout.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64714,7 +64714,7 @@
     "name": "IFC Slab",
     "entity_type": "ifc_class",
     "description": "IFC schema class (IfcSlab) used to represent individual tread and riser slab elements within the stair seat assembly.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64723,7 +64723,7 @@
     "name": "IFC Railing",
     "entity_type": "ifc_class",
     "description": "IFC schema class (IfcRailing) used to model handrails, guardrails, and balustrades associated with stair seat tiers.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64948,7 +64948,7 @@
     "name": "IFC – IfcSlab (Mezzanine)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model a mezzanine or intermediate structural floor slab element within a BIM dataset.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -64957,7 +64957,7 @@
     "name": "IFC – IfcSpace (Mezzanine Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing the spatial volume of a mezzanine or intermediate-level space for area, zoning, and occupancy tracking.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -65290,7 +65290,7 @@
     "name": "IFC Spatial Zone (Daylight Zone)",
     "entity_type": "ifc_class",
     "description": "An IfcSpatialZone instance used in BIM models to delineate and track areas receiving defined levels of natural daylight.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -65596,7 +65596,7 @@
     "name": "IfcSpace (Common Area)",
     "entity_type": "ifc_class",
     "description": "IFC schema class representing a defined spatial zone within the building model annotated as a shared or common-use area.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -65605,7 +65605,7 @@
     "name": "IfcZone (Occupancy Zone)",
     "entity_type": "ifc_class",
     "description": "IFC grouping entity that aggregates multiple common-area spaces into a single named zone for energy, access, or management purposes.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -65884,7 +65884,7 @@
     "name": "IFC Covering (IfcCovering)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class capturing floor, wall, and ceiling finish elements applied within the entrance room.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -65893,7 +65893,7 @@
     "name": "IFC Furnishing Element (IfcFurnishingElement)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing fixed and loose furniture items such as benches, console tables, and coat hooks in the entrance room.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -66460,7 +66460,7 @@
     "name": "IfcWindow (Framed View Opening)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity representing the primary glazed or open aperture through which the Zen view is experienced.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -66469,7 +66469,7 @@
     "name": "IfcSpace (Viewing Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC spatial entity bounding the interior zone whose occupant position and sightline are designed around the composed view.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67144,7 +67144,7 @@
     "name": "IfcSpace – Children's Realm",
     "entity_type": "ifc_class",
     "description": "IFC spatial element classifying the Children's Realm as a named, bounded building space within the facility model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67153,7 +67153,7 @@
     "name": "IfcFurnishingElement – Play Equipment",
     "entity_type": "ifc_class",
     "description": "IFC class representing fixed and loose play furniture and equipment objects within the children's space model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67162,7 +67162,7 @@
     "name": "IfcZone – Child Supervision Zone",
     "entity_type": "ifc_class",
     "description": "IFC zone grouping all spaces under active child supervision for facilities management and safety compliance tracking.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67270,7 +67270,7 @@
     "name": "IfcSpace (East Bedroom)",
     "entity_type": "ifc_class",
     "description": "The IFC data model class used to represent and exchange the east-facing sleeping room as a defined space within a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67279,7 +67279,7 @@
     "name": "IfcWindow (East-Facing)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing the east-facing window opening and its properties within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67711,7 +67711,7 @@
     "name": "IfcSpace – Terrace",
     "entity_type": "ifc_class",
     "description": "The IFC spatial element used to model the terrace as a defined outdoor room within the building's spatial hierarchy.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67720,7 +67720,7 @@
     "name": "IfcSlab – Terrace Deck",
     "entity_type": "ifc_class",
     "description": "The IFC slab class used to represent the structural deck or base slab of the terrace in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67738,7 +67738,7 @@
     "name": "IfcWall – Terrace Boundary Wall",
     "entity_type": "ifc_class",
     "description": "The IFC wall class used to represent solid enclosure or privacy walls around the terrace perimeter in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67747,7 +67747,7 @@
     "name": "IfcDoor – Terrace Access Gate",
     "entity_type": "ifc_class",
     "description": "The IFC door class used to model the access gate or door element connecting the terrace to adjacent spaces or the street.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -67999,7 +67999,7 @@
     "name": "IfcSpace (Private Occupancy)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity used to model and classify a single-occupancy private room within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -68008,7 +68008,7 @@
     "name": "IfcDoor (Lockable)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity representing a lockable door component providing controlled access to the private space.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -68017,7 +68017,7 @@
     "name": "IfcWall (Acoustic Partition)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity for interior partition walls with acoustic performance specifications bounding the private room.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -68764,7 +68764,7 @@
     "name": "IfcSpace (Bathroom)",
     "entity_type": "ifc_class",
     "description": "The IFC spatial element used to define and attribute the bathing room volume within a building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -69340,7 +69340,7 @@
     "name": "IfcSpace (Dining)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent a defined dining or eating space within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -69349,7 +69349,7 @@
     "name": "IfcFurnishingElement (Dining Furniture)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to model fixed or loose dining furniture elements such as tables and benches in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -69358,7 +69358,7 @@
     "name": "IfcFlowTerminal (Kitchen Equipment)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing terminal catering and kitchen equipment connected to building services within a communal eating facility.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -69637,7 +69637,7 @@
     "name": "IFC_FURNISHING_ELEMENT (IfcFurnishingElement – Reception Desk)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity used to represent the reception desk as a furnishing element within a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -69817,7 +69817,7 @@
     "name": "IfcSpace (Waiting Area)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent and exchange the bounded waiting space geometry and attributes in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -69826,7 +69826,7 @@
     "name": "IfcFurnishingElement (Seating)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing furniture elements such as chairs and benches placed within the waiting space in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -69835,7 +69835,7 @@
     "name": "IfcZone (Waiting Zone)",
     "entity_type": "ifc_class",
     "description": "An IFC grouping construct that aggregates multiple waiting-related spaces or sub-areas into a single named functional zone.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -70123,7 +70123,7 @@
     "name": "IFCSpace (Meeting Room)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity used to represent the meeting room as a defined spatial zone within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -70132,7 +70132,7 @@
     "name": "IfcWall (Partition)",
     "entity_type": "ifc_class",
     "description": "IFC class representing the partition wall elements bounding and subdividing the meeting room within the BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -70798,7 +70798,7 @@
     "name": "IfcSpace (Cottage Unit)",
     "entity_type": "ifc_class",
     "description": "IFC classification representing the cottage as a bounded spatial unit within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -70807,7 +70807,7 @@
     "name": "IfcSlab (Loft Deck)",
     "entity_type": "ifc_class",
     "description": "IFC class representing the loft floor slab or deck element within the cottage model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -70978,7 +70978,7 @@
     "name": "IfcSpace (Accessible Dwelling)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent the accessible dwelling space of the old age cottage within a Building Information Model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -72058,7 +72058,7 @@
     "name": "IFC Curtain Wall (IfcCurtainWall)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing a non-load-bearing north face curtain wall assembly in BIM data.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -72067,7 +72067,7 @@
     "name": "IFC Window (IfcWindow)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model individual glazed openings within the north facade.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -73048,7 +73048,7 @@
     "name": "IfcSpace (Gallery Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC-compliant spatial element defining the bounded gallery surround zone within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -73057,7 +73057,7 @@
     "name": "IfcWall (Gallery Perimeter)",
     "entity_type": "ifc_class",
     "description": "The IFC wall element representing the physical perimeter enclosure of the gallery surround in the BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -73264,7 +73264,7 @@
     "name": "IfcSlab (Balcony Type)",
     "entity_type": "ifc_class",
     "description": "The IFC classification used to model the balcony deck slab as a distinct slab element with PredefinedType set to BASESLAB or tagged as balcony in BIM authoring tools.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -73273,7 +73273,7 @@
     "name": "IfcDoor (Balcony Access)",
     "entity_type": "ifc_class",
     "description": "The IFC class used to represent the balcony access door or sliding glass door within the wall opening leading to the outdoor space.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -73282,7 +73282,7 @@
     "name": "IfcSpace (Balcony)",
     "entity_type": "ifc_class",
     "description": "The IFC space object that defines the volumetric boundary of the balcony for area scheduling, thermal analysis, and room-data-sheet purposes.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -73471,7 +73471,7 @@
     "name": "IfcEarthworksCut",
     "entity_type": "ifc_class",
     "description": "The IFC class representing the modelled volume of earth removed by cutting operations when forming terraced levels in a slope.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -74155,7 +74155,7 @@
     "name": "IfcSpace – Landscape Zone",
     "entity_type": "ifc_class",
     "description": "The IFC classification used to represent defined outdoor landscape spaces such as wild garden areas in a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -74803,7 +74803,7 @@
     "name": "IfcSpace (Greenhouse Zone)",
     "entity_type": "ifc_class",
     "description": "The IFC spatial element used to represent the enclosed greenhouse volume for energy analysis and space management in BIM.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -74812,7 +74812,7 @@
     "name": "IfcCurtainWall (Glazed Envelope)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing the lightweight glazed wall and roof assembly that forms the primary building envelope.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -75343,7 +75343,7 @@
     "name": "IFC Annotation – IfcZone",
     "entity_type": "ifc_class",
     "description": "The IFC class used to group and designate the vegetable garden as a named functional zone within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -75964,7 +75964,7 @@
     "name": "IFC Window Element (IfcWindow)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model the window assembly hosted within the window place opening in a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -76549,7 +76549,7 @@
     "name": "IfcSystem (IfcDistributionSystem)",
     "entity_type": "ifc_class",
     "description": "IFC classes grouping MEP distribution components—HVAC, electrical, data—serving the workspace into logical, queryable systems.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -76783,7 +76783,7 @@
     "name": "IfcFurniture (Kitchen Units)",
     "entity_type": "ifc_class",
     "description": "The IFC entity class representing fitted kitchen furniture elements such as base and wall cabinet units in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -76792,7 +76792,7 @@
     "name": "IfcFlowTerminal (Kitchen Sink)",
     "entity_type": "ifc_class",
     "description": "The IFC classification for end-point plumbing fixtures such as the kitchen sink within a flow system model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -76927,7 +76927,7 @@
     "name": "IFC Furnishing Element",
     "entity_type": "ifc_class",
     "description": "An IfcFurnishingElement instance representing fixed seating, central feature objects, or other furniture-class components within the sitting circle.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -77143,7 +77143,7 @@
     "name": "IfcSpace (Dormitory)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing the defined spatial boundary and metadata of a communal sleeping room or zone.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -77152,7 +77152,7 @@
     "name": "IfcFurniture (Bed)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model individual bed units and bunk assemblies within the building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -78160,7 +78160,7 @@
     "name": "IfcSpace (Height-Attributed)",
     "entity_type": "ifc_class",
     "description": "An IFC space entity carrying ceiling-height property sets that enable interoperable tracking of height parameters across BIM authoring tools.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -78169,7 +78169,7 @@
     "name": "IfcCovering (Ceiling Type)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing ceiling finish elements, linked to the bounding space to record material, height offset, and finish type.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -81364,7 +81364,7 @@
     "name": "IFC Door (Concealed)",
     "entity_type": "ifc_class",
     "description": "The IfcDoor IFC class instance representing a disguised or concealed door element in a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -82804,7 +82804,7 @@
     "name": "IFC Column (IfcColumn)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model any vertical structural column element, including corner columns, in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -82813,7 +82813,7 @@
     "name": "IFC Footing (IfcFooting)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing the isolated footing foundation element beneath each corner column.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -82822,7 +82822,7 @@
     "name": "IFC Beam (IfcBeam)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model beams spanning between corner columns along the building perimeter.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -83326,7 +83326,7 @@
     "name": "IfcSlab (Ground Floor)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to digitally represent and exchange the ground floor slab element within BIM models.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -83335,7 +83335,7 @@
     "name": "IfcMember (Downstand Beam)",
     "entity_type": "ifc_class",
     "description": "The IFC class representing integral downstand beams or ribs that are part of the slab structural assembly in BIM data.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -83785,7 +83785,7 @@
     "name": "IfcBeam (Perimeter)",
     "entity_type": "ifc_class",
     "description": "The IFC schema entity used to represent perimeter beam elements in a BIM model, capturing geometry, material, and connectivity data.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -83794,7 +83794,7 @@
     "name": "IfcMember (Perimeter Edge)",
     "entity_type": "ifc_class",
     "description": "An IFC class used for linear structural members at the building perimeter that do not strictly fit the primary beam classification, such as edge channels or rim members.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -83938,7 +83938,7 @@
     "name": "IFCCoveringType",
     "entity_type": "ifc_class",
     "description": "The IFC classification used to represent membrane layers and coverings applied to wall surfaces within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -84271,7 +84271,7 @@
     "name": "IFC Structural Surface Member",
     "entity_type": "ifc_class",
     "description": "The IFC class used to represent curved shell or vault structural elements in a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -84280,7 +84280,7 @@
     "name": "IFC Slab (IfcSlab)",
     "entity_type": "ifc_class",
     "description": "The IFC class commonly used to represent floor-ceiling vault elements as curved slab assemblies in BIM workflows.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -86809,7 +86809,7 @@
     "name": "IfcRoof (Dormer)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model the dormer's own roof element within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -86818,7 +86818,7 @@
     "name": "IfcWindow (Dormer)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent the window unit inserted within the dormer opening in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -86827,7 +86827,7 @@
     "name": "IfcWall (Dormer Cheek)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class applied to model the vertical cheek walls of a dormer as distinct wall elements in a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -87178,7 +87178,7 @@
     "name": "IfcSlab (FLOOR)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class representing the structural horizontal slab element that forms the base of the floor assembly.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -87403,7 +87403,7 @@
     "name": "IfcWall (External)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent the external wall element containing the lapped cladding assembly within a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -87412,7 +87412,7 @@
     "name": "IfcCovering (Cladding)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model the surface cladding layer, such as lapped boards, applied to the face of an external wall element.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -87628,7 +87628,7 @@
     "name": "IfcCovering (Wall)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to model non-structural wall coverings, including soft panels and textile finishes, within a Building Information Model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -88915,7 +88915,7 @@
     "name": "IfcSpace (Seating Area)",
     "entity_type": "ifc_class",
     "description": "The IFC schema class used to represent and exchange the geometric boundary and metadata of a seating space within a BIM model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -88924,7 +88924,7 @@
     "name": "IfcFurnishingElement (Seat)",
     "entity_type": "ifc_class",
     "description": "The IFC class that models individual seat objects, capturing their geometry, placement, and associated properties within a building model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -89554,7 +89554,7 @@
     "name": "IFC Roof Element",
     "entity_type": "ifc_class",
     "description": "The IFC class IfcRoof used to represent the overall canvas roof assembly within a building information model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -89563,7 +89563,7 @@
     "name": "IFC Member (Cable)",
     "entity_type": "ifc_class",
     "description": "The IFC class IfcMember used to model individual cable elements within the tensile roof structure in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -90031,7 +90031,7 @@
     "name": "IFC Wall Element (IfcWall)",
     "entity_type": "ifc_class",
     "description": "The IFC wall object class representing the host facade or boundary wall surface onto which climbing plant support systems are fixed.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -90040,7 +90040,7 @@
     "name": "IFC Railing (IfcRailing)",
     "entity_type": "ifc_class",
     "description": "The IFC railing class used to model freestanding or balcony-edge trellis and wire guide frameworks in a BIM environment.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -90049,7 +90049,7 @@
     "name": "IFC Furniture / Site Furniture (IfcFurnishingElement)",
     "entity_type": "ifc_class",
     "description": "The IFC class commonly used to represent pergola frames, arbours, and decorative plant support structures within a site or landscape model.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -90733,7 +90733,7 @@
     "name": "IfcSpace (Color Zone)",
     "entity_type": "ifc_class",
     "description": "An IFC model entity representing a spatial zone in a BIM model attributed with warm color finish properties.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "claude-sonnet-4-6",
     "created_at": "2026-05-23T23:01:03.779811"
   },
@@ -244228,7 +244228,7 @@
     "name": "IfcLengthMeasure",
     "entity_type": "ifc_class",
     "description": "Measure defined type for length measurements.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:49:42.839568"
   },
@@ -244264,7 +244264,7 @@
     "name": "IfcValue",
     "entity_type": "ifc_class",
     "description": "Data type for nominal value in property definitions.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:49:42.839568"
   },
@@ -244273,7 +244273,7 @@
     "name": "IfcUnit",
     "entity_type": "ifc_class",
     "description": "Data type for unit definitions, allows SI unit, derived unit, conversion based unit or context dependent unit.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:49:42.839568"
   },
@@ -245857,7 +245857,7 @@
     "name": "IfcShell",
     "entity_type": "ifc_class",
     "description": "Shell used in surface model definitions",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:54:48.609693"
   },
@@ -245965,7 +245965,7 @@
     "name": "IfcBooleanOperator",
     "entity_type": "ifc_class",
     "description": "Boolean operator",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:55:02.228751"
   },
@@ -245974,7 +245974,7 @@
     "name": "IfcBooleanOperand",
     "entity_type": "ifc_class",
     "description": "Boolean operand",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:55:02.228751"
   },
@@ -246316,7 +246316,7 @@
     "name": "IfcObjectReferenceSelect",
     "entity_type": "ifc_class",
     "description": "Defines the types of objects that may be referenced as a property within an IfcPropertySet.",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:55:59.982491"
   },
@@ -246361,7 +246361,7 @@
     "name": "IfcMaterialSelect",
     "entity_type": "ifc_class",
     "description": "",
-    "status": "proposed",
+    "status": "deprecated",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-24T12:56:19.038148"
   },
