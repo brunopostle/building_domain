@@ -27,8 +27,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bsos export --format json --output data/bsos_snapshot.json --db bsos.db 2>/dev/null || true",
-            "statusMessage": "Updating bsos_snapshot.json…"
+            "command": "bsos export --format json --output data/snapshot/ --db bsos.db || true",
+            "statusMessage": "Updating data/snapshot/…"
           }
         ]
       }
