@@ -3,13 +3,21 @@ scripts/ifc_compliance_report.py.
 
 The deterministic check engine (constraint classification, evaluation,
 antipatterns) now lives in bsos.validation and is tested in test_validation.py.
-What remains here is the report's spatial-object → space-usage vocabulary used
-for the adjacency checks.
+What remains here is the report's own geometry helpers, MEP vocabulary, and
+(building_domain-l5w.1) the semantic space-entity resolver that replaced the
+old hardcoded SPACE_TO_ENTITY / SPATIAL_OBJECT_TO_USAGE lookup tables.
 """
 import importlib.util
+from datetime import datetime, timezone
 from pathlib import Path
 
+import numpy as np
 import pytest
+from sqlmodel import Session
+
+from bsos.persistence.database import create_db_engine
+from bsos.persistence.models import EntityRow, EmbeddingRow
+from bsos.mcp_server.server import SEARCH_EMBEDDING_MODEL
 
 ROOT = Path(__file__).resolve().parents[2]
 _spec = importlib.util.spec_from_file_location(
@@ -17,6 +25,8 @@ _spec = importlib.util.spec_from_file_location(
 )
 cr = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(cr)
+
+NOW = datetime.now(timezone.utc)
 
 
 # ── footprint area from triangulated mesh ────────────────────────────────────
@@ -60,23 +70,91 @@ def test_footprint_area_ignores_downward_faces():
     assert cr._footprint_area(g) == pytest.approx(4.0)
 
 
-@pytest.mark.parametrize("name,usage", [
-    ("Kitchen", "kitchen"),
-    ("Living Room", "living"),
-    ("Hallway", "circulation"),
-    ("Corridor", "circulation"),
-    ("Staircase", "stair"),
-    ("Toilet / WC", "toilet"),
-    ("Retail Unit", "retail"),
-])
-def test_object_to_usage_known(name, usage):
-    assert cr.object_to_usage(name) == usage
+# ── Semantic space-entity resolution (building_domain-l5w.1) ────────────────
+# Replaces the old fixed SPACE_TO_ENTITY / SPATIAL_OBJECT_TO_USAGE dicts with
+# embedding similarity, so a stub embedder (fixed vectors per query text) gives
+# deterministic, fast tests without loading the real sentence-transformers model.
+
+DIM = 4
 
 
-@pytest.mark.parametrize("name", ["Countertop", "Wall", "Basement",
-                                  "Fire Extinguisher", "Coffee Table"])
-def test_object_to_usage_unknown(name):
-    assert cr.object_to_usage(name) is None
+def _vec(values):
+    v = np.array(values, dtype=np.float32)
+    n = np.linalg.norm(v)
+    return v / n if n else v
+
+
+class _StubEmbedder:
+    """Fixed vector per query text; unlisted text falls back to a neutral vector."""
+    _VECTORS = {
+        "kitchen": [1.0, 0.0, 0.0, 0.0],
+        "corridor": [0.0, 1.0, 0.0, 0.0],
+        "nonsense": [0.0, 0.0, 0.0, 1.0],
+    }
+
+    def encode(self, texts):
+        default = [0.25, 0.25, 0.25, 0.25]
+        return np.array(
+            [_vec(self._VECTORS.get(t.lower(), default)) for t in texts],
+            dtype=np.float32,
+        )
+
+
+@pytest.fixture
+def engine(tmp_path):
+    return create_db_engine(str(tmp_path / "test.db"))
+
+
+@pytest.fixture
+def session(engine):
+    with Session(engine) as s:
+        yield s
+
+
+def _add_space_entity(session, eid, name, vector):
+    session.add(EntityRow(id=eid, name=name, entity_type="space",
+                          source_model="test", created_at=NOW))
+    session.add(EmbeddingRow(item_type="entity", item_id=eid, model=SEARCH_EMBEDDING_MODEL,
+                             dim=DIM, content_hash="test", vector=_vec(vector).tobytes()))
+    session.commit()
+
+
+def test_semantic_match_entity_finds_best_match(session):
+    _add_space_entity(session, "e-kitchen", "Kitchen", [1.0, 0.0, 0.0, 0.0])
+    _add_space_entity(session, "e-corridor", "Corridor", [0.0, 1.0, 0.0, 0.0])
+    assert cr.semantic_match_entity(session, "kitchen", entity_type="space",
+                                    _embedder=_StubEmbedder()) == "Kitchen"
+
+
+def test_semantic_match_entity_below_threshold_returns_none(session):
+    _add_space_entity(session, "e-kitchen", "Kitchen", [1.0, 0.0, 0.0, 0.0])
+    assert cr.semantic_match_entity(session, "nonsense", entity_type="space",
+                                    min_score=0.9, _embedder=_StubEmbedder()) is None
+
+
+def test_semantic_match_entity_filters_by_entity_type(session):
+    session.add(EntityRow(id="e-component", name="Kitchen Counter",
+                          entity_type="component", source_model="test", created_at=NOW))
+    session.add(EmbeddingRow(item_type="entity", item_id="e-component", model=SEARCH_EMBEDDING_MODEL,
+                             dim=DIM, content_hash="test", vector=_vec([1.0, 0.0, 0.0, 0.0]).tobytes()))
+    session.commit()
+    assert cr.semantic_match_entity(session, "kitchen", entity_type="space",
+                                    _embedder=_StubEmbedder()) is None
+
+
+def test_get_entity_type_returns_none_for_unknown_or_merged(tmp_path):
+    import sqlite3
+    db_path = tmp_path / "entity_type.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e1", name="Kitchen", entity_type="space",
+                        source_model="test", created_at=NOW))
+        s.add(EntityRow(id="e2", name="Old Name", entity_type="space", status="merged",
+                        source_model="test", created_at=NOW))
+        s.commit()
+    assert cr.get_entity_type(db_path, "Kitchen") == "space"
+    assert cr.get_entity_type(db_path, "Old Name") is None
+    assert cr.get_entity_type(db_path, "Nonexistent") is None
 
 
 def test_mep_presence_keys_are_known_system_objects():

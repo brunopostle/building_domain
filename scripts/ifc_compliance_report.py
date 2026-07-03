@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """IFC × BSOS compliance report.
 
-For every space type in an IFC model this checks four BSOS knowledge layers
+For every space in an IFC model this checks four BSOS knowledge layers
 against what is actually modelled:
 
   * REQUIREMENTS  — requires/depends_on assertions (materials, elements, MEP)
@@ -10,6 +10,11 @@ against what is actually modelled:
                     IFC spatial structure (shared bounding walls)
   * ANTIPATTERNS  — known failure conditions, flagged only when the model
                     affirmatively exhibits the negative signal
+
+Each modelled IfcSpace is resolved to a bsos 'space' entity via semantic
+search (the same embedding similarity the `search_entities` MCP tool uses),
+so the report works against any space in any model rather than a fixed list
+of 6 hardcoded space types (building_domain-l5w.1).
 
 Usage:
     python scripts/ifc_compliance_report.py [path/to/model.ifc] [path/to/bsos.db]
@@ -24,26 +29,26 @@ import ifcopenshell
 import ifcopenshell.geom
 import ifcopenshell.util.element
 import ifcopenshell.util.shape
+from sqlmodel import Session
 
 # The deterministic check engine is shared with the bsos `validate_element` MCP
 # tool, so the report and the tool can never disagree. This script's job is to
 # extract `facts` from the IFC model and hand them to that engine.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from bsos import validation  # noqa: E402
+from bsos.persistence.database import create_db_engine  # noqa: E402
+from bsos.mcp_server.server import search_entities_tool  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 IFC_PATH = ROOT / "_test.ifc"
 BSOS_DB  = ROOT / "bsos.db"
 
-# ── Space type → BSOS entity ─────────────────────────────────────────────────
-SPACE_TO_ENTITY = {
-    "kitchen":     "Kitchen",
-    "living":      "Living Room",
-    "circulation": "Hallway / Circulation Corridor",
-    "toilet":      "Toilet / WC",
-    "stair":       "Staircase / Stair Hall",
-    "retail":      "Retail Unit / Shop Front",
-}
+# ── Space semantic matching threshold ────────────────────────────────────────
+# Calibrated against production bsos.db (2026-07-02): a genuine EPset_Topology
+# usage tag stripped of its numeric suffix (e.g. 'living-2' -> 'living') scores
+# >=0.51 against its correct bsos space entity; unrelated text (e.g. a stray
+# 'nonsense-zone-9' tag) scores ~0.26. 0.4 separates the two with margin.
+SPACE_MATCH_MIN_SCORE = 0.4
 
 # ── IFC element types that represent each system ─────────────────────────────
 # Keys must match validation.SYSTEM_OBJECTS (the shared system vocabulary); this
@@ -142,18 +147,53 @@ def get_antipatterns(db_path: Path, entity_name: str) -> list[tuple]:
         """, (entity_name,)).fetchall()
 
 
+def get_entity_type(db_path: Path, entity_name: str) -> str | None:
+    """entity_type of an exact (already-resolved) bsos entity name, or None."""
+    with sqlite3.connect(db_path) as conn:
+        row = conn.execute("""
+            SELECT entity_type FROM entities WHERE name = ? AND status != 'merged'
+        """, (entity_name,)).fetchone()
+        return row[0] if row else None
+
+
+def semantic_match_entity(session: Session, query: str, entity_type: str | None = None,
+                          min_score: float = SPACE_MATCH_MIN_SCORE, _embedder=None) -> str | None:
+    """Best-matching bsos entity name for free text, or None below min_score.
+
+    Reuses the same embedding-similarity ranking as the bsos `search_entities`
+    MCP tool, so callers resolve arbitrary IFC names/tags against the
+    knowledge graph instead of a hardcoded name lookup table.
+    """
+    if not query:
+        return None
+    result = search_entities_tool(session, query, max_results=5, min_score=min_score,
+                                  _embedder=_embedder)
+    for r in result["results"]:
+        if entity_type is None or r["entity_type"] == entity_type:
+            return r["name"]
+    return None
+
+
 # ── IFC helpers ───────────────────────────────────────────────────────────────
 
-def get_space_usage(space) -> str | None:
-    psets = ifcopenshell.util.element.get_psets(space)
-    usage = psets.get("EPset_Topology", {}).get("Usage", "")
-    if usage:
-        return usage.lower().split("-")[0].strip()
-    name = (space.Name or "").lower()
-    for key in SPACE_TO_ENTITY:
-        if key in name:
-            return key
-    return None
+_space_entity_cache: dict[int, str | None] = {}
+
+
+def resolve_space_entity(session: Session, space, _embedder=None) -> str | None:
+    """Resolve an IfcSpace to its best-matching bsos 'space' entity name.
+
+    Prefers the EPset_Topology.Usage tag (e.g. 'kitchen-1' -> 'kitchen') when
+    present, falling back to the space's own LongName/Name. Cached per space id
+    since each lookup is an embedding comparison.
+    """
+    sid = space.id()
+    if sid not in _space_entity_cache:
+        psets = ifcopenshell.util.element.get_psets(space)
+        usage = psets.get("EPset_Topology", {}).get("Usage", "")
+        query = usage.split("-")[0].strip() if usage else (space.LongName or space.Name or "")
+        _space_entity_cache[sid] = semantic_match_entity(
+            session, query, entity_type="space", _embedder=_embedder)
+    return _space_entity_cache[sid]
 
 
 def _collect_layer_materials(element, out: set[str]) -> None:
@@ -297,36 +337,9 @@ def check(obj: str, facts: dict) -> tuple[str, str]:
     return status.upper(), detail
 
 
-# ── Spatial relations: BSOS object name → modelled space usage ───────────────
-# Only relations to objects that are themselves modelled space types can be
-# checked; relations to furniture/structure (Countertop, Wall, Basement) are
-# skipped.
-SPATIAL_OBJECT_TO_USAGE: dict[str, str] = {
-    "kitchen": "kitchen",
-    "living": "living",
-    "hallway": "circulation",
-    "corridor": "circulation",
-    "circulation": "circulation",
-    "staircase": "stair",
-    "stair hall": "stair",
-    "stair": "stair",
-    "toilet": "toilet",
-    "wc": "toilet",
-    "retail": "retail",
-    "shop": "retail",
-}
-
 # Relations that assert two spaces share a boundary / connection.
 ADJACENCY_RELATIONS = {"adjacent_to", "connects_to", "accessible_from",
                        "connected_to"}
-
-
-def object_to_usage(object_name: str) -> str | None:
-    n = object_name.lower()
-    for key, usage in SPATIAL_OBJECT_TO_USAGE.items():
-        if key in n:
-            return usage
-    return None
 
 
 def build_adjacency(ifc) -> dict[int, set[int]]:
@@ -380,8 +393,7 @@ def _emit(label: str, confidence: float,
                              "space": sname})
 
 
-def report_requirements(ifc, usage, entity, spaces, reqs,
-                        totals, all_rows) -> None:
+def report_requirements(ifc, entity, spaces, reqs, totals, all_rows) -> None:
     if not reqs:
         return
     print("   REQUIREMENTS")
@@ -396,13 +408,12 @@ def report_requirements(ifc, usage, entity, spaces, reqs,
     for (predicate, obj, confidence, appl), space_statuses in req_results.items():
         appl_str = _fmt_applicability(appl)
         _emit(f"{predicate} {obj}", confidence, space_statuses, totals, all_rows,
-              {"category": "requirement", "space_type": usage, "entity": entity,
+              {"category": "requirement", "space_type": entity, "entity": entity,
                "predicate": predicate, "object": obj, "applicability": appl_str},
               extra=f"  [{appl_str}]" if appl_str else "")
 
 
-def report_constraints(ifc, usage, entity, spaces, constraints,
-                       totals, all_rows) -> None:
+def report_constraints(ifc, entity, spaces, constraints, totals, all_rows) -> None:
     if not constraints:
         return
     print("   CONSTRAINTS")
@@ -424,36 +435,44 @@ def report_constraints(ifc, usage, entity, spaces, constraints,
                 status = status.upper()
             space_statuses.append((space.Name or "?", status, detail))
         _emit(f"{ctype} — {rule}", confidence, space_statuses, totals, all_rows,
-              {"category": "constraint", "space_type": usage, "entity": entity,
+              {"category": "constraint", "space_type": entity, "entity": entity,
                "object": obj if obj is not None else dim[0], "rule": rule})
     if unchecked:
         print(f"   ·  {unchecked} constraint(s) not mechanically checkable "
               f"(non-dimensional / code)")
 
 
-def report_spatial(ifc, usage, entity, spaces, rels, adj, id_to_usage,
-                   usages_present, totals, all_rows) -> None:
+def report_spatial(db_path, entity, spaces, rels, adj, id_to_entity,
+                   entities_present, totals, all_rows) -> None:
+    """Check adjacent_to/connects_to/accessible_from relations.
+
+    `rels` objects are already-resolved bsos entity names (from the join in
+    get_spatial_relations), so a checkable relation is simply one whose object
+    is itself a bsos 'space' entity — no separate name-matching vocabulary is
+    needed. PASS/FAIL is decided against the spaces actually resolved in this
+    model; UNCHECKED means the target space entity exists in bsos but nothing
+    in this model resolved to it.
+    """
     checkable = [(rel, obj, conf) for rel, obj, conf in rels
-                 if rel in ADJACENCY_RELATIONS and object_to_usage(obj)]
+                 if rel in ADJACENCY_RELATIONS and get_entity_type(db_path, obj) == "space"]
     if not checkable:
         return
     print("   SPATIAL")
     for rel, obj, conf in checkable:
-        target = object_to_usage(obj)
         space_statuses = []
         for space in spaces:
-            if target not in usages_present:
+            if obj not in entities_present:
                 status, detail = "UNCHECKED", (
-                    f"no '{target}' space modelled to verify against")
+                    f"no space modelled resolves to bsos entity '{obj}'")
             else:
-                neighbours = {id_to_usage.get(nid) for nid in adj.get(space.id(), set())}
-                if target in neighbours:
-                    status, detail = "PASS", f"adjacent to a '{target}' space"
+                neighbours = {id_to_entity.get(nid) for nid in adj.get(space.id(), set())}
+                if obj in neighbours:
+                    status, detail = "PASS", f"adjacent to a '{obj}' space"
                 else:
-                    status, detail = "FAIL", f"not adjacent to any '{target}' space"
+                    status, detail = "FAIL", f"not adjacent to any '{obj}' space"
             space_statuses.append((space.Name or "?", status, detail))
         _emit(f"{rel} {obj}", conf, space_statuses, totals, all_rows,
-              {"category": "spatial", "space_type": usage, "entity": entity,
+              {"category": "spatial", "space_type": entity, "entity": entity,
                "relation": rel, "object": obj})
     skipped = len(rels) - len(checkable)
     if skipped:
@@ -461,8 +480,7 @@ def report_spatial(ifc, usage, entity, spaces, rels, adj, id_to_usage,
               f"objects skipped")
 
 
-def report_antipatterns(ifc, usage, entity, spaces, aps,
-                        totals, all_rows) -> None:
+def report_antipatterns(ifc, entity, spaces, aps, totals, all_rows) -> None:
     if not aps:
         return
     print("   ANTIPATTERNS")
@@ -477,7 +495,7 @@ def report_antipatterns(ifc, usage, entity, spaces, aps,
                 print(f"   {SYM['FAIL']} [{conf:.0%}] {name}  ({space.Name or '?'})")
                 print(f"         model exhibits '{topic}' failure signal")
                 all_rows.append({
-                    "category": "antipattern", "space_type": usage,
+                    "category": "antipattern", "space_type": entity,
                     "entity": entity, "object": name,
                     "status": "FAIL",
                     "detail": f"'{topic}' failure signal present",
@@ -487,25 +505,28 @@ def report_antipatterns(ifc, usage, entity, spaces, aps,
         print(f"   {SYM['PASS']} none of {len(aps)} known failure "
               f"condition(s) detected")
         all_rows.append({
-            "category": "antipattern", "space_type": usage, "entity": entity,
+            "category": "antipattern", "space_type": entity, "entity": entity,
             "object": "(none triggered)", "status": "PASS",
             "detail": f"{len(aps)} antipattern(s) checked, none triggered"})
 
 
-def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB) -> list[dict]:
+def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB, _embedder=None) -> list[dict]:
     ifc = ifcopenshell.open(str(ifc_path))
     _mep_cache.clear()
     _geom_cache.clear()
+    _space_entity_cache.clear()
 
-    spaces_by_usage: dict[str, list] = defaultdict(list)
-    for space in ifc.by_type("IfcSpace"):
-        usage = get_space_usage(space)
-        if usage and usage in SPACE_TO_ENTITY:
-            spaces_by_usage[usage].append(space)
+    engine = create_db_engine(str(db_path))
+    spaces_by_entity: dict[str, list] = defaultdict(list)
+    with Session(engine) as session:
+        for space in ifc.by_type("IfcSpace"):
+            entity_name = resolve_space_entity(session, space, _embedder=_embedder)
+            if entity_name:
+                spaces_by_entity[entity_name].append(space)
 
     adj = build_adjacency(ifc)
-    id_to_usage = {sp.id(): u for u, sps in spaces_by_usage.items() for sp in sps}
-    usages_present = set(spaces_by_usage)
+    id_to_entity = {sp.id(): e for e, sps in spaces_by_entity.items() for sp in sps}
+    entities_present = set(spaces_by_entity)
 
     totals   = {"PASS": 0, "FAIL": 0, "UNCHECKED": 0}
     all_rows: list[dict] = []
@@ -515,13 +536,12 @@ def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB) -> list[dict]
     print(f"  Model : {Path(ifc_path).name}")
     print(f"{'='*W}\n")
 
-    for usage in sorted(spaces_by_usage):
-        entity = SPACE_TO_ENTITY[usage]
+    for entity in sorted(spaces_by_entity):
         reqs   = get_requirements(db_path, entity)
         cons   = get_constraints(db_path, entity)
         rels   = get_spatial_relations(db_path, entity)
         aps    = get_antipatterns(db_path, entity)
-        spaces = spaces_by_usage[usage]
+        spaces = spaces_by_entity[entity]
         if not (reqs or cons or rels or aps):
             continue
 
@@ -529,11 +549,11 @@ def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB) -> list[dict]
         print(f"▶  {entity}  ({len(spaces)} space(s): {space_names})")
         print(f"   {'─'*(W-3)}")
 
-        report_requirements(ifc, usage, entity, spaces, reqs, totals, all_rows)
-        report_constraints(ifc, usage, entity, spaces, cons, totals, all_rows)
-        report_spatial(ifc, usage, entity, spaces, rels, adj, id_to_usage,
-                       usages_present, totals, all_rows)
-        report_antipatterns(ifc, usage, entity, spaces, aps, totals, all_rows)
+        report_requirements(ifc, entity, spaces, reqs, totals, all_rows)
+        report_constraints(ifc, entity, spaces, cons, totals, all_rows)
+        report_spatial(db_path, entity, spaces, rels, adj, id_to_entity,
+                       entities_present, totals, all_rows)
+        report_antipatterns(ifc, entity, spaces, aps, totals, all_rows)
         print()
 
     # ── Summary ──────────────────────────────────────────────────────────────
