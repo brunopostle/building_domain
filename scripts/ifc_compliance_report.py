@@ -374,29 +374,37 @@ def _fmt_applicability(appl_json: str) -> str:
 def _emit(label: str, confidence: float,
           space_statuses: list[tuple[str, str, str]],
           totals: dict, all_rows: list[dict], row_base: dict,
-          extra: str = "") -> None:
-    """Print one check, collapsed if every space agrees else expanded."""
+          extra: str = "", quiet: bool = False) -> None:
+    """Record one check, printing it collapsed/expanded unless quiet=True.
+
+    quiet=True is used by the `check_model` MCP tool: printing to stdout would
+    corrupt the MCP server's stdio JSON-RPC stream, so tool-driven runs only
+    build `all_rows` and never touch stdout.
+    """
     statuses = [s for _, s, _ in space_statuses]
     if len(set(statuses)) == 1:
         status = statuses[0]
         detail = space_statuses[0][2]
         totals[status] += 1
-        print(f"   {SYM[status]} [{confidence:.0%}] {label}{extra}")
-        print(f"         {detail}")
+        if not quiet:
+            print(f"   {SYM[status]} [{confidence:.0%}] {label}{extra}")
+            print(f"         {detail}")
         all_rows.append({**row_base, "status": status, "detail": detail})
     else:
         for sname, status, detail in space_statuses:
             totals[status] += 1
-            print(f"   {SYM[status]} [{confidence:.0%}] {label}  ({sname})")
-            print(f"         {detail}")
+            if not quiet:
+                print(f"   {SYM[status]} [{confidence:.0%}] {label}  ({sname})")
+                print(f"         {detail}")
             all_rows.append({**row_base, "status": status, "detail": detail,
                              "space": sname})
 
 
-def report_requirements(ifc, entity, spaces, reqs, totals, all_rows) -> None:
+def report_requirements(ifc, entity, spaces, reqs, totals, all_rows, quiet=False) -> None:
     if not reqs:
         return
-    print("   REQUIREMENTS")
+    if not quiet:
+        print("   REQUIREMENTS")
     req_results: dict[tuple, list[tuple[str, str, str]]] = defaultdict(list)
     for space in spaces:
         facts = build_facts(ifc, space)
@@ -410,13 +418,14 @@ def report_requirements(ifc, entity, spaces, reqs, totals, all_rows) -> None:
         _emit(f"{predicate} {obj}", confidence, space_statuses, totals, all_rows,
               {"category": "requirement", "space_type": entity, "entity": entity,
                "predicate": predicate, "object": obj, "applicability": appl_str},
-              extra=f"  [{appl_str}]" if appl_str else "")
+              extra=f"  [{appl_str}]" if appl_str else "", quiet=quiet)
 
 
-def report_constraints(ifc, entity, spaces, constraints, totals, all_rows) -> None:
+def report_constraints(ifc, entity, spaces, constraints, totals, all_rows, quiet=False) -> None:
     if not constraints:
         return
-    print("   CONSTRAINTS")
+    if not quiet:
+        print("   CONSTRAINTS")
     unchecked = 0
     for ctype, rule, confidence in constraints:
         obj = validation.classify_constraint(rule, ctype)
@@ -436,14 +445,14 @@ def report_constraints(ifc, entity, spaces, constraints, totals, all_rows) -> No
             space_statuses.append((space.Name or "?", status, detail))
         _emit(f"{ctype} — {rule}", confidence, space_statuses, totals, all_rows,
               {"category": "constraint", "space_type": entity, "entity": entity,
-               "object": obj if obj is not None else dim[0], "rule": rule})
-    if unchecked:
+               "object": obj if obj is not None else dim[0], "rule": rule}, quiet=quiet)
+    if unchecked and not quiet:
         print(f"   ·  {unchecked} constraint(s) not mechanically checkable "
               f"(non-dimensional / code)")
 
 
 def report_spatial(db_path, entity, spaces, rels, adj, id_to_entity,
-                   entities_present, totals, all_rows) -> None:
+                   entities_present, totals, all_rows, quiet=False) -> None:
     """Check adjacent_to/connects_to/accessible_from relations.
 
     `rels` objects are already-resolved bsos entity names (from the join in
@@ -457,7 +466,8 @@ def report_spatial(db_path, entity, spaces, rels, adj, id_to_entity,
                  if rel in ADJACENCY_RELATIONS and get_entity_type(db_path, obj) == "space"]
     if not checkable:
         return
-    print("   SPATIAL")
+    if not quiet:
+        print("   SPATIAL")
     for rel, obj, conf in checkable:
         space_statuses = []
         for space in spaces:
@@ -473,17 +483,18 @@ def report_spatial(db_path, entity, spaces, rels, adj, id_to_entity,
             space_statuses.append((space.Name or "?", status, detail))
         _emit(f"{rel} {obj}", conf, space_statuses, totals, all_rows,
               {"category": "spatial", "space_type": entity, "entity": entity,
-               "relation": rel, "object": obj})
+               "relation": rel, "object": obj}, quiet=quiet)
     skipped = len(rels) - len(checkable)
-    if skipped:
+    if skipped and not quiet:
         print(f"   ·  {skipped} relation(s) to non-spatial / unmodelled "
               f"objects skipped")
 
 
-def report_antipatterns(ifc, entity, spaces, aps, totals, all_rows) -> None:
+def report_antipatterns(ifc, entity, spaces, aps, totals, all_rows, quiet=False) -> None:
     if not aps:
         return
-    print("   ANTIPATTERNS")
+    if not quiet:
+        print("   ANTIPATTERNS")
     flagged = 0
     for space in spaces:
         signals = validation.antipattern_signals(build_facts(ifc, space))
@@ -492,8 +503,9 @@ def report_antipatterns(ifc, entity, spaces, aps, totals, all_rows) -> None:
             if topic:
                 flagged += 1
                 totals["FAIL"] += 1
-                print(f"   {SYM['FAIL']} [{conf:.0%}] {name}  ({space.Name or '?'})")
-                print(f"         model exhibits '{topic}' failure signal")
+                if not quiet:
+                    print(f"   {SYM['FAIL']} [{conf:.0%}] {name}  ({space.Name or '?'})")
+                    print(f"         model exhibits '{topic}' failure signal")
                 all_rows.append({
                     "category": "antipattern", "space_type": entity,
                     "entity": entity, "object": name,
@@ -502,15 +514,66 @@ def report_antipatterns(ifc, entity, spaces, aps, totals, all_rows) -> None:
                     "space": space.Name or "?"})
     if not flagged:
         totals["PASS"] += 1
-        print(f"   {SYM['PASS']} none of {len(aps)} known failure "
-              f"condition(s) detected")
+        if not quiet:
+            print(f"   {SYM['PASS']} none of {len(aps)} known failure "
+                  f"condition(s) detected")
         all_rows.append({
             "category": "antipattern", "space_type": entity, "entity": entity,
             "object": "(none triggered)", "status": "PASS",
             "detail": f"{len(aps)} antipattern(s) checked, none triggered"})
 
 
-def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB, _embedder=None) -> list[dict]:
+def summarize(all_rows: list[dict]) -> dict:
+    """Aggregate {totals, by_category, failures} from a run_report() result.
+
+    Shared by the CLI's printed summary and the `check_model` MCP tool, so the
+    two presentations of a report can never disagree.
+    """
+    totals = {"PASS": 0, "FAIL": 0, "UNCHECKED": 0}
+    for r in all_rows:
+        totals[r["status"]] += 1
+
+    by_category = {}
+    for cat, label in (("requirement", "requirements"), ("constraint", "constraints"),
+                       ("spatial", "spatial"), ("antipattern", "antipatterns")):
+        rows = [r for r in all_rows if r.get("category") == cat]
+        if rows:
+            by_category[label] = {
+                "pass": sum(r["status"] == "PASS" for r in rows),
+                "fail": sum(r["status"] == "FAIL" for r in rows),
+                "unchecked": sum(r["status"] == "UNCHECKED" for r in rows),
+            }
+
+    seen: set[tuple] = set()
+    failures = []
+    for r in all_rows:
+        if r["status"] != "FAIL":
+            continue
+        key = (r["entity"], r.get("object", ""), r["detail"])
+        if key in seen:
+            continue
+        seen.add(key)
+        failures.append({"entity": r["entity"], "object": r.get("object", ""),
+                         "detail": r["detail"]})
+
+    return {
+        "total": sum(totals.values()),
+        "pass": totals["PASS"],
+        "fail": totals["FAIL"],
+        "unchecked": totals["UNCHECKED"],
+        "by_category": by_category,
+        "failures": failures,
+    }
+
+
+def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB, _embedder=None,
+              quiet: bool = False) -> list[dict]:
+    """Run the full compliance report. Returns the flat list of check rows.
+
+    quiet=True suppresses all stdout output (used by the `check_model` MCP
+    tool — printing would corrupt the MCP server's stdio JSON-RPC stream) and
+    skips geometry/facts work for spaces with no bsos knowledge to check.
+    """
     ifc = ifcopenshell.open(str(ifc_path))
     _mep_cache.clear()
     _geom_cache.clear()
@@ -531,10 +594,11 @@ def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB, _embedder=Non
     totals   = {"PASS": 0, "FAIL": 0, "UNCHECKED": 0}
     all_rows: list[dict] = []
 
-    print(f"\n{'='*W}")
-    print(f"  IFC × BSOS  Compliance Report")
-    print(f"  Model : {Path(ifc_path).name}")
-    print(f"{'='*W}\n")
+    if not quiet:
+        print(f"\n{'='*W}")
+        print(f"  IFC × BSOS  Compliance Report")
+        print(f"  Model : {Path(ifc_path).name}")
+        print(f"{'='*W}\n")
 
     for entity in sorted(spaces_by_entity):
         reqs   = get_requirements(db_path, entity)
@@ -545,50 +609,39 @@ def run_report(ifc_path: Path = IFC_PATH, db_path: Path = BSOS_DB, _embedder=Non
         if not (reqs or cons or rels or aps):
             continue
 
-        space_names = ", ".join(s.Name or "?" for s in sorted(spaces, key=lambda s: s.Name or ""))
-        print(f"▶  {entity}  ({len(spaces)} space(s): {space_names})")
-        print(f"   {'─'*(W-3)}")
+        if not quiet:
+            space_names = ", ".join(s.Name or "?" for s in sorted(spaces, key=lambda s: s.Name or ""))
+            print(f"▶  {entity}  ({len(spaces)} space(s): {space_names})")
+            print(f"   {'─'*(W-3)}")
 
-        report_requirements(ifc, entity, spaces, reqs, totals, all_rows)
-        report_constraints(ifc, entity, spaces, cons, totals, all_rows)
+        report_requirements(ifc, entity, spaces, reqs, totals, all_rows, quiet=quiet)
+        report_constraints(ifc, entity, spaces, cons, totals, all_rows, quiet=quiet)
         report_spatial(db_path, entity, spaces, rels, adj, id_to_entity,
-                       entities_present, totals, all_rows)
-        report_antipatterns(ifc, entity, spaces, aps, totals, all_rows)
-        print()
+                       entities_present, totals, all_rows, quiet=quiet)
+        report_antipatterns(ifc, entity, spaces, aps, totals, all_rows, quiet=quiet)
+        if not quiet:
+            print()
 
-    # ── Summary ──────────────────────────────────────────────────────────────
-    print(f"{'='*W}")
-    total = sum(totals.values())
-    print(
-        f"  Checks: {total}   "
-        f"✓ PASS {totals['PASS']}   "
-        f"✗ FAIL {totals['FAIL']}   "
-        f"? UNCHECKED {totals['UNCHECKED']}"
-    )
-    # Per-layer breakdown
-    for cat, label in (("requirement", "requirements"), ("constraint", "constraints"),
-                       ("spatial", "spatial"), ("antipattern", "antipatterns")):
-        rows = [r for r in all_rows if r.get("category") == cat]
-        if rows:
-            p = sum(r["status"] == "PASS" for r in rows)
-            f = sum(r["status"] == "FAIL" for r in rows)
-            u = sum(r["status"] == "UNCHECKED" for r in rows)
-            print(f"    {label:<13} ✓ {p}   ✗ {f}   ? {u}")
-    print(f"{'='*W}\n")
+    if not quiet:
+        summary = summarize(all_rows)
+        print(f"{'='*W}")
+        print(
+            f"  Checks: {summary['total']}   "
+            f"✓ PASS {summary['pass']}   "
+            f"✗ FAIL {summary['fail']}   "
+            f"? UNCHECKED {summary['unchecked']}"
+        )
+        for label, counts in summary["by_category"].items():
+            print(f"    {label:<13} ✓ {counts['pass']}   ✗ {counts['fail']}   ? {counts['unchecked']}")
+        print(f"{'='*W}\n")
 
-    failures = [r for r in all_rows if r["status"] == "FAIL"]
-    if failures:
-        print("FAILURES")
-        print(f"{'─'*W}")
-        seen: set[tuple] = set()
-        for r in failures:
-            key = (r["entity"], r["object"], r["detail"])
-            if key in seen:
-                continue
-            seen.add(key)
-            print(f"  ✗  {r['entity']} — {r.get('object', '')}")
-            print(f"     {r['detail']}")
-        print()
+        if summary["failures"]:
+            print("FAILURES")
+            print(f"{'─'*W}")
+            for f in summary["failures"]:
+                print(f"  ✗  {f['entity']} — {f['object']}")
+                print(f"     {f['detail']}")
+            print()
 
     return all_rows
 

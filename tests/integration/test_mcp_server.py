@@ -398,3 +398,37 @@ def test_validate_element_registered_on_server(engine, tmp_path):
     import asyncio
     tools = asyncio.run(server.list_tools())
     assert "validate_element" in {t.name for t in tools}
+
+
+# ---------------------------------------------------------------------------
+# check_model (building_domain-l5w.2)
+# ---------------------------------------------------------------------------
+# Full behaviour (real ifcopenshell geometry + real embedding model) was
+# verified manually against _test.ifc / bsos.db during development -- see the
+# beads issue notes. What's covered here is registration and the fast-fail
+# paths that don't require loading the model or a real IFC file.
+
+def test_check_model_registered_on_server(tmp_path):
+    db = tmp_path / "reg.db"
+    server = create_server(str(db))
+    import asyncio
+    tools = asyncio.run(server.list_tools())
+    assert "check_model" in {t.name for t in tools}
+
+
+def test_check_model_missing_ifc_file(tmp_path):
+    from bsos.mcp_server.server import check_model_tool
+    db = tmp_path / "reg.db"
+    create_db_engine(str(db))
+    result = check_model_tool(str(tmp_path / "nonexistent.ifc"), str(db))
+    assert result["error"] == "ifc_file_not_found"
+
+
+def test_get_compliance_report_module_loads_real_script():
+    # Exercises the file-path-based load itself (cheap -- just function/constant
+    # definitions, no embedding model touched) without running a full report.
+    from bsos.mcp_server.server import _get_compliance_report_module
+    module = _get_compliance_report_module()
+    assert module is not None
+    assert hasattr(module, "run_report")
+    assert hasattr(module, "summarize")

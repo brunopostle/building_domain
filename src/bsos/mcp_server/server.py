@@ -723,6 +723,69 @@ def validate_element_tool(
     }
 
 
+_compliance_report_module = None
+
+
+def _get_compliance_report_module():
+    """Load scripts/ifc_compliance_report.py as a module (building_domain-l5w.2).
+
+    That script lives outside the installed `bsos` package (it is not listed
+    in pyproject.toml's wheel packages), so it is loaded by file path rather
+    than a normal import. This only works from a full repo checkout (the
+    documented `pip install -e .` setup) — cached at module scope so repeated
+    check_model calls don't re-exec the file or reload the embedding model.
+    """
+    global _compliance_report_module
+    if _compliance_report_module is None:
+        import importlib.util
+        from pathlib import Path
+
+        script_path = Path(__file__).resolve().parents[3] / "scripts" / "ifc_compliance_report.py"
+        if not script_path.exists():
+            return None
+        spec = importlib.util.spec_from_file_location(
+            "_bsos_ifc_compliance_report", script_path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        _compliance_report_module = module
+    return _compliance_report_module
+
+
+def check_model_tool(ifc_path: str, db_path: str, _embedder=None) -> dict:
+    """Run the IFC × BSOS compliance report against a loaded IFC model file.
+
+    Checks every space in the model against four bsos knowledge layers:
+    requirements (requires/depends_on), constraints (must/must_not rules),
+    spatial relations (adjacency to other required space types), and
+    anti-patterns (known failure conditions). Each space is resolved to its
+    bsos entity by semantic search, so this works against any modelled space
+    rather than a fixed list of space types.
+
+    ifc_path is a filesystem path to an .ifc file (e.g. one already loaded via
+    the `ifc` server's ifc_load). Returns a summary (pass/fail/unchecked
+    counts, per-category breakdown, deduplicated failure list) plus the full
+    list of individual check rows.
+    """
+    from pathlib import Path
+
+    module = _get_compliance_report_module()
+    if module is None:
+        return {"error": "compliance_report_unavailable",
+                "detail": "scripts/ifc_compliance_report.py not found — this "
+                          "tool requires a full repo checkout, not a packaged install."}
+
+    ifc_file = Path(ifc_path)
+    if not ifc_file.exists():
+        return {"error": "ifc_file_not_found", "query": ifc_path}
+
+    all_rows = module.run_report(ifc_file, Path(db_path), _embedder=_embedder, quiet=True)
+    return {
+        "model": ifc_file.name,
+        "summary": module.summarize(all_rows),
+        "checks": all_rows,
+    }
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -837,5 +900,9 @@ def create_server(db_path: str) -> FastMCP:
     ) -> dict:
         with Session(engine) as session:
             return validate_element_tool(session, entity, facts, min_confidence, include_proposed)
+
+    @mcp.tool(description=check_model_tool.__doc__)
+    def check_model(ifc_path: str) -> dict:
+        return check_model_tool(ifc_path, db_path)
 
     return mcp
