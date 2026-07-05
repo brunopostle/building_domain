@@ -19,3 +19,8 @@ data/bsos_snapshot.json
 *.db-wal
 .beads-credential-key
 .bsos_config
+
+# Local DB backups / scratch reports — never committed (bsos.db backups are
+# 100MB+ and duplicate the git-tracked data/snapshot/ export anyway).
+*.db.bak-*
+compliance_report.txt
