@@ -487,7 +487,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:32:05.988868"
   },
   {
@@ -976,7 +976,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:32:43.587567"
   },
   {
@@ -1213,7 +1213,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:33:23.276544"
   },
   {
@@ -1260,7 +1260,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:33:23.297619"
   },
   {
@@ -1321,7 +1321,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:33:43.242023"
   },
   {
@@ -1355,7 +1355,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:33:43.242023"
   },
   {
@@ -1371,7 +1371,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:33:43.242023"
   },
   {
@@ -1387,7 +1387,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "schema",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:33:47.896708"
   },
   {
@@ -2240,7 +2240,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:35:16.283695"
   },
   {
@@ -2272,7 +2272,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:35:18.802732"
   },
   {
@@ -2318,7 +2318,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:35:22.080724"
   },
   {
@@ -2962,7 +2962,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:36:30.155902"
   },
   {
@@ -3038,7 +3038,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:36:41.659679"
   },
   {
@@ -3535,7 +3535,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:37:31.889758"
   },
   {
@@ -3826,7 +3826,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:38:21.197630"
   },
   {
@@ -4147,7 +4147,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:38:45.972600"
   },
   {
@@ -4230,7 +4230,7 @@
     "exceptions": [],
     "confidence": 0.65,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:39:25.406251"
   },
   {
@@ -4864,7 +4864,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:40:20.913008"
   },
   {
@@ -5094,7 +5094,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:40:30.446690"
   },
   {
@@ -5358,7 +5358,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:41:05.467040"
   },
   {
@@ -5418,7 +5418,7 @@
     ],
     "confidence": 0.6,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:41:26.798735"
   },
   {
@@ -5514,7 +5514,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:41:33.621695"
   },
   {
@@ -5633,7 +5633,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:41:42.852551"
   },
   {
@@ -5754,7 +5754,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:42:04.648304"
   },
   {
@@ -5784,7 +5784,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:42:11.955957"
   },
   {
@@ -5846,7 +5846,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:42:18.869989"
   },
   {
@@ -5937,7 +5937,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:42:34.746659"
   },
   {
@@ -6166,7 +6166,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:42:51.853954"
   },
   {
@@ -7115,7 +7115,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:43:44.956890"
   },
   {
@@ -9179,7 +9179,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:45:56.679521"
   },
   {
@@ -9476,7 +9476,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:46:19.254949"
   },
   {
@@ -9659,7 +9659,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:46:31.837762"
   },
   {
@@ -9675,7 +9675,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:46:31.837762"
   },
   {
@@ -9762,7 +9762,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:46:38.334795"
   },
   {
@@ -10727,7 +10727,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:47:45.963552"
   },
   {
@@ -10773,7 +10773,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:47:51.839566"
   },
   {
@@ -10806,7 +10806,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:47:52.328966"
   },
   {
@@ -10870,7 +10870,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:47:58.431960"
   },
   {
@@ -10898,7 +10898,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:47:58.796611"
   },
   {
@@ -10914,7 +10914,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:47:58.796611"
   },
   {
@@ -11257,7 +11257,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:48:21.950673"
   },
   {
@@ -11271,7 +11271,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:48:21.950673"
   },
   {
@@ -11721,7 +11721,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:48:47.247099"
   },
   {
@@ -12052,7 +12052,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:49:07.691632"
   },
   {
@@ -12177,7 +12177,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:49:14.606795"
   },
   {
@@ -12325,7 +12325,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:49:27.065704"
   },
   {
@@ -12675,7 +12675,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:49:51.454015"
   },
   {
@@ -12810,7 +12810,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:06.539942"
   },
   {
@@ -12827,7 +12827,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:06.539942"
   },
   {
@@ -12843,7 +12843,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:06.539942"
   },
   {
@@ -13255,7 +13255,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:35.051832"
   },
   {
@@ -13269,7 +13269,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:35.051832"
   },
   {
@@ -13283,7 +13283,7 @@
     "exceptions": [],
     "confidence": 0.65,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:35.051832"
   },
   {
@@ -13326,7 +13326,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:39.622449"
   },
   {
@@ -13401,7 +13401,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:46.354710"
   },
   {
@@ -13431,7 +13431,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:46.354710"
   },
   {
@@ -13475,7 +13475,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:50:48.893773"
   },
   {
@@ -13741,7 +13741,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:51:04.903994"
   },
   {
@@ -13792,7 +13792,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:51:07.164887"
   },
   {
@@ -14114,7 +14114,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:51:28.871846"
   },
   {
@@ -14270,7 +14270,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:51:39.204493"
   },
   {
@@ -14480,7 +14480,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:51:52.581888"
   },
   {
@@ -14798,7 +14798,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:52:12.530791"
   },
   {
@@ -15897,7 +15897,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:53:30.366895"
   },
   {
@@ -16384,7 +16384,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:54:01.411827"
   },
   {
@@ -16725,7 +16725,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:54:20.426740"
   },
   {
@@ -17035,7 +17035,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:54:39.525541"
   },
   {
@@ -19991,7 +19991,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:57:44.070807"
   },
   {
@@ -20157,7 +20157,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:57:58.140115"
   },
   {
@@ -21430,7 +21430,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:59:21.636875"
   },
   {
@@ -21446,7 +21446,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T06:59:21.636875"
   },
   {
@@ -23292,7 +23292,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:01:15.832499"
   },
   {
@@ -24389,7 +24389,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:02:28.879257"
   },
   {
@@ -24698,7 +24698,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:02:48.352834"
   },
   {
@@ -25891,7 +25891,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:04:00.111175"
   },
   {
@@ -26445,7 +26445,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:04:40.963680"
   },
   {
@@ -26893,7 +26893,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:05:14.262575"
   },
   {
@@ -26909,7 +26909,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:05:14.262575"
   },
   {
@@ -28514,7 +28514,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:06:58.178454"
   },
   {
@@ -31270,7 +31270,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:09:55.528451"
   },
   {
@@ -32625,7 +32625,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:11:22.971499"
   },
   {
@@ -33331,7 +33331,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:12:05.556458"
   },
   {
@@ -33627,7 +33627,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:12:22.718306"
   },
   {
@@ -35833,7 +35833,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:14:43.582923"
   },
   {
@@ -35934,7 +35934,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:14:50.401092"
   },
   {
@@ -36128,7 +36128,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:15:01.224855"
   },
   {
@@ -37861,7 +37861,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:16:38.308240"
   },
   {
@@ -38472,7 +38472,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:17:17.685198"
   },
   {
@@ -38565,7 +38565,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:17:24.647774"
   },
   {
@@ -38614,7 +38614,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:17:24.798576"
   },
   {
@@ -38664,7 +38664,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:17:31.134675"
   },
   {
@@ -39427,7 +39427,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:18:14.839958"
   },
   {
@@ -39807,7 +39807,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:18:38.810552"
   },
   {
@@ -40255,7 +40255,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:19:08.214548"
   },
   {
@@ -41496,7 +41496,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:20:24.916987"
   },
   {
@@ -41682,7 +41682,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:20:38.735690"
   },
   {
@@ -41714,7 +41714,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:20:38.735690"
   },
   {
@@ -42818,7 +42818,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:21:54.755787"
   },
   {
@@ -43382,7 +43382,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:22:25.150208"
   },
   {
@@ -43785,7 +43785,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:22:54.732991"
   },
   {
@@ -44058,7 +44058,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:23:10.379835"
   },
   {
@@ -44690,7 +44690,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:23:49.492710"
   },
   {
@@ -44905,7 +44905,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:23:58.637872"
   },
   {
@@ -44972,7 +44972,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:24:04.377646"
   },
   {
@@ -44989,7 +44989,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:24:04.377646"
   },
   {
@@ -45245,7 +45245,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:24:18.611523"
   },
   {
@@ -45474,7 +45474,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:24:29.533752"
   },
   {
@@ -45876,7 +45876,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:24:57.449992"
   },
   {
@@ -46619,7 +46619,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:25:40.088422"
   },
   {
@@ -47813,7 +47813,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:26:47.065934"
   },
   {
@@ -49093,7 +49093,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:27:57.724671"
   },
   {
@@ -49244,7 +49244,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:28:06.095935"
   },
   {
@@ -50886,7 +50886,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:29:36.086818"
   },
   {
@@ -50900,7 +50900,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:29:36.086818"
   },
   {
@@ -51464,7 +51464,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:30:11.707953"
   },
   {
@@ -52987,7 +52987,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:31:41.436741"
   },
   {
@@ -54137,7 +54137,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:32:48.797937"
   },
   {
@@ -56368,7 +56368,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:35:12.626789"
   },
   {
@@ -56658,7 +56658,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:35:30.978691"
   },
   {
@@ -56714,7 +56714,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:35:33.989015"
   },
   {
@@ -58465,7 +58465,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:37:33.498877"
   },
   {
@@ -60519,7 +60519,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:39:55.167293"
   },
   {
@@ -61274,7 +61274,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:40:58.061581"
   },
   {
@@ -61468,7 +61468,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:41:13.967820"
   },
   {
@@ -61512,7 +61512,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:41:18.063906"
   },
   {
@@ -61763,7 +61763,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:41:34.856783"
   },
   {
@@ -64561,7 +64561,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:44:46.348560"
   },
   {
@@ -65270,7 +65270,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:45:37.173127"
   },
   {
@@ -65533,7 +65533,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:45:56.180752"
   },
   {
@@ -65808,7 +65808,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:46:22.500741"
   },
   {
@@ -66100,7 +66100,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:46:42.568849"
   },
   {
@@ -66285,7 +66285,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:46:51.905637"
   },
   {
@@ -66748,7 +66748,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:47:19.030591"
   },
   {
@@ -67242,7 +67242,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:47:51.417298"
   },
   {
@@ -69445,7 +69445,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:49:52.175067"
   },
   {
@@ -69874,7 +69874,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:50:24.111838"
   },
   {
@@ -70010,7 +70010,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:50:36.416648"
   },
   {
@@ -70040,7 +70040,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:50:36.416648"
   },
   {
@@ -70105,7 +70105,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:50:36.952447"
   },
   {
@@ -70195,7 +70195,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:50:43.750598"
   },
   {
@@ -70211,7 +70211,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:50:43.750598"
   },
   {
@@ -70682,7 +70682,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:51:17.947201"
   },
   {
@@ -72782,7 +72782,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:53:26.730520"
   },
   {
@@ -73529,7 +73529,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:54:17.407609"
   },
   {
@@ -74380,7 +74380,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:55:15.399676"
   },
   {
@@ -74743,7 +74743,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:55:39.809774"
   },
   {
@@ -75090,7 +75090,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:56:01.891655"
   },
   {
@@ -75123,7 +75123,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:56:07.621742"
   },
   {
@@ -76137,7 +76137,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:57:16.825891"
   },
   {
@@ -77987,7 +77987,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:58:59.106834"
   },
   {
@@ -78206,7 +78206,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:59:10.201391"
   },
   {
@@ -78546,7 +78546,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:59:33.498567"
   },
   {
@@ -78918,7 +78918,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:59:58.531821"
   },
   {
@@ -78950,7 +78950,7 @@
     "exceptions": [],
     "confidence": 0.6,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T07:59:58.531821"
   },
   {
@@ -79031,7 +79031,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:00:07.121639"
   },
   {
@@ -79061,7 +79061,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:00:07.121639"
   },
   {
@@ -80745,7 +80745,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:02:00.647603"
   },
   {
@@ -81819,7 +81819,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:03:12.903827"
   },
   {
@@ -82207,7 +82207,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:03:49.486859"
   },
   {
@@ -82324,7 +82324,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:03:55.694867"
   },
   {
@@ -82586,7 +82586,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:04:22.357664"
   },
   {
@@ -82904,7 +82904,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:04:41.861787"
   },
   {
@@ -83888,7 +83888,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:05:45.433616"
   },
   {
@@ -84356,7 +84356,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:06:30.706710"
   },
   {
@@ -84398,7 +84398,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:06:30.706710"
   },
   {
@@ -84896,7 +84896,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:06:56.242882"
   },
   {
@@ -84928,7 +84928,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:07:05.423822"
   },
   {
@@ -84975,7 +84975,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:07:05.423822"
   },
   {
@@ -85088,7 +85088,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:07:12.306650"
   },
   {
@@ -85347,7 +85347,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:07:28.176095"
   },
   {
@@ -85579,7 +85579,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:07:47.284145"
   },
   {
@@ -86603,7 +86603,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:08:49.586960"
   },
   {
@@ -88914,7 +88914,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:11:19.046842"
   },
   {
@@ -88940,7 +88940,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:11:19.046842"
   },
   {
@@ -88982,7 +88982,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:11:23.473464"
   },
   {
@@ -88996,7 +88996,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:11:23.473464"
   },
   {
@@ -89010,7 +89010,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:11:23.473464"
   },
   {
@@ -89116,7 +89116,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:11:30.053198"
   },
   {
@@ -89170,7 +89170,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:11:33.168524"
   },
   {
@@ -89718,7 +89718,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:12:12.833896"
   },
   {
@@ -90047,7 +90047,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:12:35.146716"
   },
   {
@@ -90091,7 +90091,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:12:41.465905"
   },
   {
@@ -90290,7 +90290,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:12:50.303939"
   },
   {
@@ -90320,7 +90320,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:12:50.303939"
   },
   {
@@ -90334,7 +90334,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:12:50.303939"
   },
   {
@@ -91593,7 +91593,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:14:19.659767"
   },
   {
@@ -91655,7 +91655,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:14:22.932965"
   },
   {
@@ -91729,7 +91729,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:14:25.344650"
   },
   {
@@ -92140,7 +92140,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:14:57.718694"
   },
   {
@@ -92769,7 +92769,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:15:30.022617"
   },
   {
@@ -92951,7 +92951,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:15:42.264597"
   },
   {
@@ -93003,7 +93003,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:15:45.245981"
   },
   {
@@ -93125,7 +93125,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:15:52.426764"
   },
   {
@@ -93216,7 +93216,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:15:57.578137"
   },
   {
@@ -93506,7 +93506,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:16:18.451802"
   },
   {
@@ -93524,7 +93524,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:16:22.817884"
   },
   {
@@ -93542,7 +93542,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:16:22.817884"
   },
   {
@@ -93594,7 +93594,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:16:25.781760"
   },
   {
@@ -93958,7 +93958,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:16:49.546928"
   },
   {
@@ -95168,7 +95168,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:18:05.730639"
   },
   {
@@ -95339,7 +95339,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:18:15.970622"
   },
   {
@@ -95355,7 +95355,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:18:15.970622"
   },
   {
@@ -95605,7 +95605,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:18:30.774925"
   },
   {
@@ -95619,7 +95619,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:18:30.774925"
   },
   {
@@ -95636,7 +95636,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:18:30.774925"
   },
   {
@@ -95652,7 +95652,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:18:30.774925"
   },
   {
@@ -97493,7 +97493,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:20:19.631181"
   },
   {
@@ -98484,7 +98484,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:21:11.606310"
   },
   {
@@ -98952,7 +98952,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:21:41.739724"
   },
   {
@@ -99172,7 +99172,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:21:53.932596"
   },
   {
@@ -99522,7 +99522,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:24.959576"
   },
   {
@@ -99623,7 +99623,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:25.244991"
   },
   {
@@ -99892,7 +99892,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:48.627770"
   },
   {
@@ -100070,7 +100070,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:57.743074"
   },
   {
@@ -100087,7 +100087,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:57.743074"
   },
   {
@@ -100103,7 +100103,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:57.743074"
   },
   {
@@ -100136,7 +100136,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:57.743074"
   },
   {
@@ -100152,7 +100152,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:22:57.743074"
   },
   {
@@ -100475,7 +100475,7 @@
     ],
     "confidence": 0.65,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:23:16.704013"
   },
   {
@@ -100660,7 +100660,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:23:26.561907"
   },
   {
@@ -100957,7 +100957,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:23:42.382921"
   },
   {
@@ -101147,7 +101147,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:23:52.631898"
   },
   {
@@ -101193,7 +101193,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:23:56.137042"
   },
   {
@@ -101269,7 +101269,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:23:59.422625"
   },
   {
@@ -101311,7 +101311,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:24:00.927825"
   },
   {
@@ -101377,7 +101377,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:24:05.215926"
   },
   {
@@ -101567,7 +101567,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:24:16.322892"
   },
   {
@@ -101583,7 +101583,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:24:16.322892"
   },
   {
@@ -101970,7 +101970,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:24:42.865477"
   },
   {
@@ -103957,7 +103957,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:26:27.753614"
   },
   {
@@ -103973,7 +103973,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:26:27.753614"
   },
   {
@@ -104642,7 +104642,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:27:13.678693"
   },
   {
@@ -105337,7 +105337,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:27:49.348490"
   },
   {
@@ -105555,7 +105555,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:27:55.632748"
   },
   {
@@ -106756,7 +106756,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:29:07.138046"
   },
   {
@@ -106801,7 +106801,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:29:09.979867"
   },
   {
@@ -106931,7 +106931,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:29:15.561847"
   },
   {
@@ -107403,7 +107403,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:29:36.882339"
   },
   {
@@ -108601,7 +108601,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:30:52.136192"
   },
   {
@@ -108618,7 +108618,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:30:52.136192"
   },
   {
@@ -108666,7 +108666,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:31:00.003925"
   },
   {
@@ -108682,7 +108682,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:31:00.003925"
   },
   {
@@ -108699,7 +108699,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:31:00.003925"
   },
   {
@@ -108715,7 +108715,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:31:00.003925"
   },
   {
@@ -109201,7 +109201,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:31:29.271628"
   },
   {
@@ -109355,7 +109355,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:31:38.703701"
   },
   {
@@ -109551,7 +109551,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:31:52.217672"
   },
   {
@@ -111022,7 +111022,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:33:15.744017"
   },
   {
@@ -111181,7 +111181,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:33:23.244576"
   },
   {
@@ -111338,7 +111338,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:33:31.129908"
   },
   {
@@ -111968,7 +111968,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:34:02.325160"
   },
   {
@@ -111983,7 +111983,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:34:02.325160"
   },
   {
@@ -112030,7 +112030,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:34:08.098515"
   },
   {
@@ -112072,7 +112072,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:34:08.098515"
   },
   {
@@ -112505,7 +112505,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:34:33.314760"
   },
   {
@@ -112720,7 +112720,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:34:46.125130"
   },
   {
@@ -112899,7 +112899,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:34:57.146420"
   },
   {
@@ -113845,7 +113845,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:35:48.246466"
   },
   {
@@ -114681,7 +114681,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:36:34.199852"
   },
   {
@@ -114697,7 +114697,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:36:34.199852"
   },
   {
@@ -114713,7 +114713,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:36:39.080865"
   },
   {
@@ -114729,7 +114729,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:36:39.080865"
   },
   {
@@ -114989,7 +114989,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:36:53.966093"
   },
   {
@@ -115037,7 +115037,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:36:56.630185"
   },
   {
@@ -115579,7 +115579,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:37:29.524927"
   },
   {
@@ -116243,7 +116243,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:38:12.856012"
   },
   {
@@ -116257,7 +116257,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:38:12.856012"
   },
   {
@@ -116757,7 +116757,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:38:45.174850"
   },
   {
@@ -116773,7 +116773,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:38:45.174850"
   },
   {
@@ -116905,7 +116905,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:38:54.309528"
   },
   {
@@ -116922,7 +116922,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:38:54.309528"
   },
   {
@@ -117107,7 +117107,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:39:02.772576"
   },
   {
@@ -117631,7 +117631,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:39:36.840600"
   },
   {
@@ -118612,7 +118612,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:40:29.775979"
   },
   {
@@ -119541,7 +119541,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:41:29.810831"
   },
   {
@@ -119666,7 +119666,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:41:37.689689"
   },
   {
@@ -120130,7 +120130,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:42:11.437556"
   },
   {
@@ -120392,7 +120392,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:42:29.425639"
   },
   {
@@ -122361,7 +122361,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:44:27.075681"
   },
   {
@@ -122710,7 +122710,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:44:46.745625"
   },
   {
@@ -123865,7 +123865,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:45:51.468630"
   },
   {
@@ -125427,7 +125427,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:47:36.055861"
   },
   {
@@ -125532,7 +125532,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:47:43.593558"
   },
   {
@@ -125703,7 +125703,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:47:56.517518"
   },
   {
@@ -125759,7 +125759,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:48:02.591581"
   },
   {
@@ -125806,7 +125806,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:48:02.890304"
   },
   {
@@ -126089,7 +126089,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:48:26.715181"
   },
   {
@@ -126106,7 +126106,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:48:26.715181"
   },
   {
@@ -126200,7 +126200,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:48:32.537838"
   },
   {
@@ -126842,7 +126842,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:49:15.104811"
   },
   {
@@ -127194,7 +127194,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:49:35.862691"
   },
   {
@@ -127408,7 +127408,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:49:51.155694"
   },
   {
@@ -128753,7 +128753,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:51:16.614565"
   },
   {
@@ -128767,7 +128767,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:51:16.614565"
   },
   {
@@ -129173,7 +129173,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:51:41.815749"
   },
   {
@@ -129548,7 +129548,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:52:04.106126"
   },
   {
@@ -129834,7 +129834,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:52:24.869186"
   },
   {
@@ -130366,7 +130366,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:53:01.553888"
   },
   {
@@ -131672,7 +131672,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:54:15.369228"
   },
   {
@@ -131733,7 +131733,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:54:21.142801"
   },
   {
@@ -131789,7 +131789,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:54:21.758950"
   },
   {
@@ -132393,7 +132393,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:54:59.276581"
   },
   {
@@ -132494,7 +132494,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:55:08.046607"
   },
   {
@@ -132551,7 +132551,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:55:09.248623"
   },
   {
@@ -134204,7 +134204,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:57:01.208338"
   },
   {
@@ -134335,7 +134335,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:57:10.282787"
   },
   {
@@ -135260,7 +135260,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:57:56.507695"
   },
   {
@@ -135761,7 +135761,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:58:28.668770"
   },
   {
@@ -135775,7 +135775,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:58:28.668770"
   },
   {
@@ -135789,7 +135789,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:58:28.668770"
   },
   {
@@ -136154,7 +136154,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:58:50.789983"
   },
   {
@@ -136760,7 +136760,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T08:59:26.213023"
   },
   {
@@ -137359,7 +137359,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:00:13.100919"
   },
   {
@@ -138398,7 +138398,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:01:21.822994"
   },
   {
@@ -139473,7 +139473,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:02:32.245962"
   },
   {
@@ -139644,7 +139644,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:02:43.390381"
   },
   {
@@ -139719,7 +139719,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:02:47.018778"
   },
   {
@@ -139818,7 +139818,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:02:54.379172"
   },
   {
@@ -140020,7 +140020,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:03:13.285376"
   },
   {
@@ -140297,7 +140297,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:03:30.254568"
   },
   {
@@ -140577,7 +140577,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:03:51.819613"
   },
   {
@@ -140738,7 +140738,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:03:59.915520"
   },
   {
@@ -141060,7 +141060,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:04:26.162657"
   },
   {
@@ -141077,7 +141077,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:04:26.162657"
   },
   {
@@ -141499,7 +141499,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:04:56.948984"
   },
   {
@@ -141561,7 +141561,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:04:58.650580"
   },
   {
@@ -142330,7 +142330,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:05:54.255214"
   },
   {
@@ -142344,7 +142344,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:05:54.255214"
   },
   {
@@ -142752,7 +142752,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:06:17.805747"
   },
   {
@@ -143411,7 +143411,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:07:07.920745"
   },
   {
@@ -144360,7 +144360,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:08:12.457296"
   },
   {
@@ -144579,7 +144579,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:08:27.341965"
   },
   {
@@ -144774,7 +144774,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:08:43.994572"
   },
   {
@@ -144851,7 +144851,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:08:51.859964"
   },
   {
@@ -145646,7 +145646,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:09:40.988937"
   },
   {
@@ -145770,7 +145770,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:09:50.188183"
   },
   {
@@ -146450,7 +146450,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:10:35.834079"
   },
   {
@@ -146588,7 +146588,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:10:46.258333"
   },
   {
@@ -146823,7 +146823,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:11:03.102231"
   },
   {
@@ -146915,7 +146915,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:11:09.393855"
   },
   {
@@ -148021,7 +148021,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:12:29.694489"
   },
   {
@@ -148753,7 +148753,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:13:21.423924"
   },
   {
@@ -148784,7 +148784,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:13:26.726603"
   },
   {
@@ -149548,7 +149548,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:14:27.595979"
   },
   {
@@ -150124,7 +150124,7 @@
     ],
     "confidence": 0.3,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "rejected",
     "created_at": "2026-06-30T09:15:06.817392"
   },
   {
@@ -150140,7 +150140,7 @@
     ],
     "confidence": 0.25,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "rejected",
     "created_at": "2026-06-30T09:15:06.817392"
   },
   {
@@ -150156,7 +150156,7 @@
     ],
     "confidence": 0.4,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "rejected",
     "created_at": "2026-06-30T09:15:06.817392"
   },
   {
@@ -151543,7 +151543,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:16:39.756429"
   },
   {
@@ -151768,7 +151768,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:16:56.226364"
   },
   {
@@ -151802,7 +151802,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:17:02.055188"
   },
   {
@@ -152766,7 +152766,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:18:02.127657"
   },
   {
@@ -152831,7 +152831,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:18:10.638881"
   },
   {
@@ -152927,7 +152927,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:18:15.911893"
   },
   {
@@ -153505,7 +153505,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:18:59.091404"
   },
   {
@@ -153670,7 +153670,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:19:11.354272"
   },
   {
@@ -153996,7 +153996,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:19:36.645971"
   },
   {
@@ -154145,7 +154145,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:19:52.863599"
   },
   {
@@ -154684,7 +154684,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:20:31.064959"
   },
   {
@@ -154862,7 +154862,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:20:44.958455"
   },
   {
@@ -155907,7 +155907,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:22:04.129154"
   },
   {
@@ -155923,7 +155923,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:22:04.129154"
   },
   {
@@ -156047,7 +156047,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:22:12.175718"
   },
   {
@@ -156269,7 +156269,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:22:29.435367"
   },
   {
@@ -156732,7 +156732,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:22:57.536522"
   },
   {
@@ -158072,7 +158072,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:24:17.127169"
   },
   {
@@ -158555,7 +158555,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:24:46.256556"
   },
   {
@@ -160084,7 +160084,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:26:23.234623"
   },
   {
@@ -160263,7 +160263,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:26:34.355280"
   },
   {
@@ -160374,7 +160374,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:26:39.896265"
   },
   {
@@ -160827,7 +160827,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:27:15.335396"
   },
   {
@@ -161204,7 +161204,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:27:35.210471"
   },
   {
@@ -161376,7 +161376,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:27:54.808495"
   },
   {
@@ -161421,7 +161421,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:27:55.854302"
   },
   {
@@ -161437,7 +161437,7 @@
     ],
     "confidence": 0.65,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:27:55.854302"
   },
   {
@@ -161757,7 +161757,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:28:18.364560"
   },
   {
@@ -162459,7 +162459,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:29:07.982208"
   },
   {
@@ -162491,7 +162491,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:29:07.982208"
   },
   {
@@ -162507,7 +162507,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:29:07.982208"
   },
   {
@@ -163092,7 +163092,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:29:45.867131"
   },
   {
@@ -164103,7 +164103,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:30:45.551906"
   },
   {
@@ -164137,7 +164137,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:30:45.551906"
   },
   {
@@ -164313,7 +164313,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:30:55.382068"
   },
   {
@@ -164993,7 +164993,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:31:38.716036"
   },
   {
@@ -166442,7 +166442,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:33:01.509597"
   },
   {
@@ -166673,7 +166673,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:33:13.930989"
   },
   {
@@ -167030,7 +167030,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:33:37.307125"
   },
   {
@@ -167748,7 +167748,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:34:18.361281"
   },
   {
@@ -168247,7 +168247,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:34:54.154734"
   },
   {
@@ -168698,7 +168698,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:35:22.668687"
   },
   {
@@ -169939,7 +169939,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:36:39.163080"
   },
   {
@@ -169973,7 +169973,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:36:39.163080"
   },
   {
@@ -170339,7 +170339,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:36:58.618391"
   },
   {
@@ -170390,7 +170390,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:37:00.969962"
   },
   {
@@ -170437,7 +170437,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:37:05.011408"
   },
   {
@@ -170454,7 +170454,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:37:05.011408"
   },
   {
@@ -170800,7 +170800,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:37:30.773799"
   },
   {
@@ -170866,7 +170866,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:37:33.028709"
   },
   {
@@ -170950,7 +170950,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:37:38.711573"
   },
   {
@@ -171489,7 +171489,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:38:08.681223"
   },
   {
@@ -171505,7 +171505,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:38:08.681223"
   },
   {
@@ -171739,7 +171739,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:38:21.998781"
   },
   {
@@ -172017,7 +172017,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:38:39.606778"
   },
   {
@@ -172033,7 +172033,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:38:39.606778"
   },
   {
@@ -172163,7 +172163,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:38:48.902149"
   },
   {
@@ -172251,7 +172251,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:38:54.678412"
   },
   {
@@ -173111,7 +173111,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:39:49.424713"
   },
   {
@@ -173218,7 +173218,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:39:54.648902"
   },
   {
@@ -173235,7 +173235,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:39:54.648902"
   },
   {
@@ -173298,7 +173298,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:40:01.124793"
   },
   {
@@ -173324,7 +173324,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:40:01.124793"
   },
   {
@@ -173338,7 +173338,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:40:01.124793"
   },
   {
@@ -173863,7 +173863,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:40:30.742613"
   },
   {
@@ -173907,7 +173907,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:40:34.686814"
   },
   {
@@ -173935,7 +173935,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:40:34.686814"
   },
   {
@@ -174671,7 +174671,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:41:16.772056"
   },
   {
@@ -174963,7 +174963,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:41:30.907513"
   },
   {
@@ -175145,7 +175145,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:41:43.399662"
   },
   {
@@ -175352,7 +175352,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:41:57.344593"
   },
   {
@@ -175366,7 +175366,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:41:57.344593"
   },
   {
@@ -175538,7 +175538,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:42:05.396930"
   },
   {
@@ -175827,7 +175827,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:42:22.955335"
   },
   {
@@ -176490,7 +176490,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:02.476565"
   },
   {
@@ -176507,7 +176507,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:02.476565"
   },
   {
@@ -176836,7 +176836,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:24.366016"
   },
   {
@@ -176959,7 +176959,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:31.328138"
   },
   {
@@ -177071,7 +177071,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:39.328971"
   },
   {
@@ -177118,7 +177118,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:39.328971"
   },
   {
@@ -177161,7 +177161,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:44.015434"
   },
   {
@@ -177451,7 +177451,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:43:59.050422"
   },
   {
@@ -177742,7 +177742,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:44:18.536321"
   },
   {
@@ -177770,7 +177770,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:44:18.536321"
   },
   {
@@ -177818,7 +177818,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:44:19.484658"
   },
   {
@@ -177978,7 +177978,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:44:31.952014"
   },
   {
@@ -178396,7 +178396,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:44:59.497935"
   },
   {
@@ -178978,7 +178978,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:45:35.189048"
   },
   {
@@ -179148,7 +179148,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:45:43.457777"
   },
   {
@@ -179331,7 +179331,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:45:59.948386"
   },
   {
@@ -179347,7 +179347,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:45:59.948386"
   },
   {
@@ -179380,7 +179380,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:46:04.520981"
   },
   {
@@ -179428,7 +179428,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:46:07.984621"
   },
   {
@@ -179472,7 +179472,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:46:09.185085"
   },
   {
@@ -179846,7 +179846,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:46:34.092235"
   },
   {
@@ -180042,7 +180042,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:46:50.660509"
   },
   {
@@ -180560,7 +180560,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:47:23.790073"
   },
   {
@@ -181001,7 +181001,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:47:50.107878"
   },
   {
@@ -181050,7 +181050,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:47:55.731973"
   },
   {
@@ -181114,7 +181114,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:47:55.848848"
   },
   {
@@ -181258,7 +181258,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:48:08.531316"
   },
   {
@@ -181756,7 +181756,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:48:40.990976"
   },
   {
@@ -182293,7 +182293,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:49:09.291483"
   },
   {
@@ -183642,7 +183642,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:50:33.120367"
   },
   {
@@ -183789,7 +183789,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:50:44.788921"
   },
   {
@@ -183833,7 +183833,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:50:47.233231"
   },
   {
@@ -183875,7 +183875,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:50:52.980591"
   },
   {
@@ -184171,7 +184171,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:51:17.693331"
   },
   {
@@ -184293,7 +184293,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:51:26.694590"
   },
   {
@@ -184597,7 +184597,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:51:48.282065"
   },
   {
@@ -184775,7 +184775,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:52:04.054443"
   },
   {
@@ -184874,7 +184874,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:52:13.167307"
   },
   {
@@ -185123,7 +185123,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:52:31.969462"
   },
   {
@@ -185139,7 +185139,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:52:31.969462"
   },
   {
@@ -185281,7 +185281,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:52:41.368297"
   },
   {
@@ -185568,7 +185568,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:52:57.102377"
   },
   {
@@ -186171,7 +186171,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:53:39.576521"
   },
   {
@@ -186287,7 +186287,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:53:46.561280"
   },
   {
@@ -186483,7 +186483,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:54:00.585972"
   },
   {
@@ -186823,7 +186823,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:54:16.989742"
   },
   {
@@ -186932,7 +186932,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:54:26.601028"
   },
   {
@@ -186949,7 +186949,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:54:26.601028"
   },
   {
@@ -187156,7 +187156,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:54:39.318042"
   },
   {
@@ -187922,7 +187922,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:55:30.289513"
   },
   {
@@ -188606,7 +188606,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:56:18.255220"
   },
   {
@@ -188764,7 +188764,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:56:28.544858"
   },
   {
@@ -189916,7 +189916,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:57:46.434733"
   },
   {
@@ -191320,7 +191320,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:59:20.287465"
   },
   {
@@ -191489,7 +191489,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:59:33.029915"
   },
   {
@@ -191505,7 +191505,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T09:59:33.029915"
   },
   {
@@ -192165,7 +192165,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:00:16.197940"
   },
   {
@@ -192179,7 +192179,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:00:16.197940"
   },
   {
@@ -192292,7 +192292,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:00:23.128649"
   },
   {
@@ -192399,7 +192399,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:00:32.029885"
   },
   {
@@ -193037,7 +193037,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:01:13.502781"
   },
   {
@@ -193183,7 +193183,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:01:22.351070"
   },
   {
@@ -193231,7 +193231,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:01:24.419458"
   },
   {
@@ -193247,7 +193247,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:01:26.725391"
   },
   {
@@ -193263,7 +193263,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:01:26.725391"
   },
   {
@@ -193618,7 +193618,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:01:54.052478"
   },
   {
@@ -193712,7 +193712,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:01:59.756046"
   },
   {
@@ -194290,7 +194290,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:02:43.140678"
   },
   {
@@ -194406,7 +194406,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:02:51.671642"
   },
   {
@@ -194584,7 +194584,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:03:08.087586"
   },
   {
@@ -194862,7 +194862,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:03:22.515435"
   },
   {
@@ -195089,7 +195089,7 @@
     ],
     "confidence": 0.6,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:03:38.250861"
   },
   {
@@ -195968,7 +195968,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:04:43.156039"
   },
   {
@@ -195996,7 +195996,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:04:43.156039"
   },
   {
@@ -196151,7 +196151,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:04:52.590475"
   },
   {
@@ -196167,7 +196167,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:04:52.590475"
   },
   {
@@ -197583,7 +197583,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:06:39.664803"
   },
   {
@@ -197778,7 +197778,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:06:54.522304"
   },
   {
@@ -198320,7 +198320,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:07:28.270750"
   },
   {
@@ -198367,7 +198367,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:07:33.185605"
   },
   {
@@ -200024,7 +200024,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:09:28.379318"
   },
   {
@@ -200179,7 +200179,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:09:40.326049"
   },
   {
@@ -201082,7 +201082,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:10:38.438544"
   },
   {
@@ -201600,7 +201600,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:11:12.219246"
   },
   {
@@ -202840,7 +202840,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:12:30.593508"
   },
   {
@@ -203032,7 +203032,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:12:42.892898"
   },
   {
@@ -203298,7 +203298,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:12:56.523595"
   },
   {
@@ -203540,7 +203540,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:13:12.857549"
   },
   {
@@ -203575,7 +203575,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:13:13.707096"
   },
   {
@@ -203591,7 +203591,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:13:13.707096"
   },
   {
@@ -203699,7 +203699,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:13:23.663875"
   },
   {
@@ -203878,7 +203878,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:13:32.322508"
   },
   {
@@ -204143,7 +204143,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:13:50.869873"
   },
   {
@@ -204463,7 +204463,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:14:16.090543"
   },
   {
@@ -205082,7 +205082,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:14:55.821755"
   },
   {
@@ -205383,7 +205383,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "architectural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:15:12.901323"
   },
   {
@@ -206148,7 +206148,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:16:01.365039"
   },
   {
@@ -206725,7 +206725,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:16:38.533100"
   },
   {
@@ -206741,7 +206741,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:16:38.533100"
   },
   {
@@ -207269,7 +207269,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:17:22.310815"
   },
   {
@@ -207444,7 +207444,7 @@
     ],
     "confidence": 0.8,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:17:32.091413"
   },
   {
@@ -208146,7 +208146,7 @@
     "exceptions": [],
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:18:32.369255"
   },
   {
@@ -208240,7 +208240,7 @@
     ],
     "confidence": 0.75,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:18:41.184950"
   },
   {
@@ -208350,7 +208350,7 @@
     ],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:18:50.423495"
   },
   {
@@ -208788,7 +208788,7 @@
     "exceptions": [],
     "confidence": 0.75,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:19:25.144462"
   },
   {
@@ -208817,7 +208817,7 @@
     "exceptions": [],
     "confidence": 0.7,
     "knowledge_origin": "physical",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:19:25.144462"
   },
   {
@@ -208833,7 +208833,7 @@
     ],
     "confidence": 0.65,
     "knowledge_origin": "cultural",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T10:19:25.144462"
   },
   {
