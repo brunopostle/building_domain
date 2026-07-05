@@ -5,6 +5,12 @@ Implements Sections 10.1, 10.2, 10.3:
   Sub-task 1: Assertion/constraint/pattern conflict detection (Section 10.1)
     - Embedding similarity pre-filter, LLM classification:
       duplicate | complementary | contradictory | unrelated
+    - Embeddings are cached in the `embeddings` table keyed by
+      (item_type, item_id, model) + content hash, so repeat sweeps only
+      pay the encode() cost for items that are new or changed.
+    - LLM classification calls run on a bounded thread pool (--workers);
+      only the network call is parallel, all DB reads/writes stay on the
+      calling thread.
     - Contradictory pairs → conflict_pairs table, status='conflicted',
       provenance_log rows, conflict_evaluated_at stamp
     - --limit N: stop after N LLM classification calls
@@ -20,8 +26,10 @@ Implements Sections 10.1, 10.2, 10.3:
   Sub-task 4: AbstractionNode cascade (Section 10.3)
     - When any item → conflicted/deprecated, re-evaluate parent AbstractionNodes
 """
+import hashlib
 import json
 import uuid
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 from typing import Callable
 
@@ -36,6 +44,7 @@ from bsos.persistence.models import (
     AssertionRow,
     ConflictPairRow,
     ConstraintRow,
+    EmbeddingRow,
     PatternRow,
     ProcessRelationRow,
     ProvenanceLogRow,
@@ -48,6 +57,7 @@ EMBEDDING_MODEL = "all-mpnet-base-v2"
 SIMILARITY_THRESHOLD = 0.80  # pre-filter: pairs below this are skipped
 CONFLICT_QUEUE_CAP = 500
 ABSTRACTION_QUEUE_CAP_CASCADE = 200
+DEFAULT_WORKERS = 4  # bounded thread pool for LLM classification calls (network I/O only)
 
 CLASSIFY_OPTIONS = ["duplicate", "complementary", "contradictory", "unrelated"]
 
@@ -101,6 +111,58 @@ def _item_type_label(row) -> str:
     if isinstance(row, PatternRow):
         return "pattern"
     return "unknown"
+
+
+def _content_hash(text: str) -> str:
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def _load_or_compute_embeddings(
+    session: Session,
+    items: list,
+    item_type: str,
+    embedding_model: str,
+    embedder: Callable[[list[str]], np.ndarray],
+) -> np.ndarray:
+    """Load cached vectors from the `embeddings` table, computing (and
+    persisting) only for items that are new or whose text changed since the
+    last run. Mirrors bsos.pipeline.pass2._load_or_compute_embeddings.
+    """
+    vectors: dict[str, np.ndarray] = {}
+    to_compute = []
+
+    for item in items:
+        chash = _content_hash(_item_text(item))
+        row = session.get(EmbeddingRow, (item_type, item.id, embedding_model))
+        if row and row.content_hash == chash:
+            vectors[item.id] = np.frombuffer(row.vector, dtype=np.float32).copy()
+        else:
+            to_compute.append(item)
+
+    if to_compute:
+        texts = [_item_text(item) for item in to_compute]
+        computed = np.array(embedder(texts), dtype=np.float32)
+        for i, item in enumerate(to_compute):
+            chash = _content_hash(_item_text(item))
+            vec = computed[i]
+            existing = session.get(EmbeddingRow, (item_type, item.id, embedding_model))
+            if existing:
+                existing.vector = vec.tobytes()
+                existing.content_hash = chash
+                existing.dim = int(vec.shape[0])
+            else:
+                session.add(EmbeddingRow(
+                    item_type=item_type,
+                    item_id=item.id,
+                    model=embedding_model,
+                    dim=int(vec.shape[0]),
+                    content_hash=chash,
+                    vector=vec.tobytes(),
+                ))
+            vectors[item.id] = vec
+        session.commit()
+
+    return np.array([vectors[item.id] for item in items], dtype=np.float32)
 
 
 def _conflicted_count(session: Session) -> int:
@@ -196,13 +258,45 @@ def _apply_contradictory(
 # Sub-task 1: Assertion / constraint / pattern conflict detection
 # ---------------------------------------------------------------------------
 
+def _classify_pair(provider: LLMProvider, text_a: str, text_b: str, type_label: str) -> str:
+    """Network-only LLM classification call — no DB access, safe to run on a worker thread."""
+    prompt = (
+        f"Compare these two {type_label} statements "
+        "from a building-domain knowledge base.\n\n"
+        f"Item A: {text_a}\n"
+        f"Item B: {text_b}\n\n"
+        "Classify their relationship:\n"
+        "- duplicate: they assert the same thing\n"
+        "- complementary: they cover different aspects without conflict\n"
+        "- contradictory: they assert mutually incompatible claims\n"
+        "- unrelated: no meaningful semantic overlap\n\n"
+        "Reply with the classification and a brief rationale."
+    )
+    result = provider.extract(prompt, _ConflictClassification)
+    classification = result.classification.strip().lower()
+    if classification not in CLASSIFY_OPTIONS:
+        classification = "unrelated"
+    return classification
+
+
 def _run_conflict_detection(
     engine,
     provider: LLMProvider,
     embedder: Callable[[list[str]], np.ndarray],
     limit: int | None,
+    embedding_model: str = EMBEDDING_MODEL,
+    workers: int = DEFAULT_WORKERS,
 ) -> dict:
-    """Detect conflicts among assertions, constraints, and patterns."""
+    """Detect conflicts among assertions, constraints, and patterns.
+
+    Runs in three phases per item type so the (network-bound) LLM calls can
+    be parallelized on a bounded thread pool while all DB reads/writes stay
+    on the calling thread:
+      1. sequential — similarity pre-filter + resolve pairs that already
+         have a conflict_pairs row, queue the rest for classification
+      2. parallel   — classify queued pairs (no DB access)
+      3. sequential — apply classification results, stamp conflict_evaluated_at
+    """
     llm_calls = 0
     items_evaluated = 0
     conflicts_found = 0
@@ -228,104 +322,124 @@ def _run_conflict_detection(
         if not all_items:
             continue
 
-        texts = [_item_text(r) for r in all_items]
-        vecs = np.array(embedder(texts), dtype=np.float32)
+        type_label = _item_type_label(all_items[0])
+
+        with Session(engine) as session:
+            vecs = _load_or_compute_embeddings(session, all_items, type_label, embedding_model, embedder)
         id_to_idx = {r.id: i for i, r in enumerate(all_items)}
 
+        # ------------------------------------------------------------------
+        # Phase 1: similarity pre-filter, resolve already-classified pairs,
+        # queue new pairs for LLM classification.
+        # ------------------------------------------------------------------
+        pending: dict[frozenset, tuple] = {}
+        fully_queued_rows = []
+        limit_hit = False
+
         for query_row in unevaluated:
-            if limit is not None and llm_calls >= limit:
-                log.info("conflict_detection_limit_reached", limit=limit)
+            if limit_hit:
                 break
 
             qi = id_to_idx.get(query_row.id)
             if qi is None:
                 continue
 
-            query_vec = vecs[qi]
-            sims = _cosine_similarities(query_vec, vecs)
-
-            with Session(engine) as session:
-                pause = _conflicted_count(session) >= CONFLICT_QUEUE_CAP
-                changed_by = provider.model_id
+            sims = _cosine_similarities(vecs[qi], vecs)
 
             for ci, sim in enumerate(sims):
-                if ci == qi:
+                if ci == qi or sim < SIMILARITY_THRESHOLD:
                     continue
-                if sim < SIMILARITY_THRESHOLD:
-                    continue
-                if limit is not None and llm_calls >= limit:
-                    break
 
                 cand_row = all_items[ci]
+                key = frozenset((query_row.id, cand_row.id))
+                if key in pending:
+                    continue
 
-                # Check existing pair
                 with Session(engine) as session:
                     existing = _existing_conflict_pair(session, query_row.id, cand_row.id)
 
                 if existing:
-                    # Already classified — apply status update if contradictory
-                    if existing.classification == "contradictory" and not pause:
+                    if existing.classification == "contradictory":
                         with Session(engine) as session:
+                            pause = _conflicted_count(session) >= CONFLICT_QUEUE_CAP
                             q = session.get(type(query_row), query_row.id)
                             c = session.get(type(cand_row), cand_row.id)
                             if q and c:
-                                _apply_contradictory(session, q, c, "contradictory", changed_by, pause)
+                                _apply_contradictory(session, q, c, "contradictory", provider.model_id, pause)
                                 session.commit()
                     continue
 
-                # LLM classification
-                prompt = (
-                    f"Compare these two {_item_type_label(query_row)} statements "
-                    "from a building-domain knowledge base.\n\n"
-                    f"Item A: {_item_text(query_row)}\n"
-                    f"Item B: {_item_text(cand_row)}\n\n"
-                    "Classify their relationship:\n"
-                    "- duplicate: they assert the same thing\n"
-                    "- complementary: they cover different aspects without conflict\n"
-                    "- contradictory: they assert mutually incompatible claims\n"
-                    "- unrelated: no meaningful semantic overlap\n\n"
-                    "Reply with the classification and a brief rationale."
-                )
-                try:
-                    result = provider.extract(prompt, _ConflictClassification)
-                    classification = result.classification.strip().lower()
-                    if classification not in CLASSIFY_OPTIONS:
-                        classification = "unrelated"
-                    llm_calls += 1
-                except Exception as exc:
-                    log.warning("conflict_llm_error", error=str(exc), item_a=query_row.id, item_b=cand_row.id)
-                    llm_calls += 1
+                if limit is not None and llm_calls + len(pending) >= limit:
+                    log.info("conflict_detection_limit_reached", limit=limit)
+                    limit_hit = True
+                    break
+
+                pending[key] = (query_row, cand_row)
+
+            if limit_hit:
+                break
+
+            fully_queued_rows.append(query_row)
+
+        # ------------------------------------------------------------------
+        # Phase 2: classify queued pairs in parallel (network I/O only).
+        # ------------------------------------------------------------------
+        results: dict[frozenset, str | None] = {}
+        if pending:
+            with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
+                future_to_key = {
+                    pool.submit(_classify_pair, provider, _item_text(a), _item_text(b), type_label): key
+                    for key, (a, b) in pending.items()
+                }
+                for future in as_completed(future_to_key):
+                    key = future_to_key[future]
+                    a, b = pending[key]
+                    try:
+                        results[key] = future.result()
+                    except Exception as exc:
+                        log.warning("conflict_llm_error", error=str(exc), item_a=a.id, item_b=b.id)
+                        results[key] = None
+
+        # ------------------------------------------------------------------
+        # Phase 3: apply classification results sequentially.
+        # ------------------------------------------------------------------
+        for key, (query_row, cand_row) in pending.items():
+            llm_calls += 1
+            classification = results.get(key)
+            if classification is None:
+                continue
+
+            with Session(engine) as session:
+                pause = _conflicted_count(session) >= CONFLICT_QUEUE_CAP
+                q = session.get(type(query_row), query_row.id)
+                c = session.get(type(cand_row), cand_row.id)
+                if q is None or c is None:
                     continue
 
-                with Session(engine) as session:
-                    q = session.get(type(query_row), query_row.id)
-                    c = session.get(type(cand_row), cand_row.id)
-                    if q is None or c is None:
-                        continue
+                if classification == "contradictory":
+                    _apply_contradictory(session, q, c, classification, provider.model_id, pause)
+                    conflicts_found += 1
+                else:
+                    session.add(ConflictPairRow(
+                        id=str(uuid.uuid4()),
+                        item_a_id=q.id,
+                        item_a_type=_item_type_label(q),
+                        item_b_id=c.id,
+                        item_b_type=_item_type_label(c),
+                        detected_at=_now(),
+                        classification=classification,
+                    ))
+                session.commit()
 
-                    if classification == "contradictory":
-                        _apply_contradictory(session, q, c, classification, changed_by, pause)
-                        conflicts_found += 1
-                    else:
-                        session.add(ConflictPairRow(
-                            id=str(uuid.uuid4()),
-                            item_a_id=q.id,
-                            item_a_type=_item_type_label(q),
-                            item_b_id=c.id,
-                            item_b_type=_item_type_label(c),
-                            detected_at=_now(),
-                            classification=classification,
-                        ))
-                    session.commit()
-
-            # Stamp conflict_evaluated_at
-            with Session(engine) as session:
-                row = session.get(type(query_row), query_row.id)
-                if row:
-                    row.conflict_evaluated_at = _now()
-                    session.commit()
-
-            items_evaluated += 1
+        # Stamp conflict_evaluated_at for rows whose full candidate set was
+        # resolved (not cut short by --limit).
+        with Session(engine) as session:
+            for row in fully_queued_rows:
+                r = session.get(type(row), row.id)
+                if r:
+                    r.conflict_evaluated_at = _now()
+            session.commit()
+        items_evaluated += len(fully_queued_rows)
 
         if limit is not None and llm_calls >= limit:
             break
@@ -541,13 +655,16 @@ def run_conflict_detection(
     limit: int | None = None,
     _embedder: Callable[[list[str]], np.ndarray] | None = None,
     dry_run: bool = False,
+    workers: int = DEFAULT_WORKERS,
 ) -> dict:
     """Run all conflict detection sub-tasks.
 
-    provider is used for LLM classification.
-    _embedder is a test seam; omit in production to use SentenceTransformer.
+    provider is used for LLM classification. workers bounds the thread pool
+    used for LLM classification calls (network I/O only — DB access stays
+    single-threaded). _embedder is a test seam; omit in production to use
+    SentenceTransformer.
     """
-    log.info("conflict_detection_start", embedding_model=embedding_model, limit=limit)
+    log.info("conflict_detection_start", embedding_model=embedding_model, limit=limit, workers=workers)
 
     if dry_run:
         with Session(engine) as session:
@@ -576,13 +693,15 @@ def run_conflict_detection(
         from sentence_transformers import SentenceTransformer
         _st = SentenceTransformer(embedding_model)
         embedder: Callable[[list[str]], np.ndarray] = lambda texts: _st.encode(
-            texts, show_progress_bar=False
+            texts, show_progress_bar=True, batch_size=64
         )
     else:
         embedder = _embedder
 
     # Sub-task 1
-    detection_result = _run_conflict_detection(engine, provider, embedder, limit)
+    detection_result = _run_conflict_detection(
+        engine, provider, embedder, limit, embedding_model=embedding_model, workers=workers
+    )
 
     # Sub-task 2
     divergence_result = _run_process_relation_divergence(engine)

@@ -16,12 +16,15 @@ def validate_conflicts(
     model: str = typer.Option(None, "--model", help="LLM model ID (overrides config)"),
     limit: int = typer.Option(None, "--limit", help="Stop after N LLM classification calls"),
     dry_run: bool = typer.Option(False, "--dry-run", help="Report scope without writing"),
+    workers: int = typer.Option(
+        None, "--workers", help="Concurrent LLM classification calls (default 4)"
+    ),
 ) -> None:
     """Detect conflicts: contradictions, ProcessRelation divergences, and cycles."""
     from bsos.cli.db_context import open_db, resolve_db_path
     from bsos.config import get_config
     from bsos.llm import make_provider
-    from bsos.normalization.conflict_detection import run_conflict_detection
+    from bsos.normalization.conflict_detection import DEFAULT_WORKERS, run_conflict_detection
     from bsos.persistence.database import create_db_engine
 
     db_path = resolve_db_path(db)
@@ -57,6 +60,7 @@ def validate_conflicts(
         provider,
         limit=limit,
         dry_run=dry_run,
+        workers=workers if workers is not None else DEFAULT_WORKERS,
     )
 
     if dry_run:

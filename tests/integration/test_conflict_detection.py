@@ -1,5 +1,7 @@
 """Integration tests for conflict detection — bsos validate --conflicts."""
 import json
+import threading
+import time
 import uuid
 from datetime import datetime, timezone
 
@@ -85,6 +87,30 @@ class FakeProvider:
 
     def classify(self, prompt: str, options: list[str]) -> str:
         return self._classification
+
+
+class ConcurrencyTrackingProvider:
+    """Records peak in-flight extract() calls to prove classification runs in parallel."""
+
+    def __init__(self, classification: str = "unrelated", delay: float = 0.05):
+        self._classification = classification
+        self._delay = delay
+        self.model_id = "fake-llm"
+        self._lock = threading.Lock()
+        self._current = 0
+        self.max_concurrent = 0
+        self.calls = 0
+
+    def extract(self, prompt: str, schema, **kwargs):
+        with self._lock:
+            self._current += 1
+            self.max_concurrent = max(self.max_concurrent, self._current)
+            self.calls += 1
+        time.sleep(self._delay)
+        with self._lock:
+            self._current -= 1
+        from bsos.normalization.conflict_detection import _ConflictClassification
+        return _ConflictClassification(classification=self._classification, rationale="test")
 
 
 # ---------------------------------------------------------------------------
@@ -289,6 +315,57 @@ class TestAssertionConflictDetection:
         with Session(engine) as session:
             ra = session.get(AssertionRow, a_id)
             assert ra.conflict_evaluated_at is not None
+
+    def test_embeddings_are_cached_across_runs(self, engine):
+        """Second sweep should only re-embed new/changed items, not the whole corpus."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            _make_assertion(session, "high_a", e1.id, e2.id)
+            _make_assertion(session, "low_c", e1.id, e2.id)
+            session.commit()
+
+        calls: list[list[str]] = []
+
+        def counting_embedder(texts: list[str]) -> np.ndarray:
+            calls.append(list(texts))
+            return fake_embedder(texts)
+
+        provider = FakeProvider("unrelated")
+
+        # First sweep embeds both existing items and populates the cache.
+        _run_conflict_detection(engine, provider, counting_embedder, limit=None)
+        assert len(calls) == 1
+        assert set(calls[0]) == {"high_a", "low_c"}
+
+        # Add a new assertion and reopen the sweep: only the new item's text
+        # should reach the embedder, the other two must come from the cache.
+        with Session(engine) as session:
+            e3 = _make_entity(session, "e3")
+            e1 = session.exec(select(EntityRow).where(EntityRow.name == "e1")).first()
+            _make_assertion(session, "high_b", e1.id, e3.id)
+            session.commit()
+
+        _run_conflict_detection(engine, provider, counting_embedder, limit=None)
+
+        assert len(calls) == 2
+        assert calls[1] == ["high_b"]
+
+    def test_llm_classification_runs_concurrently(self, engine):
+        """Multiple queued pairs should overlap on the thread pool, not run one at a time."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            # 4 mutually-similar assertions -> 6 candidate pairs to classify.
+            for _ in range(4):
+                _make_assertion(session, "high_a", e1.id, e2.id)
+            session.commit()
+
+        provider = ConcurrencyTrackingProvider(delay=0.05)
+        _run_conflict_detection(engine, provider, fake_embedder, limit=None, workers=4)
+
+        assert provider.calls == 6
+        assert provider.max_concurrent >= 2
 
 
 # ---------------------------------------------------------------------------
