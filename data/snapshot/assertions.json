@@ -1995,7 +1995,7 @@
       "When approval is given by a person"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:03:14.059066"
   },
   {
@@ -2013,7 +2013,7 @@
       "When approval is given by an organization"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:03:14.059066"
   },
   {
@@ -2211,7 +2211,7 @@
       "IfcApprovalRelationship relates one IfcApproval to one or more IfcRoot entities"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:03:14.540422"
   },
   {
@@ -3857,7 +3857,7 @@
     "exceptions": [
       "non-prestressed beams"
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:04:36.299220"
   },
   {
@@ -4123,7 +4123,7 @@
     "exceptions": [
       "IfcBeamType does not contain IfcTendon in the IFC schema—IfcTendon is an element that may be associated with an IfcBeam (occurrence) via IfcRelConnectsElements or IfcRelNests, but it is not contained within IfcBeamType. Also, tendons can be in post-tensioned beams, not only prestressed."
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:04:48.426219"
   },
   {
@@ -4139,7 +4139,7 @@
       "at beam-column joints"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:04:48.426219"
   },
   {
@@ -5458,7 +5458,7 @@
       "when the profile defined by the boundary curve is extruded"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:05:40.356212"
   },
   {
@@ -5476,7 +5476,7 @@
       "when the profile defined by the boundary curve is revolved"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:05:40.356212"
   },
   {
@@ -6084,7 +6084,7 @@
       "When defining boundary conditions at a point connection"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:06:04.215284"
   },
   {
@@ -6677,7 +6677,7 @@
       "when connections between elements are modeled"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:06:38.430785"
   },
   {
@@ -7338,7 +7338,7 @@
       "when defining wall element types"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:07:12.241983"
   },
   {
@@ -7464,7 +7464,7 @@
       "when defining curtain wall element types"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:07:12.241983"
   },
   {
@@ -7482,7 +7482,7 @@
       "when defining footing element types"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:07:12.241983"
   },
   {
@@ -7580,7 +7580,7 @@
       "when associating element occurrences to the type definition"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:07:12.241983"
   },
   {
@@ -7826,7 +7826,7 @@
     "exceptions": [
       "furniture in movable/open-plan layouts may not be explicitly contained"
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:07:13.039386"
   },
   {
@@ -9196,7 +9196,7 @@
       "When the point list defines vertices for a triangulated mesh"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:08:47.627550"
   },
   {
@@ -9251,7 +9251,7 @@
       "When used in tessellated geometry representations"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:08:47.627550"
   },
   {
@@ -11510,7 +11510,7 @@
     "exceptions": [
       "when colour is defined by other colour models like HSL or CMYK"
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:10:48.412662"
   },
   {
@@ -11618,7 +11618,7 @@
       "when defining text colour in annotations"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:10:48.412662"
   },
   {
@@ -11691,7 +11691,7 @@
       "when transferring vertical loads to the ground"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:10:55.271052"
   },
   {
@@ -11734,7 +11734,7 @@
     "exceptions": [
       "IfcColumn supports Slab is not always true in framed structures — in flat slab or flat plate systems (without drop panels), slabs are supported directly by columns, but the relationship is more accurately a connection or load transfer rather than 'support' in the typical beam-to-column sense. Also, in pre-cast concrete structures, columns may support slabs via corbels or brackets, which is a different structural behavior than framed slab support."
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:10:55.271052"
   },
   {
@@ -12128,7 +12128,7 @@
     "exceptions": [
       "In steel frame buildings, IfcColumnType instances may be used with steel columns that pass through floor slabs with only a shear connection (not supporting the slab structurally). The slab is supported by beams or metal deck, not the column type itself."
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:11:20.519762"
   },
   {
@@ -12184,7 +12184,7 @@
       "At beam-column joints"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:11:20.519762"
   },
   {
@@ -12256,7 +12256,7 @@
       "When associated with an object through property definition relationships"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:11:35.511123"
   },
   {
@@ -12312,7 +12312,7 @@
     "exceptions": [
       "If the complex property is not assigned to any object"
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:11:35.511123"
   },
   {
@@ -12547,7 +12547,7 @@
       "IfcCompositeCurve is a subtype of IfcCurve"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:11:52.441291"
   },
   {
@@ -12565,7 +12565,7 @@
       "IfcCompositeCurve is a subtype of IfcBoundedCurve"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:11:52.441291"
   },
   {
@@ -13427,7 +13427,7 @@
       "As the parent type/superclass"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:13:18.317211"
   },
   {
@@ -13498,7 +13498,7 @@
       "when a point-based connection topology is defined"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:13:25.269231"
   },
   {
@@ -13517,7 +13517,7 @@
       "when a curve-based connection topology is defined"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:13:25.269231"
   },
   {
@@ -13536,7 +13536,7 @@
       "when a surface-based connection topology is defined"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:13:25.269231"
   },
   {
@@ -14006,7 +14006,7 @@
     "exceptions": [
       "Even if a connection involves a surface geometry, there is no requirement in the IFC schema that IfcConnectionSurfaceGeometry depends on or requires IfcConnectionCurveGeometry. They are sibling types under IfcConnectionGeometry used for different geometric representations."
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:13:42.909853"
   },
   {
@@ -14034,7 +14034,7 @@
     "applicability": [],
     "conditions": [],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:13:42.909853"
   },
   {
@@ -15089,7 +15089,7 @@
       "when resource type is labor-related"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:14:50.947574"
   },
   {
@@ -15161,7 +15161,7 @@
       "when resource is a product resource"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:14:50.947574"
   },
   {
@@ -15275,7 +15275,7 @@
     "exceptions": [
       "Not applicable for labor or cost resources"
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:14:57.908865"
   },
   {
@@ -15485,7 +15485,7 @@
       "IfcContext is specialized as IfcProject for building projects"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:15:03.628062"
   },
   {
@@ -16159,7 +16159,7 @@
       "When converting between units"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:15:35.937658"
   },
   {
@@ -17757,7 +17757,7 @@
       "when crew is assigned to a construction task"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:17:18.015338"
   },
   {
@@ -20841,7 +20841,7 @@
       "For establishing the type-occurrence relationship"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:20:45.131177"
   },
   {
@@ -20857,7 +20857,7 @@
       "When the distribution control element type is specifically a sensor type"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:20:45.131177"
   },
   {
@@ -20873,7 +20873,7 @@
       "When the distribution control element type is specifically an actuator type"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:20:45.131177"
   },
   {
@@ -20889,7 +20889,7 @@
       "When the distribution control element type is specifically an alarm type"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:20:45.131177"
   },
   {
@@ -20905,7 +20905,7 @@
       "When the distribution control element type is specifically a controller type"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:20:45.131177"
   },
   {
@@ -20921,7 +20921,7 @@
       "When the distribution control element type is specifically a flow instrument type"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:20:45.131177"
   },
   {
@@ -24154,7 +24154,7 @@
       "When directional orientation is needed"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:23:46.478882"
   },
   {
@@ -24319,7 +24319,7 @@
       "When edge direction/orientation needs to be explicitly specified"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:23:50.430996"
   },
   {
@@ -24960,7 +24960,7 @@
       "when elements are physically connected"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:25:44.093489"
   },
   {
@@ -43358,7 +43358,7 @@
       "When using non-SI units that need conversion to SI"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:44:27.390453"
   },
   {
@@ -44869,7 +44869,7 @@
     "applicability": [],
     "conditions": [],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:45:56.806257"
   },
   {
@@ -51022,7 +51022,7 @@
       "when defining a pre-defined color by RGB values"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:51:29.367185"
   },
   {
@@ -54705,7 +54705,7 @@
       "when properties contain sub-properties"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:54:09.046025"
   },
   {
@@ -55494,7 +55494,7 @@
       "When IfcPropertyReferenceValue is used to reference a property from another property set"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:54:46.932966"
   },
   {
@@ -58486,7 +58486,7 @@
       "when instantiating ramp occurrences from the type"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T07:58:02.872713"
   },
   {
@@ -63413,7 +63413,7 @@
       "When the structural item is a member or element"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:02:34.051944"
   },
   {
@@ -64828,7 +64828,7 @@
       "When linking property definitions to templates"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:03:52.742992"
   },
   {
@@ -67392,7 +67392,7 @@
       "The relationship must link a resource to an approval"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:06:02.143497"
   },
   {
@@ -67492,7 +67492,7 @@
       "When modeling construction-specific resources"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:06:04.528476"
   },
   {
@@ -71221,7 +71221,7 @@
     "exceptions": [
       "Non-load-bearing walls supported directly by foundation"
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:10:00.684505"
   },
   {
@@ -72797,7 +72797,7 @@
       "when IfcSpatialElement is IfcSpace"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:11:03.181093"
   },
   {
@@ -73159,7 +73159,7 @@
     ],
     "conditions": [],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:11:17.705688"
   },
   {
@@ -76710,7 +76710,7 @@
       "At joints and supports"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:13:46.065057"
   },
   {
@@ -76726,7 +76726,7 @@
       "Along edges/curves"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:13:46.065057"
   },
   {
@@ -84930,7 +84930,7 @@
       "When equipment is assigned to a task"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:19:33.767273"
   },
   {
@@ -86443,7 +86443,7 @@
       "when text color is specified"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:20:45.745732"
   },
   {
@@ -89143,7 +89143,7 @@
     ],
     "conditions": [],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T08:22:57.344620"
   },
   {
@@ -113522,7 +113522,7 @@
     "exceptions": [
       "In skip-floor or transfer structures, a column may pass through a floor slab without connecting to it structurally, or in buildings with floating slabs (non-structural), the column may not connect to every floor slab it passes through. Also, in basement or podium conditions, the column may connect to a wall or beam instead of the floor slab."
     ],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T09:04:16.852427"
   },
   {
@@ -158187,7 +158187,7 @@
       "to bear vertical loads"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-06-29T11:06:00.169779"
   },
   {
@@ -396150,7 +396150,7 @@
     "applicability": [],
     "conditions": [],
     "exceptions": [],
-    "status": "accepted",
+    "status": "conflicted",
     "created_at": "2026-07-04T07:07:49.920963"
   },
   {

@@ -122,7 +122,7 @@
     "child_count": 3,
     "abstraction_rationale": "All three assertions share IfcBoundaryCurve as the subject and describe its role in defining a profile that is then used in different geometric operations: as a boundary for profiles with voids, or as the profile to be extruded or revolved to create 3D solids. The statement captures the common theme without adding any new information.",
     "confidence": 1.0,
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-07-04T03:44:55.415812"
   },
   {
@@ -194,7 +194,7 @@
     "child_count": 3,
     "abstraction_rationale": "The statement faithfully synthesizes all three assertions by preserving the core relationship (IfcBuildingElementType as abstract supertype containing specializations) and listing all three specific types mentioned across the sources (IfcWallType, IfcDoorType, IfcCurtainWallType) without introducing any new information.",
     "confidence": 1.0,
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-07-04T03:44:55.415812"
   },
   {
@@ -239,7 +239,7 @@
     "child_count": 3,
     "abstraction_rationale": "All three source assertions state that IfcCartesianPointList3D is used as the coordinate/point list provider for specific face set types (triangulated, polygonal, and tessellated). The synthesis captures this common role without adding any new information, simply generalizing from the specific subtypes listed to the broader category they all belong to (tessellated and polygonal face sets), which is directly supported by the sources.",
     "confidence": 1.0,
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-07-04T03:44:55.415812"
   },
   {
@@ -356,7 +356,7 @@
     "child_count": 4,
     "abstraction_rationale": "Each source assertion states that IfcConnectionGeometry depends on a specific subtype (point, curve, surface, or volume geometry) and describes when each subtype applies. The combined statement faithfully captures the abstract-supertype relationship, all four subtypes, and their respective topological contexts without introducing any new information.",
     "confidence": 1.0,
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-07-04T03:44:55.415812"
   },
   {
@@ -518,7 +518,7 @@
     "child_count": 8,
     "abstraction_rationale": "The statement captures all assertions: (1) the requirement of IfcDistributionControlElement and the definition of common properties from assertion 1; (2) the inheritance from IfcDistributionElementType from assertion 8; and (3) the six specializations listed individually in assertions 2-7. No new information beyond what is stated in the sources is introduced.",
     "confidence": 1.0,
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-07-04T03:44:55.415812"
   },
   {
