@@ -249,6 +249,123 @@ def test_review_pending_stats(tmp_path):
 
 
 # ---------------------------------------------------------------------------
+# bsos review pending --type conflict
+# ---------------------------------------------------------------------------
+
+def _make_conflicted_pair(eng):
+    from bsos.persistence.models import AssertionRow, ConflictPairRow
+    _add_entity(eng, "e-wall", "Wall")
+    _add_entity(eng, "e-window", "Window")
+    with Session(eng) as s:
+        s.add(AssertionRow(id="a1", subject_id="e-wall", predicate="requires",
+                           object_id="e-window", subject_type="component", object_type="component",
+                           confidence=0.9, knowledge_origin="engineering", source_model="test",
+                           created_at=NOW, status="conflicted"))
+        s.add(AssertionRow(id="a2", subject_id="e-wall", predicate="unsuitable_for",
+                           object_id="e-window", subject_type="component", object_type="component",
+                           confidence=0.9, knowledge_origin="engineering", source_model="test",
+                           created_at=NOW, status="conflicted"))
+        s.add(ConflictPairRow(id="cp1", item_a_id="a1", item_a_type="assertion",
+                              item_b_id="a2", item_b_type="assertion",
+                              detected_at=NOW, classification="contradictory"))
+        s.commit()
+
+
+def test_review_pending_conflict_stats(tmp_path):
+    db = _init_db(tmp_path)
+    eng = _engine(db)
+    _make_conflicted_pair(eng)
+
+    result = runner.invoke(app, ["review", "pending", "--type", "conflict", "--stats", "--db", db])
+    assert result.exit_code == 0, result.output
+    assert "Conflicted items: 2" in result.output
+    assert "assertion: 2" in result.output
+
+
+def test_review_pending_conflict_accept_a_deprecates_b(tmp_path):
+    from bsos.persistence.models import AssertionRow, ReviewDecisionRow
+
+    db = _init_db(tmp_path)
+    eng = _engine(db)
+    _make_conflicted_pair(eng)
+
+    result = runner.invoke(
+        app, ["review", "pending", "--type", "conflict", "--db", db], input="a\n"
+    )
+    assert result.exit_code == 0, result.output
+    assert "1 item(s) actioned" in result.output
+
+    with Session(eng) as s:
+        a1 = s.get(AssertionRow, "a1")
+        a2 = s.get(AssertionRow, "a2")
+        assert a1.status == "accepted"
+        assert a2.status == "deprecated"
+        decisions = s.exec(select(ReviewDecisionRow)).all()
+        assert {d.decision for d in decisions} == {"accept", "reject"}
+
+
+def test_review_pending_conflict_defer_leaves_status(tmp_path):
+    from bsos.persistence.models import AssertionRow
+
+    db = _init_db(tmp_path)
+    eng = _engine(db)
+    _make_conflicted_pair(eng)
+
+    result = runner.invoke(
+        app, ["review", "pending", "--type", "conflict", "--db", db], input="\n"
+    )
+    assert result.exit_code == 0, result.output
+    assert "No conflicted pairs actioned" in result.output
+
+    with Session(eng) as s:
+        assert s.get(AssertionRow, "a1").status == "conflicted"
+        assert s.get(AssertionRow, "a2").status == "conflicted"
+
+
+# ---------------------------------------------------------------------------
+# bsos review pending --type abstraction
+# ---------------------------------------------------------------------------
+
+def test_review_pending_abstraction_stats(tmp_path):
+    from bsos.persistence.models import AbstractionNodeRow
+
+    db = _init_db(tmp_path)
+    eng = _engine(db)
+    with Session(eng) as s:
+        s.add(AbstractionNodeRow(id="n1", statement="Walls enclose spaces",
+                                 child_ids="[]", abstraction_rationale="synthesized",
+                                 source_model="test", created_at=NOW, confidence=0.8,
+                                 status="proposed"))
+        s.commit()
+
+    result = runner.invoke(app, ["review", "pending", "--type", "abstraction", "--stats", "--db", db])
+    assert result.exit_code == 0, result.output
+    assert "Proposed abstraction nodes: 1" in result.output
+
+
+def test_review_pending_abstraction_accept(tmp_path):
+    from bsos.persistence.models import AbstractionNodeRow
+
+    db = _init_db(tmp_path)
+    eng = _engine(db)
+    with Session(eng) as s:
+        s.add(AbstractionNodeRow(id="n1", statement="Walls enclose spaces",
+                                 child_ids="[]", abstraction_rationale="synthesized",
+                                 source_model="test", created_at=NOW, confidence=0.8,
+                                 status="proposed"))
+        s.commit()
+
+    result = runner.invoke(
+        app, ["review", "pending", "--type", "abstraction", "--db", db], input="accept\n"
+    )
+    assert result.exit_code == 0, result.output
+    assert "1 item(s) actioned" in result.output
+
+    with Session(eng) as s:
+        assert s.get(AbstractionNodeRow, "n1").status == "accepted"
+
+
+# ---------------------------------------------------------------------------
 # bsos validate topology
 # ---------------------------------------------------------------------------
 

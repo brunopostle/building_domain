@@ -83,7 +83,7 @@ def validate_conflicts(
     if result.get("cap_reached"):
         typer.echo(
             "\nWarning: conflict queue cap (500) reached. "
-            "Run 'bsos review-pending --type conflict' to clear the queue.",
+            "Run 'bsos review pending --type conflict' to clear the queue.",
             err=True,
         )
 

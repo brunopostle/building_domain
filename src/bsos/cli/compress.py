@@ -83,7 +83,7 @@ def compress(
         if proposed_count >= ABSTRACTION_QUEUE_CAP:
             typer.echo(
                 f"Abstraction queue cap reached ({proposed_count}/{ABSTRACTION_QUEUE_CAP} proposed nodes). "
-                "Run 'bsos review-pending --type abstraction' to clear the queue before compressing.",
+                "Run 'bsos review pending --type abstraction' to clear the queue before compressing.",
                 err=True,
             )
             raise typer.Exit(1)
@@ -119,7 +119,7 @@ def compress(
             if proposed_count >= ABSTRACTION_QUEUE_CAP:
                 typer.echo(
                     f"\nAbstraction queue cap ({ABSTRACTION_QUEUE_CAP}) reached mid-run. "
-                    "Run 'bsos review-pending --type abstraction' to continue.",
+                    "Run 'bsos review pending --type abstraction' to continue.",
                     err=True,
                 )
                 cap_reached = True
@@ -142,7 +142,7 @@ def compress(
                 if proposed_count >= ABSTRACTION_QUEUE_CAP:
                     typer.echo(
                         f"\nAbstraction queue cap ({ABSTRACTION_QUEUE_CAP}) reached. "
-                        "Run 'bsos review-pending --type abstraction' to continue.",
+                        "Run 'bsos review pending --type abstraction' to continue.",
                         err=True,
                     )
                     cap_reached = True
@@ -224,4 +224,4 @@ def compress(
             f"{nodes_created} abstraction nodes created, {nodes_rejected} rejected."
         )
         if cap_reached:
-            typer.echo("Queue cap reached — run 'bsos review-pending --type abstraction' to continue.")
+            typer.echo("Queue cap reached — run 'bsos review pending --type abstraction' to continue.")

@@ -726,7 +726,7 @@ def run_conflict_detection(
             "conflict_queue_cap_reached",
             conflicted_count=cap_count,
             cap=CONFLICT_QUEUE_CAP,
-            hint="bsos review-pending --type conflict",
+            hint="bsos review pending --type conflict",
         )
 
     # Auto-promotion: promote items that passed conflict evaluation
