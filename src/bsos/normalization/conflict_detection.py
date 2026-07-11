@@ -208,6 +208,25 @@ def _conflicted_count(session: Session) -> int:
     return total
 
 
+def _same_subject_predicate_different_object(row_a, row_b) -> bool:
+    """True when two AssertionRows share subject+predicate but differ only in
+    object. Every predicate in this domain's vocabulary (requires, depends_on,
+    supports, contains, connects_to, improves, protects_from, ...) is
+    one-to-many, so this shape is complementary by construction, never a
+    genuine conflict (e.g. "Wall supports Window" and "Wall supports Door"
+    can both be true). Distinct from a reversed-direction pair (A rel B vs
+    B rel A) or same-pair-different-predicate, both of which are still
+    real candidates for contradiction and go through LLM classification.
+    """
+    if not isinstance(row_a, AssertionRow) or not isinstance(row_b, AssertionRow):
+        return False
+    return (
+        row_a.subject_id == row_b.subject_id
+        and row_a.predicate == row_b.predicate
+        and row_a.object_id != row_b.object_id
+    )
+
+
 def _existing_conflict_pair(
     session: Session, id_a: str, id_b: str
 ) -> ConflictPairRow | None:
@@ -311,6 +330,19 @@ def _classify_pair(provider: LLMProvider, text_a: str, text_b: str, type_label: 
         "predicate or wording style — classify as unrelated (or "
         "complementary if there is a genuine, non-conflicting relationship "
         "between them).\n\n"
+        "Second, most relationships in this domain are one-to-many: a "
+        "single subject can validly relate to several different objects "
+        "under the same predicate at once (e.g. a wall can both 'support' "
+        "a window and 'support' a door — neither claim precludes the "
+        "other). Do not classify as contradictory just because two "
+        "statements name a different object for the same subject/predicate "
+        "unless the predicate is inherently exclusive (e.g. strict "
+        "single-supertype inheritance) or the rationale explicitly states "
+        "the objects are mutually exclusive alternatives. Reserve "
+        "'contradictory' for statements that make genuinely incompatible "
+        "claims about the same relationship — e.g. reversed direction "
+        "between the same pair of entities (A depends_on B vs B depends_on "
+        "A), or opposite predicates applied to the same pair.\n\n"
         "Reply with the classification and a brief rationale."
     )
     result = provider.extract(prompt, _ConflictClassification)
@@ -423,6 +455,29 @@ def _run_conflict_detection(
                             if q and c:
                                 _apply_contradictory(session, q, c, "contradictory", provider.model_id, pause)
                                 session.commit()
+                    continue
+
+                if _same_subject_predicate_different_object(query_row, cand_row):
+                    # Every predicate in this domain's vocabulary is one-to-many
+                    # (a subject can validly relate to several different objects
+                    # under the same predicate at once), so this shape is never
+                    # a genuine conflict — resolve deterministically without an
+                    # LLM call rather than hoping the classifier follows the
+                    # non-exclusivity guidance in its prompt every time.
+                    with Session(engine) as session:
+                        q = session.get(type(query_row), query_row.id)
+                        c = session.get(type(cand_row), cand_row.id)
+                        if q and c:
+                            session.add(ConflictPairRow(
+                                id=str(uuid.uuid4()),
+                                item_a_id=q.id,
+                                item_a_type=_item_type_label(q),
+                                item_b_id=c.id,
+                                item_b_type=_item_type_label(c),
+                                detected_at=_now(),
+                                classification="complementary",
+                            ))
+                            session.commit()
                     continue
 
                 if limit is not None and llm_calls + len(pending) >= limit:
