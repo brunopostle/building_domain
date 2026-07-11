@@ -208,23 +208,21 @@ def _conflicted_count(session: Session) -> int:
     return total
 
 
-def _same_subject_predicate_different_object(row_a, row_b) -> bool:
-    """True when two AssertionRows share subject+predicate but differ only in
-    object. Every predicate in this domain's vocabulary (requires, depends_on,
-    supports, contains, connects_to, improves, protects_from, ...) is
-    one-to-many, so this shape is complementary by construction, never a
-    genuine conflict (e.g. "Wall supports Window" and "Wall supports Door"
-    can both be true). Distinct from a reversed-direction pair (A rel B vs
-    B rel A) or same-pair-different-predicate, both of which are still
-    real candidates for contradiction and go through LLM classification.
+def _assertion_pair_shares_entities(row_a, row_b) -> bool:
+    """True only when two AssertionRows concern the exact same two entities
+    (same direction or reversed) — the only shape where atomic
+    subject-predicate-object facts can be in genuine logical tension.
+
+    Any pair sharing just one entity — same subject with a different
+    object (e.g. "Wall supports Window" / "Wall supports Door", both true:
+    every predicate here is one-to-many), or a chain where one's object is
+    the other's subject — is a different claim entirely, not a
+    contradiction, regardless of whether the predicate matches. Non-
+    AssertionRow pairs are unaffected (still eligible, same as before).
     """
     if not isinstance(row_a, AssertionRow) or not isinstance(row_b, AssertionRow):
-        return False
-    return (
-        row_a.subject_id == row_b.subject_id
-        and row_a.predicate == row_b.predicate
-        and row_a.object_id != row_b.object_id
-    )
+        return True
+    return {row_a.subject_id, row_a.object_id} == {row_b.subject_id, row_b.object_id}
 
 
 def _existing_conflict_pair(
@@ -457,13 +455,13 @@ def _run_conflict_detection(
                                 session.commit()
                     continue
 
-                if _same_subject_predicate_different_object(query_row, cand_row):
-                    # Every predicate in this domain's vocabulary is one-to-many
-                    # (a subject can validly relate to several different objects
-                    # under the same predicate at once), so this shape is never
-                    # a genuine conflict — resolve deterministically without an
-                    # LLM call rather than hoping the classifier follows the
-                    # non-exclusivity guidance in its prompt every time.
+                if not _assertion_pair_shares_entities(query_row, cand_row):
+                    # Atomic subject-predicate-object facts can only be in
+                    # genuine logical tension when they're about the exact
+                    # same two entities. Anything sharing just one entity is
+                    # a different claim, never a conflict — resolve it
+                    # deterministically without an LLM call rather than
+                    # hoping the classifier follows the prompt every time.
                     with Session(engine) as session:
                         q = session.get(type(query_row), query_row.id)
                         c = session.get(type(cand_row), cand_row.id)

@@ -17,7 +17,7 @@ from bsos.normalization.conflict_detection import (
     _run_conflict_detection,
     _run_cycle_detection,
     _run_process_relation_divergence,
-    _same_subject_predicate_different_object,
+    _assertion_pair_shares_entities,
     run_conflict_detection,
 )
 from bsos.persistence.database import create_db_engine, create_views
@@ -181,9 +181,29 @@ def _make_assertion(
 # pre-filter and the LLM classification prompt
 # ---------------------------------------------------------------------------
 
-class TestSameSubjectPredicateDifferentObject:
+class TestAssertionPairSharesEntities:
 
-    def test_true_for_matching_subject_and_predicate_different_object(self, engine):
+    def test_true_for_same_pair_same_direction(self, engine):
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            a = _make_assertion(session, "supports", e1.id, e2.id)
+            b = _make_assertion(session, "connects_to", e1.id, e2.id)
+            session.commit()
+            assert _assertion_pair_shares_entities(a, b) is True
+
+    def test_true_for_reversed_pair(self, engine):
+        """Same two entities, reversed relationship direction — a genuine
+        candidate for contradiction, must remain eligible for LLM review."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            a = _make_assertion(session, "depends_on", e1.id, e2.id)
+            b = _make_assertion(session, "depends_on", e2.id, e1.id)
+            session.commit()
+            assert _assertion_pair_shares_entities(a, b) is True
+
+    def test_false_for_same_subject_different_object(self, engine):
         with Session(engine) as session:
             e1 = _make_entity(session, "e1")
             e2 = _make_entity(session, "e2")
@@ -191,30 +211,23 @@ class TestSameSubjectPredicateDifferentObject:
             a = _make_assertion(session, "supports", e1.id, e2.id)
             b = _make_assertion(session, "supports", e1.id, e3.id)
             session.commit()
-            assert _same_subject_predicate_different_object(a, b) is True
+            assert _assertion_pair_shares_entities(a, b) is False
 
-    def test_false_for_different_predicate(self, engine):
+    def test_false_for_chain_sharing_only_one_entity(self, engine):
+        """A's object is B's subject, but the pairs don't otherwise match —
+        two different facts about a chain, not a contradiction candidate."""
         with Session(engine) as session:
             e1 = _make_entity(session, "e1")
             e2 = _make_entity(session, "e2")
             e3 = _make_entity(session, "e3")
-            a = _make_assertion(session, "supports", e1.id, e2.id)
-            b = _make_assertion(session, "requires", e1.id, e3.id)
-            session.commit()
-            assert _same_subject_predicate_different_object(a, b) is False
-
-    def test_false_for_reversed_pair(self, engine):
-        """Same two entities, reversed relationship direction — a genuine
-        candidate for contradiction, must not be swallowed by this check."""
-        with Session(engine) as session:
-            e1 = _make_entity(session, "e1")
-            e2 = _make_entity(session, "e2")
             a = _make_assertion(session, "depends_on", e1.id, e2.id)
-            b = _make_assertion(session, "depends_on", e2.id, e1.id)
+            b = _make_assertion(session, "depends_on", e2.id, e3.id)
             session.commit()
-            assert _same_subject_predicate_different_object(a, b) is False
+            assert _assertion_pair_shares_entities(a, b) is False
 
-    def test_false_for_non_assertion_rows(self, engine):
+    def test_true_for_non_assertion_rows(self, engine):
+        """Non-assertion pairs are unaffected by this check — still eligible
+        for LLM classification exactly as before."""
         with Session(engine) as session:
             e1 = _make_entity(session, "e1")
             c = ConstraintRow(id="c1", subject_id=e1.id, rule="must drain",
@@ -223,7 +236,7 @@ class TestSameSubjectPredicateDifferentObject:
                               created_at=NOW)
             session.add(c)
             session.commit()
-            assert _same_subject_predicate_different_object(c, c) is False
+            assert _assertion_pair_shares_entities(c, c) is True
 
 
 class TestItemText:
@@ -335,6 +348,37 @@ class TestAssertionConflictDetection:
             assert ra.status != "conflicted"
             assert rb.status != "conflicted"
 
+            pair = session.exec(
+                select(ConflictPairRow).where(
+                    ((ConflictPairRow.item_a_id == a_id) & (ConflictPairRow.item_b_id == b_id))
+                    | ((ConflictPairRow.item_a_id == b_id) & (ConflictPairRow.item_b_id == a_id))
+                )
+            ).first()
+            assert pair is not None
+            assert pair.classification == "complementary"
+
+    def test_chain_sharing_one_entity_skips_llm_and_is_complementary(self, engine):
+        """A chain (A's object is B's subject, no full pair overlap) —
+        e.g. 'IfcPropertyAbstraction depends_on IfcSimpleProperty' and
+        'IfcSimpleProperty depends_on IfcProperty' — survived the narrower
+        same-subject-same-predicate rule; the broadened same-entity-pair
+        rule must catch it too."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            e3 = _make_entity(session, "e3")
+            a = _make_assertion(session, "high_a", e1.id, e2.id)
+            b = _make_assertion(session, "high_b", e2.id, e3.id)
+            session.commit()
+            a_id, b_id = a.id, b.id
+
+        provider = FakeProvider("contradictory")  # would misclassify if ever reached
+        result = _run_conflict_detection(engine, provider, fake_embedder, limit=None)
+
+        assert provider.calls == []
+        assert result["conflicts_found"] == 0
+
+        with Session(engine) as session:
             pair = session.exec(
                 select(ConflictPairRow).where(
                     ((ConflictPairRow.item_a_id == a_id) & (ConflictPairRow.item_b_id == b_id))
