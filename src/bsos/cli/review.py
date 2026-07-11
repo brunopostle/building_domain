@@ -173,37 +173,54 @@ def _review_conflicts(session: Session, limit: int, stats: bool) -> int:
         typer.echo(f"  B ({pair.item_b_type}, {row_b.status}): {_conflict_row_text(row_b, pair.item_b_type, names)}")
 
         decision = typer.prompt(
-            "  Action [a=accept-A / b=accept-B / d=deprecate-both / defer]",
+            "  Action [a=accept-A / b=accept-B / k=keep-both (not actually contradictory) "
+            "/ d=deprecate-both / defer]",
             default="defer",
         ).strip().lower()
 
         rationale = f"conflict review: {pair.id}"
+        touched_a = touched_b = None
         if decision == "a":
             if row_a.status == "conflicted":
                 _set_status(session, row_a, pair.item_a_type, "accepted", "accept", rationale)
+                touched_a = "accepted"
             if row_b.status == "conflicted":
                 _set_status(session, row_b, pair.item_b_type, "deprecated", "reject", rationale)
-            session.commit()
-            reviewed += 1
-            typer.echo("  → A accepted, B deprecated")
+                touched_b = "deprecated"
         elif decision == "b":
             if row_b.status == "conflicted":
                 _set_status(session, row_b, pair.item_b_type, "accepted", "accept", rationale)
+                touched_b = "accepted"
             if row_a.status == "conflicted":
                 _set_status(session, row_a, pair.item_a_type, "deprecated", "reject", rationale)
-            session.commit()
-            reviewed += 1
-            typer.echo("  → B accepted, A deprecated")
+                touched_a = "deprecated"
+        elif decision == "k":
+            rationale = f"conflict review: {pair.id} — not actually contradictory, both correct"
+            if row_a.status == "conflicted":
+                _set_status(session, row_a, pair.item_a_type, "accepted", "accept", rationale)
+                touched_a = "accepted"
+            if row_b.status == "conflicted":
+                _set_status(session, row_b, pair.item_b_type, "accepted", "accept", rationale)
+                touched_b = "accepted"
         elif decision == "d":
             if row_a.status == "conflicted":
                 _set_status(session, row_a, pair.item_a_type, "deprecated", "reject", rationale)
+                touched_a = "deprecated"
             if row_b.status == "conflicted":
                 _set_status(session, row_b, pair.item_b_type, "deprecated", "reject", rationale)
-            session.commit()
-            reviewed += 1
-            typer.echo("  → Both deprecated")
+                touched_b = "deprecated"
         else:
             typer.echo("  → Deferred")
+            continue
+
+        session.commit()
+        reviewed += 1
+        parts = []
+        if touched_a:
+            parts.append(f"A → {touched_a}")
+        if touched_b:
+            parts.append(f"B → {touched_b}")
+        typer.echo(f"  → {', '.join(parts) if parts else 'no change (already resolved)'}")
 
     return reviewed
 
