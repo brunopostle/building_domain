@@ -45,6 +45,7 @@ from bsos.persistence.models import (
     ConflictPairRow,
     ConstraintRow,
     EmbeddingRow,
+    EntityRow,
     PatternRow,
     ProcessRelationRow,
     ProvenanceLogRow,
@@ -89,16 +90,46 @@ def _cosine_similarities(query_vec: np.ndarray, cand_vecs: np.ndarray) -> np.nda
     return np.where(np.isfinite(sims), sims, 0.0)
 
 
-def _item_text(row) -> str:
-    """Extract a short semantic text for embedding from any item type."""
+def _item_entity_ids(row) -> set[str]:
+    """subject_id/object_id referenced by an item, for resolving names before embedding."""
+    ids: set[str] = set()
+    subj = getattr(row, "subject_id", None)
+    obj = getattr(row, "object_id", None)
+    if subj:
+        ids.add(subj)
+    if obj:
+        ids.add(obj)
+    return ids
+
+
+def _item_text(row, names: dict[str, str] | None = None) -> str:
+    """Extract a short semantic text for embedding from any item type.
+
+    `names` resolves subject_id/object_id to entity names. Without it, two
+    items that share a predicate/rule-type and similarly-worded rationale
+    but concern entirely different entities embed as near-identical text —
+    e.g. "IfcBoundaryNodeConditionWarping connects_to IfcStructuralPointConnection"
+    and "IfcRelConnectsStructuralActivity connects_to IfcStructuralItem" both
+    reduced to "connects_to | <structural-connection rationale>" — which both
+    pulls unrelated pairs past the similarity pre-filter and hides from the
+    LLM classifier which entities are actually involved, biasing it toward
+    misclassifying same-predicate-different-entity pairs as "contradictory".
+    """
+    names = names or {}
     if isinstance(row, AssertionRow):
-        parts = [row.predicate]
+        subj = names.get(row.subject_id, row.subject_id)
+        obj = names.get(row.object_id, row.object_id)
+        parts = [f"{subj} {row.predicate} {obj}"]
         if row.rationale:
             parts.append(row.rationale)
         return " | ".join(parts)
     if isinstance(row, ConstraintRow):
-        return f"{row.constraint_type}: {row.rule}"
+        subj = names.get(row.subject_id, row.subject_id)
+        return f"{row.constraint_type}: {subj}: {row.rule}"
     if isinstance(row, PatternRow):
+        if row.subject_id:
+            subj = names.get(row.subject_id, row.subject_id)
+            return f"{subj} — {row.name}: {row.problem[:120]}"
         return f"{row.name}: {row.problem[:120]}"
     return str(getattr(row, "rationale", "") or getattr(row, "rule", "") or "")
 
@@ -123,6 +154,7 @@ def _load_or_compute_embeddings(
     item_type: str,
     embedding_model: str,
     embedder: Callable[[list[str]], np.ndarray],
+    names: dict[str, str] | None = None,
 ) -> np.ndarray:
     """Load cached vectors from the `embeddings` table, computing (and
     persisting) only for items that are new or whose text changed since the
@@ -132,7 +164,7 @@ def _load_or_compute_embeddings(
     to_compute = []
 
     for item in items:
-        chash = _content_hash(_item_text(item))
+        chash = _content_hash(_item_text(item, names))
         row = session.get(EmbeddingRow, (item_type, item.id, embedding_model))
         if row and row.content_hash == chash:
             vectors[item.id] = np.frombuffer(row.vector, dtype=np.float32).copy()
@@ -140,10 +172,10 @@ def _load_or_compute_embeddings(
             to_compute.append(item)
 
     if to_compute:
-        texts = [_item_text(item) for item in to_compute]
+        texts = [_item_text(item, names) for item in to_compute]
         computed = np.array(embedder(texts), dtype=np.float32)
         for i, item in enumerate(to_compute):
-            chash = _content_hash(_item_text(item))
+            chash = _content_hash(_item_text(item, names))
             vec = computed[i]
             existing = session.get(EmbeddingRow, (item_type, item.id, embedding_model))
             if existing:
@@ -262,14 +294,23 @@ def _classify_pair(provider: LLMProvider, text_a: str, text_b: str, type_label: 
     """Network-only LLM classification call — no DB access, safe to run on a worker thread."""
     prompt = (
         f"Compare these two {type_label} statements "
-        "from a building-domain knowledge base.\n\n"
+        "from a building-domain knowledge base. Each names the specific "
+        "entities it is about.\n\n"
         f"Item A: {text_a}\n"
         f"Item B: {text_b}\n\n"
         "Classify their relationship:\n"
-        "- duplicate: they assert the same thing\n"
+        "- duplicate: they assert the same thing about the same entities\n"
         "- complementary: they cover different aspects without conflict\n"
-        "- contradictory: they assert mutually incompatible claims\n"
-        "- unrelated: no meaningful semantic overlap\n\n"
+        "- contradictory: they make mutually incompatible claims about the "
+        "SAME entities or relationship\n"
+        "- unrelated: they concern different entities, or there is no "
+        "meaningful semantic overlap — even if they share a predicate or "
+        "general topic\n\n"
+        "First check whether A and B name the same subject/object entities. "
+        "If they do not, they cannot be contradictory merely for sharing a "
+        "predicate or wording style — classify as unrelated (or "
+        "complementary if there is a genuine, non-conflicting relationship "
+        "between them).\n\n"
         "Reply with the classification and a brief rationale."
     )
     result = provider.extract(prompt, _ConflictClassification)
@@ -324,8 +365,23 @@ def _run_conflict_detection(
 
         type_label = _item_type_label(all_items[0])
 
+        entity_ids: set[str] = set()
+        for item in all_items:
+            entity_ids |= _item_entity_ids(item)
+        names: dict[str, str] = {}
+        if entity_ids:
+            with Session(engine) as session:
+                names = {
+                    e.id: e.name
+                    for e in session.exec(
+                        select(EntityRow).where(EntityRow.id.in_(entity_ids))  # type: ignore[attr-defined]
+                    ).all()
+                }
+
         with Session(engine) as session:
-            vecs = _load_or_compute_embeddings(session, all_items, type_label, embedding_model, embedder)
+            vecs = _load_or_compute_embeddings(
+                session, all_items, type_label, embedding_model, embedder, names=names
+            )
         id_to_idx = {r.id: i for i, r in enumerate(all_items)}
 
         # ------------------------------------------------------------------
@@ -388,7 +444,7 @@ def _run_conflict_detection(
         if pending:
             with ThreadPoolExecutor(max_workers=max(1, workers)) as pool:
                 future_to_key = {
-                    pool.submit(_classify_pair, provider, _item_text(a), _item_text(b), type_label): key
+                    pool.submit(_classify_pair, provider, _item_text(a, names), _item_text(b, names), type_label): key
                     for key, (a, b) in pending.items()
                 }
                 for future in as_completed(future_to_key):

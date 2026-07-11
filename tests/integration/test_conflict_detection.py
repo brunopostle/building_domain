@@ -13,6 +13,7 @@ from bsos.normalization.conflict_detection import (
     CONFLICT_QUEUE_CAP,
     SIMILARITY_THRESHOLD,
     _cascade_abstraction_nodes,
+    _item_text,
     _run_conflict_detection,
     _run_cycle_detection,
     _run_process_relation_divergence,
@@ -60,7 +61,17 @@ _PREDICATE_VEC: dict[str, np.ndarray] = {
 def fake_embedder(texts: list[str]) -> np.ndarray:
     default = np.zeros(DIM, dtype=np.float32)
     default[7] = 1.0
-    return np.array([_PREDICATE_VEC.get(t.split(" | ")[0], default) for t in texts], dtype=np.float32)
+
+    def vec_for(text: str) -> np.ndarray:
+        # _item_text now prefixes "subj predicate obj" ahead of the raw
+        # predicate token, so match by containment rather than exact
+        # first-token equality (still robust to the added entity-name context).
+        for predicate, vec in _PREDICATE_VEC.items():
+            if predicate in text:
+                return vec
+        return default
+
+    return np.array([vec_for(t) for t in texts], dtype=np.float32)
 
 
 # ---------------------------------------------------------------------------
@@ -162,6 +173,52 @@ def _make_assertion(
     )
     session.add(row)
     return row
+
+
+# ---------------------------------------------------------------------------
+# _item_text — entity-name-aware text used for both the embedding
+# pre-filter and the LLM classification prompt
+# ---------------------------------------------------------------------------
+
+class TestItemText:
+
+    def test_assertion_text_includes_entity_names_not_just_predicate(self, engine):
+        """Two assertions sharing a predicate but concerning different entities
+        must not collapse to the same 'predicate | rationale' text — that was
+        the root cause of same-predicate-different-entity pairs being pulled
+        into the similarity pre-filter and misclassified as contradictory."""
+        with Session(engine) as session:
+            wall = _make_entity(session, "Wall")
+            window = _make_entity(session, "Window")
+            door = _make_entity(session, "Door")
+            frame = _make_entity(session, "Frame")
+            a = _make_assertion(session, "connects_to", wall.id, window.id)
+            a.rationale = "Windows are set into wall openings."
+            b = _make_assertion(session, "connects_to", door.id, frame.id)
+            b.rationale = "Doors are hung from their frames."
+            session.commit()
+            names = {
+                wall.id: "Wall", window.id: "Window", door.id: "Door", frame.id: "Frame",
+            }
+            text_a = _item_text(a, names)
+            text_b = _item_text(b, names)
+
+        assert text_a != text_b
+        assert "Wall" in text_a and "Window" in text_a
+        assert "Door" in text_b and "Frame" in text_b
+
+    def test_assertion_text_falls_back_to_raw_id_without_names(self, engine):
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            a = _make_assertion(session, "requires", e1.id, e2.id)
+            session.commit()
+            e1_id, e2_id = e1.id, e2.id
+            text = _item_text(a)  # no names dict supplied
+
+        assert e1_id in text
+        assert e2_id in text
+        assert "requires" in text
 
 
 # ---------------------------------------------------------------------------
@@ -336,7 +393,9 @@ class TestAssertionConflictDetection:
         # First sweep embeds both existing items and populates the cache.
         _run_conflict_detection(engine, provider, counting_embedder, limit=None)
         assert len(calls) == 1
-        assert set(calls[0]) == {"high_a", "low_c"}
+        assert any("high_a" in t for t in calls[0])
+        assert any("low_c" in t for t in calls[0])
+        assert len(calls[0]) == 2
 
         # Add a new assertion and reopen the sweep: only the new item's text
         # should reach the embedder, the other two must come from the cache.
@@ -349,7 +408,8 @@ class TestAssertionConflictDetection:
         _run_conflict_detection(engine, provider, counting_embedder, limit=None)
 
         assert len(calls) == 2
-        assert calls[1] == ["high_b"]
+        assert len(calls[1]) == 1
+        assert "high_b" in calls[1][0]
 
     def test_llm_classification_runs_concurrently(self, engine):
         """Multiple queued pairs should overlap on the thread pool, not run one at a time."""
