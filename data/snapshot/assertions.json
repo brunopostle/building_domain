@@ -1995,7 +1995,7 @@
       "When approval is given by a person"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-29T07:03:14.059066"
   },
   {
@@ -2013,7 +2013,7 @@
       "When approval is given by an organization"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:03:14.059066"
   },
   {
@@ -2211,7 +2211,7 @@
       "IfcApprovalRelationship relates one IfcApproval to one or more IfcRoot entities"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:03:14.540422"
   },
   {
@@ -3857,7 +3857,7 @@
     "exceptions": [
       "non-prestressed beams"
     ],
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-29T07:04:36.299220"
   },
   {
@@ -4123,7 +4123,7 @@
     "exceptions": [
       "IfcBeamType does not contain IfcTendon in the IFC schema—IfcTendon is an element that may be associated with an IfcBeam (occurrence) via IfcRelConnectsElements or IfcRelNests, but it is not contained within IfcBeamType. Also, tendons can be in post-tensioned beams, not only prestressed."
     ],
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:04:48.426219"
   },
   {
@@ -4139,7 +4139,7 @@
       "at beam-column joints"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:04:48.426219"
   },
   {
@@ -5458,7 +5458,7 @@
       "when the profile defined by the boundary curve is extruded"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:05:40.356212"
   },
   {
@@ -5476,7 +5476,7 @@
       "when the profile defined by the boundary curve is revolved"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:05:40.356212"
   },
   {
@@ -6084,7 +6084,7 @@
       "When defining boundary conditions at a point connection"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-29T07:06:04.215284"
   },
   {
@@ -63413,7 +63413,7 @@
       "When the structural item is a member or element"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-29T08:02:34.051944"
   },
   {
@@ -67392,7 +67392,7 @@
       "The relationship must link a resource to an approval"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-29T08:06:02.143497"
   },
   {
@@ -76710,7 +76710,7 @@
       "At joints and supports"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-29T08:13:46.065057"
   },
   {
@@ -76726,7 +76726,7 @@
       "Along edges/curves"
     ],
     "exceptions": [],
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-29T08:13:46.065057"
   },
   {
