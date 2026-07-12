@@ -27,8 +27,11 @@ This works today. The knowledge base is entirely LLM-synthesised, ships under **
 
 The extraction pipeline's job is done — all 12 passes ran, and the output has been reviewed down
 to zero items left in `proposed` for assertions, constraints, patterns, forces, and anti-patterns.
-What remains is turning a queryable graph into composed agent capability, and closing two review
-queues the pipeline surfaced rather than resolved:
+The process-relation ordering conflicts (432 "X precedes Y" / "Y precedes X" cycles the extraction
+produced independently across unrelated parts of the graph) are also fully resolved: a context-scoping
+fix cleared all but 8 as false cross-context artifacts, and the remaining 8 same-context reversals
+were resolved by hand. What remains is turning a queryable graph into composed agent capability, and
+closing the one review queue still open:
 
 - **Compose the BSOS and IFC MCP servers into capabilities beyond lookup** — a design-time advisor
   that checks `get_process_sequence` prerequisites before an IFC edit, an anti-pattern sweep that
@@ -37,12 +40,6 @@ queues the pipeline surfaced rather than resolved:
   a BOQ sanity-check script); four more are scoped and ready to build.
 - **Spatial relations review** — 8,865 Pass 4 topological assertions are extracted but not yet
   through the manual accept/reject pass the other five tables received.
-- **Process-relation cycle review** — extraction independently produced 432 "X precedes Y" /
-  "Y precedes X" ordering conflicts across 16 activity clusters. The tooling gap that made the
-  queue unreviewable is fixed, and a follow-up architecture fix (context-scoped ordering, so
-  unrelated parts of the graph sharing a generic activity node no longer collide into a false
-  conflict) resolved all but 8 edges automatically; the last 8 are small same-context reversals
-  awaiting a final human judgement call.
 - **Entity deduplication** — 18,429 of the 19,200 active entities remain in `proposed` status
   (this doesn't block MCP queries, but embedding-based dedup would tighten the graph further).
 

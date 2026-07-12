@@ -249,7 +249,7 @@ The current database (`bsos.db`) holds the output of the full 12-pass extraction
 - **12,401 design patterns** (Pass 8) — 12,148 LLM-synthesised patterns linked to specific entities, plus the original **253 human-curated Alexander patterns** from *A Pattern Language* (`source_model='human'`) used as ground truth
 - **12,617 design forces** (Pass 9) — competing pressures driving design decisions per entity
 - **8,865 spatial relations** (Pass 4) — topological rules (above, adjacent\_to, contains, connects\_to, …); not yet through manual review, still `status='proposed'`
-- **21,609 process relations** (Pass 5) — construction ordering edges; 21,577 `proposed`, 12 `accepted`, 12 `deprecated`, 8 `conflicted` (down from 432: `building_domain-eue` scoped cycle detection to per-`subject_id` context partitions so unrelated contexts sharing a generic activity node no longer collide into false cycles; the remaining 8 are genuine same-context reversed-direction pairs queued for review — `bd show building_domain-g3r`)
+- **21,609 process relations** (Pass 5) — construction ordering edges; 21,577 `proposed`, 18 `accepted`, 14 `deprecated`, 0 `conflicted` (was 432: `building_domain-eue` scoped cycle detection to per-`subject_id` context partitions so unrelated contexts sharing a generic activity node no longer collide into false cycles, clearing all but 8 genuine same-context reversed-direction edges; those were resolved by hand in `building_domain-g3r`)
 - **437 abstraction nodes** (Pass 10c) — synthesised cross-cutting statements over clusters of related assertions
 
 ## Composed BSOS + IFC Capabilities
