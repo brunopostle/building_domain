@@ -47,6 +47,24 @@ Every result is a citable, confidence-scored assertion rather than a generic LLM
 guess. See **[MCP_DEMO.md](MCP_DEMO.md)** for the full walkthrough, including
 model-checking tools run against a loaded IFC file.
 
+## Data Quality Disclaimer
+
+The knowledge graph is **entirely LLM-generated** and has **not** been
+individually fact-checked by a human: an AI was asked to systematically
+enumerate building concepts and the relationships between them across 12
+extraction passes (see [OVERVIEW.md](OVERVIEW.md)), not drawn from a single
+verified reference or building code. `status=accepted` (as opposed to
+`proposed`) mostly reflects an automated confidence-threshold promotion —
+assertions/constraints/patterns/forces/anti-patterns scoring ≥0.85 confidence
+were bulk-accepted via a database update after spot-checking a sample at each
+confidence tier to confirm the scores looked well-calibrated, not a row-by-row
+human review. Process-ordering relations and spatial relations haven't even
+had that pass applied and remain almost entirely at their original `proposed`
+status. Treat every query result as a plausible, citable LLM claim to reason
+from, not as certified engineering, safety, or code-compliance fact — verify
+anything safety- or compliance-critical against a qualified professional or an
+authoritative standard.
+
 ## User Stories
 
 **Construction scheduling** — As an AI agent generating a construction programme from an IFC model, I need sequencing dependencies between building elements so I can order activities correctly without violating construction logic.
@@ -105,6 +123,7 @@ For Claude Desktop and a full walkthrough of the available tools, see **[MCP_DEM
 ### Development
 
 ```bash
+pip install -e .[dev]   # adds pytest
 pytest          # run tests
 bsos status     # show database state
 bsos serve      # start MCP server (stdio)
@@ -157,3 +176,16 @@ bsos export --format json --output /tmp/current.json
 # Merge into your working database (skips records you already have)
 bsos import --input data/snapshot --force
 ```
+
+## License
+
+Code and data are licensed separately:
+
+- **Code** (everything in this repo except `bsos.db` / `data/snapshot/`) —
+  **GPL-3.0-or-later**. See [LICENSE](LICENSE).
+- **Data** (the knowledge graph — `bsos.db` and its `data/snapshot/` export) —
+  **ODbL 1.0**. See [DATABASE_LICENSE](DATABASE_LICENSE) and [NOTICE](NOTICE)
+  for the license text and source attribution (Alexander's *A Pattern
+  Language*, the IFC 2x3 implementation guide, and the Buildwise IFC concepts
+  paper contributed seed material; no source text is reproduced in the
+  database — see NOTICE for details).

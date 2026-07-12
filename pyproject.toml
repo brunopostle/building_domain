@@ -11,21 +11,28 @@ license-files = ["LICENSE", "DATABASE_LICENSE", "NOTICE"]
 dependencies = [
     "pydantic>=2.0",
     "sqlmodel",
+    "sqlalchemy",
     "alembic",
     "networkx",
     "typer",
     "instructor",
     "anthropic",
+    "openai",
+    "ifcopenshell",
     "sentence-transformers",
     "numpy",
     "scipy",
     "scikit-learn",
+    "matplotlib",
     "structlog",
     "joblib",
     "mcp",
     "pypdf",
     "platformdirs",
 ]
+
+[project.optional-dependencies]
+dev = ["pytest"]
 
 [project.scripts]
 bsos = "bsos.cli.main:app"

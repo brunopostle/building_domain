@@ -629,6 +629,15 @@ def propose_assertion_tool(
     confidence is 0.0–1.0; knowledge_origin is physical/engineering/architectural/cultural.
     The assertion is stored immediately but will not appear in results where
     include_proposed=False until a human promotes it to status=accepted.
+
+    The graph was seeded around a generic commercial/residential building, so
+    coverage of other domains (site/infrastructure, climate-specific detailing,
+    data centres, hospitals, industrial buildings, heritage structures) is thin
+    — a further Pass 1 seed expansion into those domains is deferred pending
+    experience of which entity-graph gaps actually matter in practice. If a
+    query in one of these areas comes back sparse or empty, this tool is the
+    way to contribute a well-reasoned gap-filling assertion rather than just
+    falling back to unstated model knowledge.
     """
     subject_row = resolve_entity(session, subject)
     if subject_row is None:
