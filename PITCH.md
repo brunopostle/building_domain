@@ -4,24 +4,21 @@
 
 ## The Problem
 
-AI agents working with BIM (Building Information Modelling) files contain broad architectural knowledge but cannot reliably apply it. An agent asked to sequence construction activities from an IFC model may correctly identify all the building elements yet fail to apply rules like *"windows are inserted into masonry walls after the walls are built"* or *"internal finishes cannot start until the roof is watertight."* This knowledge exists in the model's training data — it does not emerge reliably at the point of need.
-
-The result is that AI agents working with building models produce generic advice, generate construction programmes that violate building logic, or miss glaring omissions in a model.
+AI agents working with BIM models contain broad architectural knowledge but cannot reliably apply it, producing generic advice, construction programmes that violate building logic, or missed omissions in a model. See [README.md](README.md) for the full framing and a worked example.
 
 ## What Exists Now
 
-BSOS (Building System of Systems) is an open, queryable building domain knowledge graph, served via the Model Context Protocol (MCP) so AI agents can retrieve relevant domain knowledge on demand rather than hoping it is spontaneously recalled.
+All 12 extraction passes are complete, reviewed, and promoted — see
+[OVERVIEW.md](OVERVIEW.md) for methodology and headline totals, and
+[README.md](README.md) for the MCP tool reference. Beyond those top-line
+numbers:
 
-**Current scale (all 12 extraction passes complete, reviewed, and promoted):**
+- **19,174 active building entities** by type — 13,499 activities, 2,630 components, 1,005 spaces, 771 IFC schema classes, 667 systems, 602 materials (a further 3,706 near-duplicates were identified and merged away)
+- **9 relationship predicates**: *requires*, *depends\_on*, *contains*, *supports*, *connects\_to*, *protects\_from*, *conflicts\_with*, *improves*, *unsuitable\_for*
+- **437 synthesised abstraction nodes** summarising clusters of related assertions
+- The **253 Christopher Alexander patterns** from *A Pattern Language*, used as ground truth, with the first computational connectivity analysis of the full pattern network: 1,754 edges, diameter 6, seven community clusters, and hub patterns identified for the first time quantitatively
 
-- **19,174 active building entities** — 13,499 activities, 2,630 components, 1,005 spaces, 771 IFC schema classes, 667 systems, 602 materials (a further 3,706 near-duplicates were identified and merged away)
-- **20,732 typed assertions** across 9 relationship predicates: *requires*, *depends\_on*, *contains*, *supports*, *connects\_to*, *protects\_from*, *conflicts\_with*, *improves*, *unsuitable\_for*
-- **14,004 hard constraints**, **23,522 anti-patterns/failure modes**, **12,617 design forces**, and **8,865 spatial relations** — the full building-intelligence layer: not just what an element depends on, but where it sits spatially, what can go wrong, and what design pressures shaped it
-- **21,609 process relations** encoding construction ordering, and **437 synthesised abstraction nodes** summarising clusters of related assertions
-- **12,401 design patterns**, including the original **253 Christopher Alexander patterns** from *A Pattern Language* used as ground truth — with the first computational connectivity analysis of the full 253-pattern network: 1,754 edges, diameter 6, seven community clusters, and hub patterns identified for the first time quantitatively
-- **MCP server** (`bsos serve`) connecting the knowledge graph to Claude Code and Claude Desktop, plus a composed `check_model` tool that runs a full requirements/constraints/spatial/anti-pattern compliance report against a loaded IFC model in one call
-
-This works today. The knowledge base is entirely LLM-synthesised, ships under **ODbL 1.0**, and is hosted at [github.com/brunopostle/building_domain](https://github.com/brunopostle/building_domain).
+This works today. The knowledge base is entirely LLM-synthesised, ships under **ODbL 1.0** (separate from the code's GPL-3.0-or-later license), and is hosted at [github.com/brunopostle/building_domain](https://github.com/brunopostle/building_domain).
 
 ## What Funding Enables: From Knowledge Base to Agent Capability
 

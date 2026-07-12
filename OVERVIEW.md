@@ -1,9 +1,50 @@
 # BSOS: Building Science Ontology System
 
-Modern AI assistants are surprisingly good at reasoning about building information models. Ask one to analyse an IFC file and it will correctly identify walls, floors, doors, and mechanical systems. But there is a gap between recognising elements and knowing the rules that govern them. An agent asked to sequence a construction programme might list all the right activities yet still get the ordering wrong — scheduling window installation before the masonry is complete, or planning interior finishes before the roof is watertight. This is not a failure of general intelligence; it is a failure of retrieval. The knowledge exists somewhere in the model's training, but it does not reliably surface at the point of need.
+Modern AI assistants are surprisingly good at recognising building elements in an
+IFC model, but not at reliably applying the rules that govern them. See
+[README.md](README.md) for how BSOS addresses this and the full MCP tool
+reference; this document goes deeper on use cases, extraction methodology, and
+current data scale.
 
-BSOS addresses this by making implicit building domain knowledge explicit and queryable. It is a structured knowledge graph populated by systematically asking an AI to enumerate building concepts and the relationships between them: what a roof requires before it can be built, what depends on a structural frame being complete, what fails when internal finishes begin before a building is weathertight. Each relationship is stored as a typed assertion — requirement, dependency, constraint, failure mode, spatial relation, process sequence — linking named building entities to other entities or conditions. The graph is then made available to AI agents working with BIM models, so when an agent is reasoning about a specific building it can query "what does a flat roof depend on?" or "what are the failure modes of a cavity wall?" and receive structured, citable answers rather than relying on whatever it happens to recall in the moment.
+## Use Cases
 
-The primary use case is AI-assisted BIM review: an agent working with an IFC file cross-references the model's actual content — materials present, elements included, mechanical and engineering systems connected — against the knowledge graph to produce a compliance report of which requirements are satisfied, which are missing, and which constraints or known failure conditions are violated. This is implemented as a single composed MCP tool (`check_model`) that resolves each modelled space to a knowledge-graph entity via semantic search and checks it against requirements, constraints, spatial relations, and anti-patterns in one pass. A secondary use case is construction sequencing: process-relation knowledge encodes ordering rules (`get_process_sequence`) that an agent can use to generate or validate a construction programme directly from model data. A third use case is design critique through the lens of Christopher Alexander's pattern language: the knowledge base includes summaries of all 253 patterns from *A Pattern Language* as well as thousands of entity-linked design patterns and the design forces that motivate them, which can be queried to evaluate whether a proposed design satisfies the human-scale qualities those patterns describe. Composing this critique into a single scan-a-whole-model tool, alongside a design-time advisor and clash-annotation tooling, is ongoing work.
+BSOS composes its tools into three capabilities beyond single-fact lookup.
+**BIM compliance review** (`check_model`) resolves each space in a loaded IFC
+model to a knowledge-graph entity via semantic search and checks it against
+requirements, constraints, spatial relations, and anti-patterns in one pass.
+**Construction sequencing** (`get_process_sequence`, `check_prerequisites`)
+generates or gates a construction programme against process-relation ordering.
+**Design critique** through the lens of Christopher Alexander's pattern language
+(`critique_patterns`, `sweep_failure_modes`, `annotate_clash`) evaluates a
+design's human-scale qualities and annotates geometry clashes with the pattern
+or failure-mode rationale behind them, rather than a bare "X intersects Y".
 
-The knowledge base was built by asking an AI to systematically enumerate building concepts — structural and envelope components, building services, space types, materials, and construction activities — across 12 extraction passes: concept discovery and deduplication, requirements/dependencies, spatial relations, process sequencing, hard constraints, anti-patterns, design patterns, design forces, normalisation, adversarial validation, and IFC schema extraction. This process drew on the AI's broad synthesis of architectural and construction knowledge rather than any single reference document or standard. Alexander's *A Pattern Language* contributed its 253 named patterns as additional seeds, biasing the concept space towards the human-scale spatial ideas the patterns describe. The current graph holds roughly 19,000 active named entities (after merging near-duplicates), 20,700 typed relationship assertions, 14,000 hard constraints, 23,500 anti-patterns, 12,600 design forces, 12,400 design patterns, 8,900 spatial relations, and 21,600 process-ordering relations. The bulk of this has been reviewed and promoted from the raw extraction output; one review queue remains open — spatial relations awaiting a first accept/reject pass. (A second queue, several hundred process-relation ordering conflicts, has since been resolved: scoping ordering to the construction context that asserted it rather than comparing globally cleared all but a handful of genuine conflicts, which were resolved by hand.) The initial survey was framed around a generic commercial and residential building, which means specialist building types are underrepresented: hospitals, data centres, industrial buildings, heritage structures, and buildings designed for specific climates all have known gaps. Extending coverage into these domains is planned follow-on work.
+## How the Knowledge Base Was Built
+
+The knowledge base was built by asking an AI to systematically enumerate
+building concepts — structural and envelope components, building services,
+space types, materials, and construction activities — across 12 extraction
+passes: concept discovery and deduplication, requirements/dependencies, spatial
+relations, process sequencing, hard constraints, anti-patterns, design patterns,
+design forces, normalisation, adversarial validation, and IFC schema extraction.
+This process drew on the AI's broad synthesis of architectural and construction
+knowledge rather than any single reference document or standard. Alexander's
+*A Pattern Language* contributed its 253 named patterns as additional seeds,
+biasing the concept space towards the human-scale spatial ideas the patterns
+describe.
+
+The current graph holds roughly 19,000 active named entities (after merging
+near-duplicates), 20,700 typed relationship assertions, 14,000 hard
+constraints, 23,500 anti-patterns, 12,600 design forces, 12,400 design
+patterns, 8,900 spatial relations, and 21,600 process-ordering relations. The
+bulk of this has been reviewed and promoted from the raw extraction output; one
+review queue remains open — spatial relations awaiting a first accept/reject
+pass. (A separate queue of several hundred process-relation ordering conflicts
+has since been resolved: scoping ordering to the construction context that
+asserted it, rather than comparing globally, cleared all but a handful of
+genuine conflicts, which were resolved by hand.) The initial survey was framed
+around a generic commercial and residential building, which means specialist
+building types are underrepresented: hospitals, data centres, industrial
+buildings, heritage structures, and buildings designed for specific climates
+all have known gaps. Extending coverage into these domains is planned
+follow-on work.
