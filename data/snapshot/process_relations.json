@@ -7052,7 +7052,7 @@
     "rationale": "Beam reinforcement must be placed inside the formwork; typically, bottom reinforcement is laid after the beam bottom form is in place, but the sequence can vary. In some methods, rebar cages are pre-assembled and lowered into formwork, requiring formwork to be partially installed first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-30T00:40:28.905539"
   },
   {
@@ -7076,7 +7076,7 @@
     "rationale": "In typical cast-in-situ construction, the beam bottom formwork is installed first, then rebar is placed, followed by beam side formwork. So formwork installation and rebar installation are interleaved, not strictly sequential.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-30T00:40:28.905539"
   },
   {
@@ -95576,7 +95576,7 @@
     "rationale": "The ground floor slab must be in place to define the starting elevation for the first floor-to-floor height dimension.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-30T02:35:37.061437"
   },
   {
@@ -95600,7 +95600,7 @@
     "rationale": "The floor-to-floor height must be established as a vertical control dimension before pouring the upper floor slab at the correct elevation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-30T02:35:37.061437"
   },
   {
@@ -226844,7 +226844,7 @@
     "rationale": "Reinforcement steel is typically placed within the formwork; however, formwork erection often precedes or is concurrent with rebar installation. In many sequences, formwork is set first, then rebar is placed inside. But structurally, the foundation or slab must be ready before formwork goes up.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "deprecated",
     "created_at": "2026-06-30T05:22:12.987684"
   },
   {
@@ -226880,7 +226880,7 @@
     "rationale": "In some sequences, rebar is placed after formwork is erected, but this is a construction preference rather than a strict physical constraint—rebar can also be pre-assembled before formwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-30T05:22:12.987684"
   },
   {
@@ -232628,7 +232628,7 @@
     "rationale": "Slab void formers are placed within the reinforcement cage of the slab. The bottom layer of reinforcement must be installed first to provide support and positioning for void formers, which are then tied or fixed in place before the top reinforcement is placed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-30T05:29:03.283680"
   },
   {
@@ -232652,7 +232652,7 @@
     "rationale": "After slab void formers are positioned and secured, the top layer of slab reinforcement must be placed over them. The top reinforcement cannot be installed before void formers are in place as the void formers occupy the mid-depth zone of the slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "conflicted",
+    "status": "accepted",
     "created_at": "2026-06-30T05:29:03.283680"
   },
   {
