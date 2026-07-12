@@ -218,6 +218,7 @@ class ProcessRelationRow(SQLModel, table=True):
     knowledge_origin: str
     rationale: str
     conflict_evaluated_at: Optional[datetime] = None
+    subject_id: Optional[str] = Field(default=None, index=True)
 
 
 class SpatialRelationRow(SQLModel, table=True):

@@ -627,7 +627,9 @@ class TestProcessRelationDivergence:
 
 class TestCycleDetection:
 
-    def _make_pr(self, session: Session, pred_id: str, succ_id: str) -> ProcessRelationRow:
+    def _make_pr(
+        self, session: Session, pred_id: str, succ_id: str, subject_id: str | None = None,
+    ) -> ProcessRelationRow:
         row = ProcessRelationRow(
             id=str(uuid.uuid4()),
             predecessor_id=pred_id,
@@ -639,6 +641,7 @@ class TestCycleDetection:
             status="proposed",
             knowledge_origin="extracted",
             rationale="test",
+            subject_id=subject_id,
         )
         session.add(row)
         return row
@@ -687,6 +690,145 @@ class TestCycleDetection:
     def test_empty_graph(self, engine):
         result = _run_cycle_detection(engine)
         assert result["cycles_found"] == 0
+
+    def test_cross_context_reversed_edges_not_flagged(self, engine):
+        """building_domain-eue repro: two unrelated subjects assert opposite
+        orderings for the same pair of generic activities (e.g. "Concrete
+        Curing" vs "Waterproofing" for two different components). Each
+        ordering is locally true; the union is not a real contradiction."""
+        with Session(engine) as session:
+            curing = _make_entity(session, "Concrete Curing")
+            waterproofing = _make_entity(session, "Waterproofing")
+            column = _make_entity(session, "Column")
+            slab = _make_entity(session, "Slab")
+            r1 = self._make_pr(session, curing.id, waterproofing.id, subject_id=column.id)
+            r2 = self._make_pr(session, waterproofing.id, curing.id, subject_id=slab.id)
+            session.commit()
+            ids = {r1.id, r2.id}
+
+        result = _run_cycle_detection(engine)
+
+        assert result["cyclic_edges_marked"] == 0
+        with Session(engine) as session:
+            for rid in ids:
+                assert session.get(ProcessRelationRow, rid).status == "proposed"
+
+    def test_same_subject_cycle_still_flagged(self, engine):
+        """Partitioning must not hide a real cycle asserted within one context."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            e3 = _make_entity(session, "e3")
+            subject = _make_entity(session, "subject")
+            r1 = self._make_pr(session, e1.id, e2.id, subject_id=subject.id)
+            r2 = self._make_pr(session, e2.id, e3.id, subject_id=subject.id)
+            r3 = self._make_pr(session, e3.id, e1.id, subject_id=subject.id)
+            session.commit()
+            ids = {r1.id, r2.id, r3.id}
+
+        result = _run_cycle_detection(engine)
+
+        assert result["cyclic_edges_marked"] == 3
+        with Session(engine) as session:
+            for rid in ids:
+                assert session.get(ProcessRelationRow, rid).status == "conflicted"
+
+    def test_universal_cycle_still_flagged(self, engine):
+        """subject_id=NULL edges ("universal") are still checked for cycles
+        among themselves — only cross-context unions are exempted."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            e3 = _make_entity(session, "e3")
+            r1 = self._make_pr(session, e1.id, e2.id)
+            r2 = self._make_pr(session, e2.id, e3.id)
+            r3 = self._make_pr(session, e3.id, e1.id)
+            session.commit()
+            ids = {r1.id, r2.id, r3.id}
+
+        result = _run_cycle_detection(engine)
+
+        assert result["cyclic_edges_marked"] == 3
+        with Session(engine) as session:
+            for rid in ids:
+                assert session.get(ProcessRelationRow, rid).status == "conflicted"
+
+    def test_resolved_cycle_not_reflagged(self, engine):
+        """A prior keep-all ReviewDecisionRow for this exact edge set means
+        cycle detection must not flip the (accepted) edges back to conflicted."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            e3 = _make_entity(session, "e3")
+            r1 = self._make_pr(session, e1.id, e2.id)
+            r2 = self._make_pr(session, e2.id, e3.id)
+            r3 = self._make_pr(session, e3.id, e1.id)
+            r1.status = r2.status = r3.status = "accepted"
+            ids = {r1.id, r2.id, r3.id}
+            session.commit()
+
+        from bsos.normalization.conflict_detection import cycle_hash
+
+        with Session(engine) as session:
+            session.add(ReviewDecisionRow(
+                id=str(uuid.uuid4()),
+                item_id=cycle_hash(ids),
+                item_type="process_relation_cycle",
+                decision="keep-all",
+                rationale="cycle review: not actually a conflict, all edges correct",
+                reviewer="human",
+                created_at=NOW,
+            ))
+            session.commit()
+
+        result = _run_cycle_detection(engine)
+
+        assert result["cyclic_edges_marked"] == 0
+        assert result["cycles_already_resolved"] == 1
+        with Session(engine) as session:
+            for rid in ids:
+                assert session.get(ProcessRelationRow, rid).status == "accepted"
+
+    def test_resolved_cycle_reflagged_when_edges_change(self, engine):
+        """Adding a new edge into a previously-resolved cycle changes its
+        identity hash, so it's treated as a fresh, unreviewed cycle."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            e3 = _make_entity(session, "e3")
+            r1 = self._make_pr(session, e1.id, e2.id)
+            r2 = self._make_pr(session, e2.id, e3.id)
+            r3 = self._make_pr(session, e3.id, e1.id)
+            r1.status = r2.status = r3.status = "accepted"
+            ids = {r1.id, r2.id, r3.id}
+            session.commit()
+
+        from bsos.normalization.conflict_detection import cycle_hash
+
+        with Session(engine) as session:
+            session.add(ReviewDecisionRow(
+                id=str(uuid.uuid4()),
+                item_id=cycle_hash(ids),
+                item_type="process_relation_cycle",
+                decision="keep-all",
+                rationale="cycle review: not actually a conflict, all edges correct",
+                reviewer="human",
+                created_at=NOW,
+            ))
+            session.commit()
+
+        with Session(engine) as session:
+            e4 = _make_entity(session, "e4")
+            e1 = session.exec(select(EntityRow).where(EntityRow.name == "e1")).first()
+            r4 = self._make_pr(session, e4.id, e1.id)
+            e2 = session.exec(select(EntityRow).where(EntityRow.name == "e2")).first()
+            r5 = self._make_pr(session, e2.id, e4.id)  # e2 -> e4 -> e1 -> e2 grows the SCC
+            session.commit()
+
+        result = _run_cycle_detection(engine)
+
+        assert result["cycles_already_resolved"] == 0
+        assert result["cyclic_edges_marked"] == 5
 
 
 # ---------------------------------------------------------------------------

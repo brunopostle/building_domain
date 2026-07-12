@@ -373,11 +373,16 @@ def _import_process_relations(
             )
             skipped += 1
             continue
+        subject_ref = r.get("subject", "")
+        subject_id = None
+        if subject_ref:
+            subject_id, _ = _resolve(subject_ref, name_to_id, id_to_type)
         session.merge(ProcessRelationRow(
             id=eid,
             predecessor_id=predecessor_id,
             successor_id=successor_id,
             hard_constraint=bool(r.get("hard_constraint", False)),
+            subject_id=subject_id,
             source_model=_IMPORT_SOURCE,
             created_at=_parse_dt(r.get("created_at")),
             confidence=float(r.get("confidence", 0.5)),

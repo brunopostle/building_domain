@@ -84,6 +84,23 @@ def test_pass5_relation_fields_populated(engine):
     assert row.status == "proposed"
 
 
+def test_pass5_sets_subject_id(engine):
+    """building_domain-eue: subject_id records which entity's pass5 call
+    produced this ordering, so cycle detection can scope contradictions to
+    the context that actually asserted them."""
+    add_entity(engine, "e-form", "Formwork")
+    add_entity(engine, "e-pour", "Concrete pouring")
+
+    p = make_provider_seq("Formwork", "Formwork", "Concrete pouring")
+    run_pass5(engine, p, "run-001", max_workers=1)
+
+    with Session(engine) as s:
+        row = s.exec(select(ProcessRelationRow)).first()
+
+    assert row is not None
+    assert row.subject_id == "e-form"
+
+
 # ---------------------------------------------------------------------------
 # Inline activity creation
 # ---------------------------------------------------------------------------
@@ -384,3 +401,74 @@ def test_pass5_skips_merged_entities(engine):
     result = run_pass5(engine, p, "run-001", max_workers=1)
 
     assert result["entities_processed"] == 1
+
+
+# ---------------------------------------------------------------------------
+# subject_id backfill (building_domain-eue)
+# ---------------------------------------------------------------------------
+
+def _add_legacy_row(
+    engine, pred_id: str, succ_id: str, source_prompt: str | None, source_model: str = "test",
+) -> str:
+    """Simulate a pre-subject_id row: source_prompt set, subject_id NULL."""
+    import uuid as _uuid
+    rid = str(_uuid.uuid4())
+    with Session(engine) as s:
+        s.add(ProcessRelationRow(
+            id=rid,
+            predecessor_id=pred_id,
+            successor_id=succ_id,
+            hard_constraint=True,
+            source_model=source_model,
+            source_prompt=source_prompt,
+            created_at=NOW,
+            confidence=0.9,
+            status="proposed",
+            knowledge_origin="extracted",
+            rationale="test",
+            subject_id=None,
+        ))
+        s.commit()
+    return rid
+
+
+def test_backfill_subject_id_resolves_from_prompt(engine):
+    from bsos.pipeline.pass5 import PROMPT_TEMPLATE, backfill_subject_id
+
+    add_entity(engine, "e-column", "Column", entity_type="component")
+    add_entity(engine, "e-form", "Formwork")
+    add_entity(engine, "e-pour", "Concrete pouring")
+
+    prompt = PROMPT_TEMPLATE.format(name="Column", entity_type="component")
+    rid = _add_legacy_row(engine, "e-form", "e-pour", prompt)
+
+    result = backfill_subject_id(engine)
+
+    assert result["updated"] == 1
+    assert result["skipped"] == 0
+    with Session(engine) as s:
+        row = s.get(ProcessRelationRow, rid)
+    assert row.subject_id == "e-column"
+
+
+def test_backfill_subject_id_skips_unparseable_or_unresolved(engine):
+    from bsos.pipeline.pass5 import backfill_subject_id
+
+    add_entity(engine, "e-form", "Formwork")
+    add_entity(engine, "e-pour", "Concrete pouring")
+
+    no_prompt = _add_legacy_row(engine, "e-form", "e-pour", None, source_model="model-a")
+    bad_prompt = _add_legacy_row(engine, "e-form", "e-pour", "not the expected format", source_model="model-b")
+    unresolved = _add_legacy_row(
+        engine, "e-form", "e-pour",
+        "For the building activity or entity 'Nonexistent Thing' (type: component) ...",
+        source_model="model-c",
+    )
+
+    result = backfill_subject_id(engine)
+
+    assert result["updated"] == 0
+    assert result["skipped"] == 3
+    with Session(engine) as s:
+        for rid in (no_prompt, bad_prompt, unresolved):
+            assert s.get(ProcessRelationRow, rid).subject_id is None

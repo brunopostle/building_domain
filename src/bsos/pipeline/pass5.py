@@ -10,6 +10,7 @@ Materials, spaces, systems, and ifc_class entities are skipped — construction
 sequencing constraints apply to activities and physical components, not to
 materials, spaces, systems, or IFC schema classes.
 """
+import re
 import threading
 import uuid
 from collections import defaultdict
@@ -64,6 +65,51 @@ def _build_name_lookup(engine) -> dict[str, tuple[str, str]]:
             if entity and entity.status != "merged":
                 lookup[alias_row.alias.lower()] = (entity.id, entity.entity_type)
     return lookup
+
+
+# PROMPT_TEMPLATE always opens with the subject entity's name and type, so the
+# subject can be recovered from source_prompt for rows written before subject_id
+# existed (building_domain-eue backfill).
+_SUBJECT_FROM_PROMPT_RE = re.compile(
+    r"^For the building activity or entity '(.+?)' \(type: \w+\)"
+)
+
+
+def backfill_subject_id(engine) -> dict:
+    """Populate subject_id for existing process_relations rows from source_prompt.
+
+    Rows written before subject_id existed only recorded the subject entity's
+    name inside the unstructured source_prompt text. Rows whose source_prompt
+    is missing, doesn't match the expected prefix, or names an entity that no
+    longer resolves are left with subject_id=NULL — the safe "treat as
+    universal" default cycle detection already applies, not an error.
+    """
+    name_lookup = _build_name_lookup(engine)
+    updated = 0
+    skipped = 0
+
+    with Session(engine) as session:
+        rows = session.exec(
+            select(ProcessRelationRow).where(ProcessRelationRow.subject_id.is_(None))
+        ).all()
+        total = len(rows)
+
+        for row in rows:
+            match = _SUBJECT_FROM_PROMPT_RE.match(row.source_prompt or "")
+            if not match:
+                skipped += 1
+                continue
+            resolved = name_lookup.get(match.group(1).lower())
+            if resolved is None:
+                skipped += 1
+                continue
+            row.subject_id = resolved[0]
+            updated += 1
+
+        session.commit()
+
+    log.info("pass5_backfill_subject_id", updated=updated, skipped=skipped, total=total)
+    return {"updated": updated, "skipped": skipped, "total": total}
 
 
 def _get_or_create_activity(
@@ -195,6 +241,7 @@ def _process_entity(
                 status="proposed",
                 knowledge_origin="engineering",
                 rationale=extracted.rationale.strip(),
+                subject_id=entity_id,
             ))
             written += 1
 

@@ -642,11 +642,46 @@ def _run_process_relation_divergence(engine) -> dict:
 # Sub-task 3: Process graph cycle detection
 # ---------------------------------------------------------------------------
 
-def _run_cycle_detection(engine) -> dict:
-    """Detect SCCs of size ≥ 2 in the ProcessRelation graph and mark edges conflicted."""
-    import networkx as nx
+def cycle_hash(edge_ids: set[str]) -> str:
+    """Deterministic identity for a cycle, keyed by its exact set of edge ids.
 
-    cycles_found = 0
+    Used as the ReviewDecisionRow.item_id for item_type="process_relation_cycle"
+    so a human "keep-all" decision survives re-runs of cycle detection: if the
+    edge set is unchanged the hash matches and the cycle is not re-flagged; if
+    an edge is added/removed/deprecated the hash changes and the (new) cycle
+    shape is treated as unreviewed (building_domain-eue).
+    """
+    return hashlib.sha256("|".join(sorted(edge_ids)).encode()).hexdigest()
+
+
+def _cycle_already_resolved(session: Session, edge_ids: set[str]) -> bool:
+    existing = session.exec(
+        select(ReviewDecisionRow)
+        .where(
+            ReviewDecisionRow.item_type == "process_relation_cycle",  # type: ignore[attr-defined]
+            ReviewDecisionRow.item_id == cycle_hash(edge_ids),  # type: ignore[attr-defined]
+        )
+        .order_by(ReviewDecisionRow.created_at.desc())  # type: ignore[attr-defined]
+    ).first()
+    return existing is not None and existing.decision == "keep-all"
+
+
+def _run_cycle_detection(engine) -> dict:
+    """Detect SCCs of size >= 2 in the ProcessRelation graph and mark edges conflicted.
+
+    Cycles are computed per subject-context partition rather than over one
+    global graph: Pass 5 extracts predecessor/successor orderings scoped to a
+    single subject entity's viewpoint (see pass5.py), but generic canonical
+    activities (e.g. "Concrete Curing") are shared nodes referenced by many
+    unrelated contexts. Unioning every edge into one graph before computing
+    SCCs makes locally-valid-but-globally-incompatible orderings from
+    unrelated contexts look like one contradiction. Partitioning by
+    subject_id keeps each context's edges (plus subject_id=NULL "universal"
+    edges, included in every partition) in their own subgraph, so two edges
+    only collide as a cycle when they actually share a context or are both
+    context-free (building_domain-eue).
+    """
+    import networkx as nx
 
     with Session(engine) as session:
         rows = session.exec(
@@ -656,26 +691,58 @@ def _run_cycle_detection(engine) -> dict:
         ).all()
 
     if not rows:
-        return {"cycles_found": 0, "cyclic_edges_marked": 0}
+        return {"cycles_found": 0, "cyclic_edges_marked": 0, "cycles_already_resolved": 0}
 
-    g = nx.DiGraph()
-    edge_ids: dict[tuple[str, str], list[str]] = {}
-    for row in rows:
-        g.add_edge(row.predecessor_id, row.successor_id)
-        edge_ids.setdefault((row.predecessor_id, row.successor_id), []).append(row.id)
+    universal = [r for r in rows if r.subject_id is None]
+    by_subject: dict[str, list] = {}
+    for r in rows:
+        if r.subject_id is not None:
+            by_subject.setdefault(r.subject_id, []).append(r)
 
+    partitions = [universal] + [universal + subject_rows for subject_rows in by_subject.values()]
+
+    cycles_found = 0
+    already_resolved = 0
     cyclic_edge_ids: set[str] = set()
-    for scc in nx.strongly_connected_components(g):
-        if len(scc) < 2:
-            continue
-        cycles_found += 1
-        scc_nodes = set(scc)
-        for (pred, succ), ids in edge_ids.items():
-            if pred in scc_nodes and succ in scc_nodes:
-                cyclic_edge_ids.update(ids)
+    seen_groups: set[frozenset] = set()
+
+    with Session(engine) as session:
+        for partition_rows in partitions:
+            g = nx.DiGraph()
+            edge_ids: dict[tuple[str, str], list[str]] = {}
+            for row in partition_rows:
+                g.add_edge(row.predecessor_id, row.successor_id)
+                edge_ids.setdefault((row.predecessor_id, row.successor_id), []).append(row.id)
+
+            for scc in nx.strongly_connected_components(g):
+                if len(scc) < 2:
+                    continue
+                scc_nodes = set(scc)
+                group_ids: set[str] = set()
+                for (pred, succ), ids in edge_ids.items():
+                    if pred in scc_nodes and succ in scc_nodes:
+                        group_ids.update(ids)
+                if not group_ids:
+                    continue
+
+                group_key = frozenset(group_ids)
+                if group_key in seen_groups:
+                    continue
+                seen_groups.add(group_key)
+                cycles_found += 1
+
+                if _cycle_already_resolved(session, group_ids):
+                    already_resolved += 1
+                    continue
+
+                cyclic_edge_ids.update(group_ids)
 
     if not cyclic_edge_ids:
-        return {"cycles_found": 0, "cyclic_edges_marked": 0}
+        return {
+            "cycles_found": cycles_found,
+            "cyclic_edges_marked": 0,
+            "cycles_already_resolved": already_resolved,
+        }
 
     with Session(engine) as session:
         for row_id in cyclic_edge_ids:
@@ -688,8 +755,17 @@ def _run_cycle_detection(engine) -> dict:
             _write_provenance(session, row.id, "process_relation", old_status, "conflicted", "bsos validate --conflicts")
         session.commit()
 
-    log.info("cycle_detection_done", cycles_found=cycles_found, cyclic_edges=len(cyclic_edge_ids))
-    return {"cycles_found": cycles_found, "cyclic_edges_marked": len(cyclic_edge_ids)}
+    log.info(
+        "cycle_detection_done",
+        cycles_found=cycles_found,
+        cyclic_edges=len(cyclic_edge_ids),
+        already_resolved=already_resolved,
+    )
+    return {
+        "cycles_found": cycles_found,
+        "cyclic_edges_marked": len(cyclic_edge_ids),
+        "cycles_already_resolved": already_resolved,
+    }
 
 
 # ---------------------------------------------------------------------------

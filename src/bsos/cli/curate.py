@@ -59,6 +59,29 @@ def merge(
         )
 
 
+@app.command("backfill-process-context")
+def backfill_process_context(
+    db: str = typer.Option(None, "--db"),
+) -> None:
+    """Populate process_relations.subject_id for rows written before it existed.
+
+    Parses the subject entity's name out of each row's source_prompt (Pass 5's
+    PROMPT_TEMPLATE always opens with it) and resolves it to an entity id.
+    Rows with no parseable/resolvable subject are left NULL — cycle detection
+    already treats NULL as "universal" (building_domain-eue).
+    """
+    from bsos.cli.db_context import resolve_db_path
+    from bsos.persistence.database import create_db_engine
+    from bsos.pipeline.pass5 import backfill_subject_id
+
+    engine = create_db_engine(resolve_db_path(db))
+    result = backfill_subject_id(engine)
+    typer.echo(
+        f"subject_id backfill: {result['updated']} updated, "
+        f"{result['skipped']} skipped (of {result['total']} NULL rows)"
+    )
+
+
 @app.command("set-entrance")
 def set_entrance(
     entity: str = typer.Argument(..., help="Space entity to mark as entrance"),

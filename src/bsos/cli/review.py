@@ -325,9 +325,24 @@ def _review_cycles(session: Session, limit: int, stats: bool) -> int:
             reviewed += 1
             typer.echo(f"  → deprecated {sorted(idxs)}, accepted the rest")
         elif decision == "keep-all":
+            from bsos.normalization.conflict_detection import cycle_hash
+
             rationale = "cycle review: not actually a conflict, all edges correct"
             for row in group:
                 _set_status(session, row, "process_relation", "accepted", "accept", rationale)
+            # Durable marker so a future `bsos validate --conflicts` run doesn't
+            # re-flag this exact edge set as conflicted (building_domain-eue) —
+            # _run_cycle_detection checks for this before re-marking a cycle.
+            session.add(ReviewDecisionRow(
+                id=str(uuid.uuid4()),
+                item_id=cycle_hash({row.id for row in group}),
+                item_type="process_relation_cycle",
+                decision="keep-all",
+                mapped_to=None,
+                rationale=rationale,
+                reviewer="human",
+                created_at=_now(),
+            ))
             session.commit()
             reviewed += 1
             typer.echo("  → kept all (accepted)")

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import model_validator
 from bsos.models.base import ProvenanceMixin
 
@@ -7,6 +9,7 @@ class ProcessRelation(ProvenanceMixin):
     predecessor_id: str
     successor_id: str
     hard_constraint: bool
+    subject_id: Optional[str] = None
 
     @model_validator(mode="after")
     def _rationale_required(self) -> "ProcessRelation":

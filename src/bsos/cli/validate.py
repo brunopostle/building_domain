@@ -76,6 +76,7 @@ def validate_conflicts(
     typer.echo(f"  PR divergences:           {result.get('divergences_found', 0)}")
     typer.echo(f"  Cycles found:             {result.get('cycles_found', 0)}")
     typer.echo(f"  Cyclic edges marked:      {result.get('cyclic_edges_marked', 0)}")
+    typer.echo(f"  Cycles already resolved:  {result.get('cycles_already_resolved', 0)}")
     typer.echo(f"  Abstraction nodes re-evaluated: {result.get('abstraction_nodes_re_evaluated', 0)}")
     typer.echo(f"  Abstraction nodes conflicted:   {result.get('abstraction_nodes_conflicted', 0)}")
     typer.echo(f"  Total conflicted items:   {result.get('conflicted_total', 0)}")

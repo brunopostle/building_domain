@@ -205,6 +205,7 @@ def _export_process_relations(session, status_filter, names) -> list[dict]:
             "predecessor": names.get(r.predecessor_id, r.predecessor_id),
             "successor": names.get(r.successor_id, r.successor_id),
             "hard_constraint": r.hard_constraint,
+            "subject": names.get(r.subject_id, r.subject_id) if r.subject_id else "",
             "rationale": r.rationale or "",
             "confidence": r.confidence,
             "knowledge_origin": r.knowledge_origin,

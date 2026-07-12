@@ -184,6 +184,33 @@ class TestReviewCycles:
             for rid in ids:
                 assert session.get(ProcessRelationRow, rid).status == "accepted"
 
+    def test_keep_all_survives_rerun(self, engine, monkeypatch):
+        """building_domain-eue: a keep-all decision must be durable — re-running
+        cycle detection over the same (now-accepted) edges must not re-flag them."""
+        with Session(engine) as session:
+            e1 = _make_entity(session, "e1")
+            e2 = _make_entity(session, "e2")
+            e3 = _make_entity(session, "e3")
+            r1 = _make_pr(session, e1.id, e2.id)
+            r2 = _make_pr(session, e2.id, e3.id)
+            r3 = _make_pr(session, e3.id, e1.id)
+            session.commit()
+            ids = {r1.id, r2.id, r3.id}
+
+        _run_cycle_detection(engine)
+
+        import typer
+        monkeypatch.setattr(typer, "prompt", lambda *a, **k: "keep-all")
+
+        with Session(engine) as session:
+            _review_cycles(session, limit=20, stats=False)
+
+        _run_cycle_detection(engine)
+
+        with Session(engine) as session:
+            for rid in ids:
+                assert session.get(ProcessRelationRow, rid).status == "accepted"
+
     def test_defer_leaves_rows_conflicted(self, engine, monkeypatch):
         with Session(engine) as session:
             e1 = _make_entity(session, "e1")
