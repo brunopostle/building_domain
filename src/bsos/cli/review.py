@@ -5,7 +5,7 @@ import uuid
 from datetime import datetime, timezone
 
 import typer
-from sqlmodel import Session, select, func
+from sqlmodel import Session, select, func, text
 
 from bsos.persistence.models import (
     AbstractionNodeRow, AssertionRow, ConfigRow, ConflictPairRow, ConstraintRow,
@@ -225,6 +225,125 @@ def _review_conflicts(session: Session, limit: int, stats: bool) -> int:
     return reviewed
 
 
+def _cyclic_groups(session: Session) -> list[list[ProcessRelationRow]]:
+    """Group process_relations conflicted by cycle detection (Sub-task 3) into
+    their cyclic components.
+
+    Cycle detection (conflict_detection._run_cycle_detection) marks every edge
+    in a strongly-connected component conflicted directly, with no
+    conflict_pairs row — a cycle is N-shaped, not pair-shaped. That means
+    these rows can't be found via ConflictPairRow like the pair-shaped
+    conflicts _review_conflicts handles; the query below (status='conflicted'
+    with no conflict_pairs row) is exactly the complement set, and is grouped
+    by connected component so a reviewer sees the whole cycle at once instead
+    of one arbitrary edge (building_domain-8lp).
+    """
+    import networkx as nx
+
+    ids = [
+        r[0] for r in session.exec(
+            text(
+                "SELECT id FROM process_relations WHERE status='conflicted'"
+                " AND id NOT IN ("
+                "  SELECT item_a_id FROM conflict_pairs"
+                "  UNION SELECT item_b_id FROM conflict_pairs"
+                ")"
+            )
+        ).all()
+    ]
+    if not ids:
+        return []
+
+    rows = [r for r in (session.get(ProcessRelationRow, i) for i in ids) if r is not None]
+
+    g = nx.Graph()
+    edges: dict[tuple[str, str], list[ProcessRelationRow]] = {}
+    for row in rows:
+        g.add_edge(row.predecessor_id, row.successor_id)
+        edges.setdefault((row.predecessor_id, row.successor_id), []).append(row)
+
+    groups = []
+    for component in nx.connected_components(g):
+        group_rows = [
+            row
+            for (pred, succ), rows_ in edges.items()
+            if pred in component and succ in component
+            for row in rows_
+        ]
+        if group_rows:
+            groups.append(group_rows)
+    return groups
+
+
+def _review_cycles(session: Session, limit: int, stats: bool) -> int:
+    """Review process_relation edges conflicted by cycle detection, grouped by
+    cyclic component (see _cyclic_groups)."""
+    groups = _cyclic_groups(session)
+
+    if stats:
+        total_edges = sum(len(g) for g in groups)
+        typer.echo(f"Cycle-conflicted process_relations: {total_edges} edge(s) in {len(groups)} cycle(s)")
+        return 0
+
+    reviewed = 0
+    shown = 0
+    for group in groups:
+        if shown >= limit:
+            break
+        group = [r for r in group if r.status == "conflicted"]
+        if not group:
+            continue
+        shown += 1
+
+        entity_ids: set[str] = set()
+        for row in group:
+            entity_ids |= {row.predecessor_id, row.successor_id}
+        names = _entity_names(session, entity_ids)
+
+        typer.echo(f"\n[cycle: {len(group)} edge(s)]")
+        for i, row in enumerate(group):
+            typer.echo(f"  [{i}] {_conflict_row_text(row, 'process_relation', names)}")
+
+        decision = typer.prompt(
+            "  Action [break=<indices to deprecate, comma-separated, e.g. break=0,2> "
+            "/ keep-all (not actually a conflict) / d=deprecate-all / defer]",
+            default="defer",
+        ).strip().lower()
+
+        if decision.startswith("break="):
+            idxs = {int(x.strip()) for x in decision[len("break="):].split(",") if x.strip().isdigit()}
+            if not idxs:
+                typer.echo("  → no valid indices given, deferred")
+                continue
+            rationale = f"cycle review: broke cycle by deprecating edge(s) {sorted(idxs)}"
+            for i, row in enumerate(group):
+                if i in idxs:
+                    _set_status(session, row, "process_relation", "deprecated", "reject", rationale)
+                else:
+                    _set_status(session, row, "process_relation", "accepted", "accept", rationale)
+            session.commit()
+            reviewed += 1
+            typer.echo(f"  → deprecated {sorted(idxs)}, accepted the rest")
+        elif decision == "keep-all":
+            rationale = "cycle review: not actually a conflict, all edges correct"
+            for row in group:
+                _set_status(session, row, "process_relation", "accepted", "accept", rationale)
+            session.commit()
+            reviewed += 1
+            typer.echo("  → kept all (accepted)")
+        elif decision == "d":
+            rationale = "cycle review: deprecated all edges in cycle"
+            for row in group:
+                _set_status(session, row, "process_relation", "deprecated", "reject", rationale)
+            session.commit()
+            reviewed += 1
+            typer.echo("  → deprecated all")
+        else:
+            typer.echo("  → Deferred")
+
+    return reviewed
+
+
 def _review_abstractions(session: Session, limit: int, stats: bool) -> int:
     """Review status='proposed' AbstractionNodeRow rows blocking the compress queue."""
     from bsos.normalization.pass10c import ABSTRACTION_QUEUE_CAP
@@ -291,8 +410,9 @@ def _compute_threshold(session: Session) -> int:
 def review_pending(
     type_filter: str = typer.Option(
         "all", "--type", "-t",
-        help="Filter by type: predicate | spatial-relation | conflict | abstraction | all "
-             "(conflict and abstraction must be requested explicitly, not covered by 'all')",
+        help="Filter by type: predicate | spatial-relation | conflict | process_relation | "
+             "abstraction | all (conflict, process_relation and abstraction must be "
+             "requested explicitly, not covered by 'all')",
     ),
     limit: int = typer.Option(20, "--limit", "-n", help="Max items to show"),
     stats: bool = typer.Option(False, "--stats", help="Show stats only, no interactive review"),
@@ -307,6 +427,13 @@ def review_pending(
             reviewed = _review_conflicts(session, limit, stats)
         if not stats:
             typer.echo(f"\n{reviewed} item(s) actioned." if reviewed else "\nNo conflicted pairs actioned.")
+        return
+
+    if type_filter == "process_relation":
+        with session:
+            reviewed = _review_cycles(session, limit, stats)
+        if not stats:
+            typer.echo(f"\n{reviewed} item(s) actioned." if reviewed else "\nNo cycle-conflicted process_relations actioned.")
         return
 
     if type_filter == "abstraction":

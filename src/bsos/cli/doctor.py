@@ -86,6 +86,32 @@ def doctor(
                 session.commit()
                 _fixed(f"{len(orphaned)} assertion(s) reset to proposed")
 
+        # ── Check 2b: cycle-conflicted process_relations pending review ──────
+        # Cycle detection (conflict_detection._run_cycle_detection) marks every
+        # edge in a strongly-connected component conflicted directly, with no
+        # conflict_pairs row (a cycle is N-shaped, not pair-shaped). Unlike
+        # check 2's assertions, these rows are legitimately conflicted — do
+        # not reset them to proposed, that would discard real cycle-detection
+        # output. They're reviewed via `bsos review pending --type
+        # process_relation` (grouped by cycle), not via conflict_pairs
+        # (building_domain-8lp).
+        pr_cycle_conflicted = session.exec(
+            text(
+                "SELECT id FROM process_relations WHERE status='conflicted'"
+                " AND id NOT IN ("
+                "  SELECT item_a_id FROM conflict_pairs"
+                "  UNION SELECT item_b_id FROM conflict_pairs"
+                ")"
+            )
+        ).all()
+        if not pr_cycle_conflicted:
+            typer.echo("  [OK] no cycle-conflicted process_relations pending review")
+        else:
+            _fail(
+                f"{len(pr_cycle_conflicted)} process_relation(s) conflicted by cycle"
+                " detection — resolve via: bsos review pending --type process_relation",
+            )
+
         # ── Check 3: pending_force_refs with validation_failure ───────────────
         vf_rows = session.exec(
             select(PendingForceRefRow).where(
