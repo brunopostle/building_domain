@@ -2,6 +2,51 @@
 
 BSOS is a structured building domain knowledge base that makes implicit architectural and construction knowledge explicitly retrievable by LLM AI agents working with BIM/IFC models. LLM agents already contain broad building domain knowledge, but this knowledge does not reliably emerge at the point of need: an agent asked to sequence construction activities from an IFC model may correctly identify all the building elements but fail to apply rules like *"windows are inserted into masonry walls after the walls are built"* or *"internal finishes cannot start until the roof is watertight"*. BSOS surfaces this knowledge as a queryable graph, accessible via MCP tools, so agents can explicitly retrieve relevant domain constraints rather than relying on it being spontaneously recalled.
 
+## What Agents Can Do With It
+
+BSOS exposes ~20,700 assertions over ~19,000 entities as 13 MCP tools, covering
+requirements, dependencies, constraints, failure modes, Alexander-style patterns,
+spatial relations, and construction process ordering — plus tools that check an
+already-loaded IFC model directly against that knowledge (compliance, clash
+rationale, anti-pattern sweeps, pattern critique).
+
+| Tool | Description |
+|------|-------------|
+| `search_entities` | Semantic search — find entities by free-text or IFC element name |
+| `get_requirements` | What a building element requires (materials, activities, other elements) |
+| `get_dependencies` | Dependency graph — what depends on what |
+| `get_constraints` | Dimensional and performance constraint rules |
+| `get_failure_modes` | Anti-patterns and failure modes with mitigations |
+| `get_patterns` | Alexander-style design patterns linked to an entity |
+| `get_forces` | Design forces (pressures) acting on an entity |
+| `get_spatial_relations` | Spatial topology (above, adjacent, encloses, …) |
+| `get_process_sequence` | Construction process ordering for an entity |
+| `check_model` | Full requirements/constraints/spatial/anti-pattern compliance report for a loaded IFC model file |
+| `check_prerequisites` | Design-time guardrail — prerequisites for an entity not yet evidenced in a loaded IFC model, call before ifc_edit/ifc_new |
+| `sweep_failure_modes` | Anti-pattern sweep — every IFC class, MEP system, space, and component/material present in a loaded model checked against known BSOS failure modes |
+| `annotate_clash` | Runs a geometric clash check for an element and annotates each clashing pair with BSOS spatial-relation/failure-mode rationale, instead of a bare "X intersects Y" |
+| `critique_patterns` | Alexander-pattern spatial critique — checks each resolved space's patterns (e.g. "light on two sides") against model-derived facts, citing the pattern's actual recorded forces as rationale |
+
+**Example — asking "what does a foundation need, structurally speaking?"**
+
+```
+Tool: get_requirements("Foundation")
+
+Foundation requires:
+  • Concrete                      conf=0.95  [engineering]
+  • Formwork                      conf=0.92  [engineering]
+  • Structural Engineering Design conf=0.98  [engineering]
+  • Footing                       conf=0.98  [engineering]
+  • Damp Proof Course             conf=0.93  [physical]  (depends_on)
+  • Reinforcement Bar             conf=0.93  [engineering]
+  • Excavation                    conf=0.97  [engineering]
+  • Soil Investigation            conf=0.98  [engineering]
+```
+
+Every result is a citable, confidence-scored assertion rather than a generic LLM
+guess. See **[MCP_DEMO.md](MCP_DEMO.md)** for the full walkthrough, including
+model-checking tools run against a loaded IFC file.
+
 ## User Stories
 
 **Construction scheduling** — As an AI agent generating a construction programme from an IFC model, I need sequencing dependencies between building elements so I can order activities correctly without violating construction logic.

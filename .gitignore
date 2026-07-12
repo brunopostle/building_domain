@@ -24,3 +24,8 @@ data/bsos_snapshot.json
 # 100MB+ and duplicate the git-tracked data/snapshot/ export anyway).
 *.db.bak-*
 compliance_report.txt
+
+# Derived cache built from bsos.db by `bsos build-graph` (default output
+# path). Like bsos.db itself, this goes stale the moment the DB changes, so
+# it is never committed — regenerate locally with `bsos build-graph`.
+bsos_graph.pkl
