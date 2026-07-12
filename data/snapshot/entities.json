@@ -7429,7 +7429,7 @@
     "name": "Roofing Membrane",
     "entity_type": "material",
     "description": "A weatherproof sheet material (e.g., PVC, TPO, modified bitumen) applied as the top layer of a flat or low-slope roof.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -10201,7 +10201,7 @@
     "name": "Load-Bearing Wall",
     "entity_type": "component",
     "description": "A structural wall that supports vertical loads from floors, roofs, or other building elements above.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -12334,7 +12334,7 @@
     "name": "Radiant Ceiling Panel",
     "entity_type": "component",
     "description": "A ceiling-mounted panel containing embedded hydronic tubing or electric elements for heating or cooling by radiation.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -14854,7 +14854,7 @@
     "name": "Wall Finish",
     "entity_type": "material",
     "description": "The surface treatment applied to corridor walls, including paint, wallcovering, wainscoting, or impact-resistant panels.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -17014,7 +17014,7 @@
     "name": "Handrails & Guardrails",
     "entity_type": "component",
     "description": "Safety railing systems installed along aisles, tier edges, and ramps to meet accessibility and code requirements.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -18733,7 +18733,7 @@
     "name": "Liquid-Applied Membrane",
     "entity_type": "material",
     "description": "A cold or hot fluid-applied coating that cures to form a seamless elastomeric waterproof barrier on roofs, decks, and below-grade walls.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -24934,7 +24934,7 @@
     "name": "Kitchen Base Cabinets",
     "entity_type": "component",
     "description": "Floor-mounted cabinet units that support countertops and provide storage in kitchen layouts.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -24943,7 +24943,7 @@
     "name": "Kitchen Wall Cabinets",
     "entity_type": "component",
     "description": "Wall-mounted upper storage cabinets installed above countertops in kitchens.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -25753,7 +25753,7 @@
     "name": "Scaffold Ladders / Stairs",
     "entity_type": "component",
     "description": "Integrated access ladders or stair towers used for safe climbing during dismantling operations.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -28777,7 +28777,7 @@
     "name": "Bicycle Parking Facility",
     "entity_type": "space",
     "description": "A structured area providing secure bicycle racks or lockers, integrated into the building's parking or entry zone.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -31387,7 +31387,7 @@
     "name": "Acoustic Wall Paneling",
     "entity_type": "material",
     "description": "Sound-absorbent wall cladding, often fabric-wrapped, installed to control reverberation in music venues.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -36346,7 +36346,7 @@
     "name": "Pergola or Trellis Structure",
     "entity_type": "component",
     "description": "Fixed overhead shading structure with beams or lattice, supported on columns anchored into the square's paving.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -36409,7 +36409,7 @@
     "name": "Rooftop Terrace",
     "entity_type": "space",
     "description": "A flat, usable outdoor area on top of a building's roof, often surfaced with paving or decking and bounded by parapets or guardrails.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -37372,7 +37372,7 @@
     "name": "Signage / Wayfinding",
     "entity_type": "component",
     "description": "Fixed mounted signs, directories, or pylons providing directional information to building users on the common land.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -39073,7 +39073,7 @@
     "name": "Built-In Wardrobes",
     "entity_type": "component",
     "description": "Fixed storage cabinetry installed within bedroom alcoves or along walls for clothes and linen.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -41485,7 +41485,7 @@
     "name": "Communal Seating Benches",
     "entity_type": "component",
     "description": "Fixed or heavy long tables and attached benches arranged in rows for high-density social seating.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -42511,7 +42511,7 @@
     "name": "Lighting and Emergency Lighting System",
     "entity_type": "system",
     "description": "The general, task, accent, and emergency egress lighting fixtures and controls installed across interior and exterior spaces.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -43141,7 +43141,7 @@
     "name": "Structural Columns",
     "entity_type": "component",
     "description": "Vertical compression members that support beams and slabs within the main building's frame.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -45733,7 +45733,7 @@
     "name": "Roof Access / Hatch",
     "entity_type": "component",
     "description": "A hinged or sliding door assembly in the roof plane providing maintenance access to the roof surface.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -51115,7 +51115,7 @@
     "name": "Whiteboard or Marker Board",
     "entity_type": "component",
     "description": "A wall-mounted writable surface for sketching ideas, notes, and diagrams during meetings.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -56056,7 +56056,7 @@
     "name": "Fixed Dining Table",
     "entity_type": "component",
     "description": "A permanently anchored table surface in a food-court, restaurant, or cafeteria setting, often with attached or non-relocatable legs.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -56488,7 +56488,7 @@
     "name": "Fixed Auditorium/Stadium Seating",
     "entity_type": "component",
     "description": "Row-mounted tiered seats permanently installed to form a stepped or sloped sitting circle.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -56542,7 +56542,7 @@
     "name": "Railing/Guardrail System",
     "entity_type": "component",
     "description": "Fixed barriers at the perimeter or between tiers of the sitting circle for safety and access control.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -60295,7 +60295,7 @@
     "name": "Floor Drain & Trench",
     "entity_type": "component",
     "description": "Plumbing fittings integrated into the floor slab for water collection, including drains, trenches, and channel grates.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -61465,7 +61465,7 @@
     "name": "Membrane Tape and Seam Sealant",
     "entity_type": "material",
     "description": "Specialized adhesive tapes and sealants used to bond membrane laps and seal penetrations for continuous air and water tightness.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
@@ -63904,7 +63904,7 @@
     "name": "Interior Partition Wall",
     "entity_type": "component",
     "description": "A non-load-bearing wall assembly that divides interior space, typically comprising framing, insulation, and finishes.",
-    "status": "proposed",
+    "status": "merged",
     "source_model": "deepseek-chat",
     "created_at": "2026-06-29T06:35:13.254244"
   },
