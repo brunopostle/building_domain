@@ -819,6 +819,48 @@ def check_prerequisites_tool(entity: str, ifc_path: str, db_path: str, _embedder
     return module.check_prerequisites_report(ifc_file, Path(db_path), entity, _embedder=_embedder)
 
 
+def sweep_failure_modes_tool(ifc_path: str, db_path: str,
+                             min_confidence: float = 0.0, _embedder=None) -> dict:
+    """Anti-pattern sweep — scan every entity present in a loaded IFC model
+    against known BSOS failure modes, producing a red-flag report.
+
+    Distinct from ifc_validate (geometry/schema only): this cross-references
+    what is actually modelled against get_failure_modes' underlying data
+    across four channels — IFC classes actually instantiated (exact match
+    against the schema-authoritative ifc_class entities), MEP systems present,
+    resolved spaces, and components/materials named in the model (semantic
+    match). It is advisory rather than proof-based: a flagged failure mode
+    means BSOS knows this kind of thing can fail this way, not that the model
+    proves the failure is occurring — unlike check_model's antipattern
+    section, which only fires when the deterministic signal engine confirms
+    the failure condition.
+
+    ifc_path is a filesystem path to an .ifc file (e.g. one already loaded via
+    the `ifc` server's ifc_load). min_confidence filters out low-confidence
+    antipattern rows.
+
+    Returns a summary (entities scanned, entities with flags, total failure
+    modes) plus a flat list of flags, each with scope (ifc_class/system/space/
+    component_or_material), the resolved bsos entity, the model evidence that
+    triggered the match, and its full failure_modes (name/conditions/
+    consequences/mitigations/confidence).
+    """
+    from pathlib import Path
+
+    module = _get_compliance_report_module()
+    if module is None:
+        return {"error": "compliance_report_unavailable",
+                "detail": "scripts/ifc_compliance_report.py not found — this "
+                          "tool requires a full repo checkout, not a packaged install."}
+
+    ifc_file = Path(ifc_path)
+    if not ifc_file.exists():
+        return {"error": "ifc_file_not_found", "query": ifc_path}
+
+    return module.sweep_failure_modes_report(ifc_file, Path(db_path),
+                                             min_confidence=min_confidence, _embedder=_embedder)
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -941,5 +983,9 @@ def create_server(db_path: str) -> FastMCP:
     @mcp.tool(description=check_prerequisites_tool.__doc__)
     def check_prerequisites(entity: str, ifc_path: str) -> dict:
         return check_prerequisites_tool(entity, ifc_path, db_path)
+
+    @mcp.tool(description=sweep_failure_modes_tool.__doc__)
+    def sweep_failure_modes(ifc_path: str, min_confidence: float = 0.0) -> dict:
+        return sweep_failure_modes_tool(ifc_path, db_path, min_confidence)
 
     return mcp

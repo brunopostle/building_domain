@@ -148,6 +148,35 @@ def get_antipatterns(db_path: Path, entity_name: str) -> list[tuple]:
         """, (entity_name,)).fetchall()
 
 
+def get_failure_modes_full(db_path: Path, entity_name: str,
+                           min_confidence: float = 0.0) -> list[dict]:
+    """Full failure-mode records for an entity (name/conditions/consequences/
+    mitigations/confidence), matching the `get_failure_modes` MCP tool's
+    shape. Used by the failure-mode sweep (building_domain-l5w.5), which
+    surfaces mitigations rather than just a bare antipattern name.
+    """
+    with sqlite3.connect(db_path) as conn:
+        rows = conn.execute("""
+            SELECT ap.name, ap.conditions, ap.consequences, ap.mitigations, ap.confidence
+            FROM antipatterns ap
+            JOIN entities e ON e.id = ap.subject_id
+            WHERE e.name = ?
+              AND ap.status != 'deprecated'
+              AND ap.confidence >= ?
+            ORDER BY ap.confidence DESC
+        """, (entity_name, min_confidence)).fetchall()
+    out = []
+    for name, conditions, consequences, mitigations, confidence in rows:
+        out.append({
+            "name": name,
+            "conditions": json.loads(conditions or "[]"),
+            "consequences": json.loads(consequences or "[]"),
+            "mitigations": json.loads(mitigations or "[]"),
+            "confidence": confidence,
+        })
+    return out
+
+
 def get_entity_type(db_path: Path, entity_name: str) -> str | None:
     """entity_type of an exact (already-resolved) bsos entity name, or None."""
     with sqlite3.connect(db_path) as conn:
@@ -183,20 +212,23 @@ def get_process_predecessors(db_path: Path, entity_name: str) -> list[tuple]:
     return sorted(best.values(), key=lambda r: -r[2])
 
 
-def semantic_match_entity(session: Session, query: str, entity_type: str | None = None,
+def semantic_match_entity(session: Session, query: str,
+                          entity_type: str | set[str] | None = None,
                           min_score: float = SPACE_MATCH_MIN_SCORE, _embedder=None) -> str | None:
     """Best-matching bsos entity name for free text, or None below min_score.
 
-    Reuses the same embedding-similarity ranking as the bsos `search_entities`
-    MCP tool, so callers resolve arbitrary IFC names/tags against the
-    knowledge graph instead of a hardcoded name lookup table.
+    entity_type accepts a single type, a set of acceptable types, or None for
+    any type. Reuses the same embedding-similarity ranking as the bsos
+    `search_entities` MCP tool, so callers resolve arbitrary IFC names/tags
+    against the knowledge graph instead of a hardcoded name lookup table.
     """
     if not query:
         return None
+    allowed = {entity_type} if isinstance(entity_type, str) else entity_type
     result = search_entities_tool(session, query, max_results=5, min_score=min_score,
                                   _embedder=_embedder)
     for r in result["results"]:
-        if entity_type is None or r["entity_type"] == entity_type:
+        if allowed is None or r["entity_type"] in allowed:
             return r["name"]
     return None
 
@@ -460,6 +492,89 @@ def check_prerequisites_report(ifc_path: Path, db_path: Path, entity_name: str,
             "missing_hard_constraints": len(missing_hard),
         },
         "recommendation": recommendation,
+    }
+
+
+# ── Anti-pattern sweep across a whole model (building_domain-l5w.5) ──────────
+# get_failure_modes is normally called per-entity by an agent that already
+# knows what to ask about. This sweeps every kind of thing actually present in
+# a loaded model instead: IFC classes (exact match against the schema-
+# authoritative `ifc_class` entities seeded by `bsos seed-ifc-classes`), MEP
+# systems (presence, same vocabulary as build_facts), spaces (same resolver as
+# resolve_space_entity), and components/materials named in the model (same
+# embedding-similarity text matching as the prerequisite checker). Distinct
+# from ifc_validate (geometry/schema only) and from report_antipatterns (which
+# only fires when the deterministic signal engine can prove a failure
+# condition) -- this is an advisory "here's what BSOS knows about things you
+# have modelled" sweep, not a proof-based check.
+FAILURE_MODE_MATCH_MIN_SCORE = SPACE_MATCH_MIN_SCORE
+
+
+def sweep_failure_modes_report(ifc_path: Path, db_path: Path,
+                               min_confidence: float = 0.0, _embedder=None) -> dict:
+    """Scan every entity type present in a loaded IFC model against known
+    BSOS failure modes (antipatterns) and return a red-flag report.
+    """
+    ifc = ifcopenshell.open(str(ifc_path))
+    engine = create_db_engine(str(db_path))
+    embedder = _embedder or _get_embedder()
+
+    flags: list[dict] = []
+    seen: set[tuple[str, str]] = set()
+
+    def _add(scope: str, entity_name: str, evidence: str) -> None:
+        key = (scope, entity_name)
+        if key in seen:
+            return
+        seen.add(key)
+        modes = get_failure_modes_full(db_path, entity_name, min_confidence)
+        if modes:
+            flags.append({
+                "scope": scope,
+                "entity": entity_name,
+                "evidence": evidence,
+                "failure_modes": modes,
+            })
+
+    # ── ifc_class channel: exact match against seeded schema classes ────────
+    present_classes = sorted({p.is_a() for p in ifc.by_type("IfcProduct")})
+    for cls in present_classes:
+        if get_entity_type(db_path, cls) == "ifc_class":
+            count = len(ifc.by_type(cls))
+            _add("ifc_class", cls, f"{count} {cls} instance(s) in model")
+
+    # ── system channel: same MEP presence vocabulary as build_facts ─────────
+    _mep_cache.clear()
+    for system in MEP_PRESENCE:
+        if mep_present(ifc, system) and get_entity_type(db_path, system) == "system":
+            _add("system", system, "system present in model")
+
+    with Session(engine) as session:
+        # ── space channel: same resolver as the compliance report ───────────
+        for space in ifc.by_type("IfcSpace"):
+            entity_name = resolve_space_entity(session, space, _embedder=embedder)
+            if entity_name:
+                _add("space", entity_name, f"space '{space.Name or '?'}'")
+
+        # ── component/material channel: same text-match as prerequisites ────
+        model_texts = collect_model_evidence_texts(ifc)
+        for text in model_texts:
+            entity_name = semantic_match_entity(
+                session, text, entity_type={"component", "material"},
+                min_score=FAILURE_MODE_MATCH_MIN_SCORE, _embedder=embedder)
+            if entity_name:
+                _add("component_or_material", entity_name, f"modelled as '{text}'")
+
+    flags.sort(key=lambda f: (-max(m["confidence"] for m in f["failure_modes"]), f["entity"]))
+
+    return {
+        "model": Path(ifc_path).name,
+        "summary": {
+            "entities_scanned": len(seen),
+            "entities_with_flags": len(flags),
+            "total_failure_modes": sum(len(f["failure_modes"]) for f in flags),
+        },
+        "flags": flags,
     }
 
 

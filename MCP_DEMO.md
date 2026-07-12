@@ -63,6 +63,7 @@ Add to `claude_desktop_config.json` (Linux: `~/.config/claude/`, macOS: `~/Libra
 | `get_process_sequence` | Construction process ordering for an entity |
 | `check_model` | Full requirements/constraints/spatial/anti-pattern compliance report for a loaded IFC model file |
 | `check_prerequisites` | Design-time guardrail — prerequisites for an entity not yet evidenced in a loaded IFC model, call before ifc_edit/ifc_new |
+| `sweep_failure_modes` | Anti-pattern sweep — every IFC class, MEP system, space, and component/material present in a loaded model checked against known BSOS failure modes |
 
 ## Example Session
 
@@ -263,11 +264,18 @@ compose them directly:
 - **`check_model`** (this server) — runs every space in a loaded IFC model against requirements,
   constraints, spatial relations, and anti-patterns in one compliance report, resolving each
   modelled space to a bsos entity via semantic search rather than a fixed space-type list.
+- **`check_prerequisites`** (this server) — design-time guardrail: before an `ifc_edit`/`ifc_new`
+  call, checks an entity's `get_process_sequence` predecessors and `must` constraints against text
+  already present in the loaded model, surfacing prerequisites BSOS says should precede it that
+  aren't yet evidenced.
+- **`sweep_failure_modes`** (this server) — anti-pattern sweep across four channels (IFC classes
+  actually instantiated, MEP systems present, resolved spaces, and components/materials named in
+  the model) against `get_failure_modes`' underlying data, producing an advisory red-flag report
+  distinct from `ifc_validate`'s geometry/schema-only checks.
 - **`scripts/ifc_boq_check.py`** — cross-references a model's costed/quantified elements against
   `get_requirements` to flag likely bill-of-quantities omissions (e.g. a costed foundation with
   no damp-proof-course line item).
 
 Further compositions are tracked under `building_domain-l5w` (`bd show building_domain-l5w`)
-and not yet built: clash reports annotated with BSOS rationale, a design-time advisor that checks
-`get_process_sequence` prerequisites before an `ifc_edit`/`ifc_new` call, and an Alexander-pattern
-spatial critique using `get_patterns` + `get_forces` against derived model facts.
+and not yet built: clash reports annotated with BSOS rationale, and an Alexander-pattern spatial
+critique using `get_patterns` + `get_forces` against derived model facts.

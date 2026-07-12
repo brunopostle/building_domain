@@ -425,3 +425,205 @@ def test_check_prerequisites_report_evidenced_prerequisite_ok_to_proceed(tmp_pat
     assert result["prerequisites"][0]["evidenced"] is True
     assert result["summary"]["missing_hard_constraints"] == 0
     assert result["recommendation"] == "OK to proceed"
+
+
+# ── Anti-pattern sweep across a whole model (building_domain-l5w.5) ─────────
+
+def test_get_failure_modes_full_returns_decoded_fields(tmp_path):
+    from bsos.persistence.models import AntiPatternRow
+
+    db_path = tmp_path / "failure_modes.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-window", name="Window", entity_type="component",
+                        source_model="test", created_at=NOW))
+        s.add(AntiPatternRow(
+            id="ap1", name="Condensation on cold glazing", subject_id="e-window",
+            conditions='["single glazing", "high humidity"]',
+            consequences='["mould growth"]', mitigations='["double glazing"]',
+            source_model="test", created_at=NOW, confidence=0.8,
+            status="accepted", knowledge_origin="physical"))
+        s.commit()
+
+    modes = cr.get_failure_modes_full(db_path, "Window")
+    assert modes == [{
+        "name": "Condensation on cold glazing",
+        "conditions": ["single glazing", "high humidity"],
+        "consequences": ["mould growth"],
+        "mitigations": ["double glazing"],
+        "confidence": 0.8,
+    }]
+
+
+def test_get_failure_modes_full_filters_by_min_confidence(tmp_path):
+    from bsos.persistence.models import AntiPatternRow
+
+    db_path = tmp_path / "failure_modes_conf.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-window", name="Window", entity_type="component",
+                        source_model="test", created_at=NOW))
+        s.add(AntiPatternRow(
+            id="ap1", name="Low-confidence flag", subject_id="e-window",
+            source_model="test", created_at=NOW, confidence=0.3,
+            status="accepted", knowledge_origin="physical"))
+        s.commit()
+
+    assert cr.get_failure_modes_full(db_path, "Window", min_confidence=0.5) == []
+    assert len(cr.get_failure_modes_full(db_path, "Window", min_confidence=0.0)) == 1
+
+
+class _FakeSweepProduct:
+    def __init__(self, cls, name=None, object_type=None):
+        self._cls = cls
+        self.Name = name
+        self.ObjectType = object_type
+
+    def is_a(self, other=None):
+        return self._cls if other is None else self._cls == other
+
+
+class _FakeSweepIfc:
+    """Combined fake: by_type("IfcProduct"/"IfcMaterial"/"IfcSpace"/<class>)."""
+    def __init__(self, products=None, materials=None, spaces=None):
+        self._products = products or []
+        self._materials = materials or []
+        self._spaces = spaces or []
+
+    def by_type(self, cls):
+        if cls == "IfcProduct":
+            return self._products
+        if cls == "IfcMaterial":
+            return self._materials
+        if cls == "IfcSpace":
+            return self._spaces
+        return [p for p in self._products if p.is_a(cls)]
+
+
+def _add_antipattern(session, eid, entity_name, entity_type, ap_name, confidence=0.8):
+    from bsos.persistence.models import AntiPatternRow
+
+    session.add(EntityRow(id=eid, name=entity_name, entity_type=entity_type,
+                          source_model="test", created_at=NOW))
+    session.add(AntiPatternRow(
+        id=f"ap-{eid}", name=ap_name, subject_id=eid,
+        source_model="test", created_at=NOW, confidence=confidence,
+        status="accepted", knowledge_origin="physical"))
+    session.commit()
+
+
+def test_sweep_failure_modes_ifc_class_channel(tmp_path, monkeypatch):
+    db_path = tmp_path / "sweep_class.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        _add_antipattern(s, "e-window-class", "IfcWindow", "ifc_class",
+                         "Window fails to seal")
+
+    fake_ifc = _FakeSweepIfc(products=[_FakeSweepProduct("IfcWindow")])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+
+    result = cr.sweep_failure_modes_report(
+        Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    assert result["summary"]["entities_with_flags"] == 1
+    flag = result["flags"][0]
+    assert flag["scope"] == "ifc_class"
+    assert flag["entity"] == "IfcWindow"
+    assert flag["evidence"] == "1 IfcWindow instance(s) in model"
+    assert flag["failure_modes"][0]["name"] == "Window fails to seal"
+
+
+def test_sweep_failure_modes_ignores_uninstantiated_ifc_classes(tmp_path, monkeypatch):
+    db_path = tmp_path / "sweep_class_absent.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        _add_antipattern(s, "e-window-class", "IfcWindow", "ifc_class",
+                         "Window fails to seal")
+
+    fake_ifc = _FakeSweepIfc(products=[_FakeSweepProduct("IfcDoor")])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+
+    result = cr.sweep_failure_modes_report(
+        Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    assert result["flags"] == []
+
+
+def test_sweep_failure_modes_system_channel(tmp_path, monkeypatch):
+    db_path = tmp_path / "sweep_system.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        _add_antipattern(s, "e-lighting", "Lighting System", "system",
+                         "Lighting flicker under low load")
+
+    fake_ifc = _FakeSweepIfc(products=[_FakeSweepProduct("IfcLightFixture")])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+
+    result = cr.sweep_failure_modes_report(
+        Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    scopes = {f["entity"]: f["scope"] for f in result["flags"]}
+    assert scopes.get("Lighting System") == "system"
+
+
+def test_sweep_failure_modes_space_channel(tmp_path, monkeypatch):
+    db_path = tmp_path / "sweep_space.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        _add_antipattern(s, "e-kitchen", "Kitchen", "space",
+                         "Grease trap overflow")
+
+    fake_ifc = _FakeSweepIfc(spaces=[_FakeSpace()])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr, "resolve_space_entity", lambda session, space, _embedder=None: "Kitchen")
+
+    result = cr.sweep_failure_modes_report(
+        Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    scopes = {f["entity"]: f["scope"] for f in result["flags"]}
+    assert scopes.get("Kitchen") == "space"
+
+
+def test_sweep_failure_modes_component_channel_and_dedup(tmp_path, monkeypatch):
+    db_path = tmp_path / "sweep_component.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        _add_antipattern(s, "e-counter", "Kitchen Counter", "component",
+                         "Countertop staining")
+        s.add(EmbeddingRow(item_type="entity", item_id="e-counter", model=SEARCH_EMBEDDING_MODEL,
+                           dim=DIM, content_hash="test", vector=_vec([1.0, 0.0, 0.0, 0.0]).tobytes()))
+        s.commit()
+
+    # Two distinct, unrelated product names both fall back to the stub
+    # embedder's neutral default vector and so both resolve to the same
+    # entity -- the sweep must report it once, not twice.
+    fake_ifc = _FakeSweepIfc(products=[
+        _FakeSweepProduct("IfcFurniture", name="Cabinet"),
+        _FakeSweepProduct("IfcFurniture", name="Worktop"),
+    ])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+
+    result = cr.sweep_failure_modes_report(
+        Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    matches = [f for f in result["flags"] if f["entity"] == "Kitchen Counter"]
+    assert len(matches) == 1
+    assert matches[0]["scope"] == "component_or_material"
+
+
+def test_sweep_failure_modes_min_confidence_filters_flags(tmp_path, monkeypatch):
+    db_path = tmp_path / "sweep_conf.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        _add_antipattern(s, "e-window-class", "IfcWindow", "ifc_class",
+                         "Window fails to seal", confidence=0.3)
+
+    fake_ifc = _FakeSweepIfc(products=[_FakeSweepProduct("IfcWindow")])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+
+    result = cr.sweep_failure_modes_report(
+        Path("dummy.ifc"), db_path, min_confidence=0.5, _embedder=_StubEmbedder())
+
+    assert result["flags"] == []
+    assert result["summary"]["entities_scanned"] == 1
+    assert result["summary"]["entities_with_flags"] == 0

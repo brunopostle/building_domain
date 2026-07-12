@@ -457,3 +457,27 @@ def test_check_prerequisites_missing_ifc_file(tmp_path):
     result = check_prerequisites_tool(
         "Interior Finishes", str(tmp_path / "nonexistent.ifc"), str(db))
     assert result["error"] == "ifc_file_not_found"
+
+
+# ---------------------------------------------------------------------------
+# sweep_failure_modes (building_domain-l5w.5)
+# ---------------------------------------------------------------------------
+# Full behaviour (four detection channels against a real IFC model) is
+# covered with fakes/stub embedder in tests/unit/test_compliance_report.py.
+# What's covered here is registration and the fast-fail path that doesn't
+# require loading the model or a real IFC file.
+
+def test_sweep_failure_modes_registered_on_server(tmp_path):
+    db = tmp_path / "reg.db"
+    server = create_server(str(db))
+    import asyncio
+    tools = asyncio.run(server.list_tools())
+    assert "sweep_failure_modes" in {t.name for t in tools}
+
+
+def test_sweep_failure_modes_missing_ifc_file(tmp_path):
+    from bsos.mcp_server.server import sweep_failure_modes_tool
+    db = tmp_path / "reg.db"
+    create_db_engine(str(db))
+    result = sweep_failure_modes_tool(str(tmp_path / "nonexistent.ifc"), str(db))
+    assert result["error"] == "ifc_file_not_found"
