@@ -1177,14 +1177,17 @@ The description below is the **logical model** — what must happen before an it
 On ingestion of any new extracted item:
 
 1. Run embedding similarity search against existing items on the same subject to find candidates
-2. For each candidate above similarity threshold, run a dedicated LLM classification call:
+   * the text used for embedding and for the LLM comparison prompt MUST include the resolved subject/object entity names alongside the predicate and rationale — text built from predicate + rationale alone lets unrelated pairs about entirely different entities collapse onto near-identical text (same predicate, similarly-worded rationale), which both defeats the similarity pre-filter's purpose and biases the downstream LLM call toward `contradictory` since it never sees which entities are actually involved
+2. Before invoking the LLM, apply a deterministic pre-filter to `AssertionRow` candidate pairs: skip LLM classification entirely unless the pair concerns the exact same two entities, in either direction (`{subject_id, object_id}` sets must match). Every predicate in this domain is one-to-many by construction — a subject may validly relate to several objects under the same predicate at once (e.g. "Wall supports Window" and "Wall supports Door" are both true) — so a pair sharing only one entity, whether same-subject-different-object or a chain where one assertion's object is the other's subject, is a different claim rather than a candidate contradiction, regardless of whether the predicate or wording matches. Pairs that fail this check are treated as **not contradictory** (novel) without an LLM call. This pre-filter does not apply to non-`AssertionRow` item types (constraints, patterns, abstraction nodes) — those remain fully eligible for LLM classification.
+3. For each remaining candidate above similarity threshold, run a dedicated LLM classification call:
    * prompt: given assertion A and assertion B, classify their relationship as one of: `duplicate | complementary | contradictory | unrelated`
    * use the classification result, not embedding distance alone, to determine the action
    * embedding similarity is only a cheap pre-filter; it cannot distinguish contradiction from complementarity
-3. If classified **duplicate** → merge: increment confidence, append provenance entry, do not create duplicate
-4. If classified **contradictory** → mark both as `conflicted`, add to human review queue
-5. If classified **complementary** or **unrelated** → treat as novel
-6. If **novel** → status remains `proposed`; promote to `accepted` when confidence threshold is reached or human accepts
+   * the prompt MUST require actual subject/object entity overlap before allowing `contradictory`, and MUST restate the one-to-many non-exclusivity guidance from step 2 so that borderline shapes the deterministic check does not catch (e.g. reversed pair direction, same-pair-different-predicate) are still judged correctly
+4. If classified **duplicate** → merge: increment confidence, append provenance entry, do not create duplicate
+5. If classified **contradictory** → mark both as `conflicted`, add to human review queue
+6. If classified **complementary** or **unrelated** → treat as novel
+7. If **novel** → status remains `proposed`; promote to `accepted` when confidence threshold is reached or human accepts
 
 For `physical` knowledge, contradictions are strong signals of either a bad extraction prompt or a genuine edge case. Edge cases MUST be captured as explicit exceptions on the relevant assertion rather than being silently resolved.
 
