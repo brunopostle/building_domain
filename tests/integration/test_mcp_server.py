@@ -506,3 +506,28 @@ def test_annotate_clash_missing_ifc_file(tmp_path):
     create_db_engine(str(db))
     result = annotate_clash_tool(str(tmp_path / "nonexistent.ifc"), 1, str(db))
     assert result["error"] == "ifc_file_not_found"
+
+
+# ---------------------------------------------------------------------------
+# critique_patterns (building_domain-l5w.6)
+# ---------------------------------------------------------------------------
+# Full behaviour (pattern classification + forced-derived rationale against a
+# real IFC model) is covered with fakes/stub embedder in
+# tests/unit/test_compliance_report.py. What's covered here is registration
+# and the fast-fail path that doesn't require loading the model or a real IFC
+# file.
+
+def test_critique_patterns_registered_on_server(tmp_path):
+    db = tmp_path / "reg.db"
+    server = create_server(str(db))
+    import asyncio
+    tools = asyncio.run(server.list_tools())
+    assert "critique_patterns" in {t.name for t in tools}
+
+
+def test_critique_patterns_missing_ifc_file(tmp_path):
+    from bsos.mcp_server.server import critique_patterns_tool
+    db = tmp_path / "reg.db"
+    create_db_engine(str(db))
+    result = critique_patterns_tool(str(tmp_path / "nonexistent.ifc"), str(db))
+    assert result["error"] == "ifc_file_not_found"

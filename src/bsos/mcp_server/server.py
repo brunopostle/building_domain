@@ -904,6 +904,54 @@ def annotate_clash_tool(ifc_path: str, element_id: int, db_path: str,
                                         scope=scope, _embedder=_embedder)
 
 
+def critique_patterns_tool(ifc_path: str, db_path: str,
+                           min_confidence: float = 0.0, _embedder=None) -> dict:
+    """Alexander-pattern spatial critique of every resolved space in a loaded
+    IFC model.
+
+    For each modelled space (resolved to a bsos entity the same way as
+    check_model), fetches its recorded get_patterns entries and, for the
+    subset with a deterministic geometric signal to test (currently: "light
+    on two sides" wording), evaluates it against facts derived from the model
+    -- including window_wall_count, which counts distinct walls carrying a
+    window rather than raw window instances, so a room with several windows
+    punched into a single facade is still correctly flagged as lit from only
+    one side. Patterns with no deterministic matcher are counted but not
+    evaluated.
+
+    Each result cites the forces recorded against the resolved space entity
+    (the same data `get_forces` returns) as rationale — e.g. "Improved
+    daylight penetration depth" traded against "Reduced glare risk from
+    single-side fenestration" — instead of generic advice, so a caller sees
+    the actual design tradeoff BSOS captured for this space rather than a
+    bare pass/fail.
+
+    ifc_path is a filesystem path to an .ifc file (e.g. one already loaded via
+    the `ifc` server's ifc_load). min_confidence filters out low-confidence
+    pattern/force rows.
+
+    Returns a summary (spaces scanned, checkable/unchecked pattern counts,
+    pass/fail totals) plus a list of critiques, each with the resolved space/
+    entity/pattern, problem/solution text, check status/detail, confidence,
+    the entity's cited forces, and the pattern's own directly-linked forces
+    (pattern_forces) when the corpus records that link.
+    """
+    from pathlib import Path
+
+    module = _get_compliance_report_module()
+    if module is None:
+        return {"error": "compliance_report_unavailable",
+                "detail": "scripts/ifc_compliance_report.py not found — this "
+                          "tool requires a full repo checkout, not a packaged install."}
+
+    ifc_file = Path(ifc_path)
+    if not ifc_file.exists():
+        return {"error": "ifc_file_not_found", "query": ifc_path}
+
+    return module.critique_patterns_report(ifc_file, Path(db_path),
+                                            min_confidence=min_confidence, _embedder=_embedder)
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -1035,5 +1083,9 @@ def create_server(db_path: str) -> FastMCP:
     def annotate_clash(ifc_path: str, element_id: int, clearance: float = 0.0,
                        tolerance: float = 0.002, scope: str = "storey") -> dict:
         return annotate_clash_tool(ifc_path, element_id, db_path, clearance, tolerance, scope)
+
+    @mcp.tool(description=critique_patterns_tool.__doc__)
+    def critique_patterns(ifc_path: str, min_confidence: float = 0.0) -> dict:
+        return critique_patterns_tool(ifc_path, db_path, min_confidence)
 
     return mcp

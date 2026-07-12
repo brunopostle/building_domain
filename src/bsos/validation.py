@@ -15,14 +15,16 @@ Facts schema (every key optional; a fact that is absent yields UNCHECKED for
 checks that need it, which is distinct from a fact that is present-but-empty
 yielding FAIL):
 
-    floor_materials  : list[str]  lower-case covering material names
-    window_count     : int        operable windows bounding the space
-    door_count       : int        doors bounding the space
-    systems_present  : list[str]  BSOS system names modelled ("Drainage System")
-    has_insulation   : bool       any wall assembly has an insulation layer
-    adjacent_usages  : list[str]  space usages sharing a boundary
-    floor_area_m2    : float      true (plan-projected) floor area in m²
-    ceiling_height_m : float      floor-to-ceiling height in m
+    floor_materials    : list[str]  lower-case covering material names
+    window_count       : int        operable windows bounding the space
+    window_wall_count  : int        distinct walls carrying a window bounding
+                                     the space (light-from-N-sides signal)
+    door_count         : int        doors bounding the space
+    systems_present    : list[str]  BSOS system names modelled ("Drainage System")
+    has_insulation     : bool       any wall assembly has an insulation layer
+    adjacent_usages    : list[str]  space usages sharing a boundary
+    floor_area_m2      : float      true (plan-projected) floor area in m²
+    ceiling_height_m   : float      floor-to-ceiling height in m
 
 The deterministic engine only covers rule shapes it has patterns for. Anything
 it cannot map returns status UNCHECKED with reason ``no_deterministic_matcher``
@@ -156,6 +158,25 @@ def classify_dimensional_constraint(
     return None
 
 
+# ── Free-text pattern name/problem/solution → checkable object ───────────────
+
+def classify_pattern(name: str, problem: str, solution: str) -> str | None:
+    """Map an Alexander-style pattern to a check object, or None if not
+    mechanically checkable.
+
+    Mirrors classify_constraint's keyword approach: most patterns are
+    qualitative design guidance ("Window-Connected Individual Workstations",
+    "Stair as Light Monitor") with no single geometric signal to test, so only
+    patterns with an unambiguous fact-derivable claim are mapped. Currently
+    covers "light on N sides" wording, the one shape build_facts already
+    exposes a distinct signal for (window_wall_count).
+    """
+    text = f"{name} {problem} {solution}".lower()
+    if "two sides" in text and ("light" in text or "daylight" in text or "window" in text):
+        return "Light on Two Sides"
+    return None
+
+
 # ── Verdict ──────────────────────────────────────────────────────────────────
 
 def evaluate(check_object: str, facts: dict) -> tuple[str, str]:
@@ -190,6 +211,16 @@ def evaluate(check_object: str, facts: dict) -> tuple[str, str]:
         if n is None:
             return UNCHECKED, "window_count not supplied"
         return (PASS, f"{n} window(s)") if n else (FAIL, "no windows found")
+
+    if obj == "Light on Two Sides":
+        n = facts.get("window_wall_count")
+        if n is None:
+            return UNCHECKED, "window_wall_count not supplied"
+        if n >= 2:
+            return PASS, f"windows on {n} distinct wall(s)"
+        if n == 1:
+            return FAIL, "windows on only 1 wall — not lit from two sides"
+        return FAIL, "no windows found"
 
     if obj in ("Doors", "Entrance Door", "External Door"):
         n = facts.get("door_count")

@@ -171,6 +171,43 @@ def test_evaluate_non_geometric_requirement_unchecked():
     assert status == v.UNCHECKED
 
 
+# ── classify_pattern ─────────────────────────────────────────────────────────
+
+@pytest.mark.parametrize("name,problem,solution", [
+    ("Light on Two Sides", "Rooms lit from only one side suffer from uneven "
+     "light distribution.", "Place windows on two sides of the room."),
+    ("Daylight From Two Sides for Room Ambiance", "Rooms lit from only one "
+     "side suffer harsh shadows.", "Add a second window wall."),
+    ("Light from Above or Two Sides to Reduce Glare",
+     "Windows on one side create glare.", "Add clerestory glazing or a "
+     "second window wall."),
+])
+def test_classify_pattern_light_on_two_sides(name, problem, solution):
+    assert v.classify_pattern(name, problem, solution) == "Light on Two Sides"
+
+
+def test_classify_pattern_unrelated_two_sides_wording_not_matched():
+    # "two sides" without any light/daylight/window context should not match.
+    assert v.classify_pattern(
+        "Accessible From Two Sides", "A corridor needs entry points.",
+        "Place doors at both ends.") is None
+
+
+def test_classify_pattern_unmapped_pattern_is_none():
+    assert v.classify_pattern(
+        "Window-Connected Individual Workstations",
+        "Workers in deep interior zones lack daylight.",
+        "Arrange workstations near windows.") is None
+
+
+def test_evaluate_light_on_two_sides():
+    assert v.evaluate("Light on Two Sides", {})[0] == v.UNCHECKED
+    assert v.evaluate("Light on Two Sides", {"window_wall_count": 0})[0] == v.FAIL
+    assert v.evaluate("Light on Two Sides", {"window_wall_count": 1})[0] == v.FAIL
+    assert v.evaluate("Light on Two Sides", {"window_wall_count": 2})[0] == v.PASS
+    assert v.evaluate("Light on Two Sides", {"window_wall_count": 3})[0] == v.PASS
+
+
 # ── validate_constraints ──────────────────────────────────────────────────────
 
 def test_validate_constraints_mixed():

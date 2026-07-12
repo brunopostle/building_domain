@@ -65,6 +65,7 @@ Add to `claude_desktop_config.json` (Linux: `~/.config/claude/`, macOS: `~/Libra
 | `check_prerequisites` | Design-time guardrail — prerequisites for an entity not yet evidenced in a loaded IFC model, call before ifc_edit/ifc_new |
 | `sweep_failure_modes` | Anti-pattern sweep — every IFC class, MEP system, space, and component/material present in a loaded model checked against known BSOS failure modes |
 | `annotate_clash` | Runs a geometric clash check for an element and annotates each clashing pair with BSOS spatial-relation/failure-mode rationale, instead of a bare "X intersects Y" |
+| `critique_patterns` | Alexander-pattern spatial critique — checks each resolved space's patterns (e.g. "light on two sides") against model-derived facts, citing the pattern's actual recorded forces as rationale |
 
 ## Example Session
 
@@ -281,7 +282,12 @@ compose them directly:
   matters: a direct spatial relation between the two if one exists, else the clashing element's
   own top spatial relations (e.g. a duct clashing with a beam that 'supports' the slab above),
   else a plain statement that no BSOS knowledge resolves for the pair.
+- **`critique_patterns`** (this server) — for each resolved space, checks its `get_patterns`
+  entries against model-derived facts (e.g. `window_wall_count`, which counts distinct walls
+  carrying a window rather than raw window instances) via a small pattern-classification matcher,
+  currently covering "light on two sides" wording. Every result cites the forces `get_forces`
+  records for that space as rationale — e.g. "Improved daylight penetration depth" traded against
+  "Reduced glare risk from single-side fenestration" — instead of generic advice.
 
-Further compositions are tracked under `building_domain-l5w` (`bd show building_domain-l5w`)
-and not yet built: an Alexander-pattern spatial critique using `get_patterns` + `get_forces`
-against derived model facts.
+All eight brainstormed compositions from the 2026-07-02 session (`building_domain-l5w`,
+`bd show building_domain-l5w`) are now built.

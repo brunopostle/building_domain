@@ -855,3 +855,284 @@ def test_annotate_clash_report_no_bsos_knowledge_resolved(tmp_path, monkeypatch)
     assert clash["object_entity"] is None
     assert clash["rationale"] == "No BSOS knowledge resolved for one or both clashing elements."
     assert result["summary"] == {"total_clashes": 1, "resolved_pairs": 0}
+
+
+# ── Alexander-pattern spatial critique (building_domain-l5w.6) ───────────────
+
+class _FakeWall:
+    def __init__(self, wid):
+        self._id = wid
+
+    def id(self):
+        return self._id
+
+
+class _FakeVoidsRel:
+    def __init__(self, wall):
+        self.RelatingBuildingElement = wall
+
+
+class _FakeOpening:
+    def __init__(self, wall):
+        self.VoidsElements = [_FakeVoidsRel(wall)]
+
+
+class _FakeFillsRel:
+    def __init__(self, wall):
+        self.RelatingOpeningElement = _FakeOpening(wall)
+
+
+class _FakeWindow:
+    """A bounding IfcWindow, optionally hosted by a wall via FillsVoids."""
+    def __init__(self, host_wall=None):
+        self._cls = "IfcWindow"
+        self.FillsVoids = [_FakeFillsRel(host_wall)] if host_wall is not None else []
+
+    def is_a(self, other=None):
+        return self._cls if other is None else self._cls == other
+
+
+def test_window_wall_count_counts_distinct_walls():
+    space = _FakeSpace()
+    space.BoundedBy = [_FakeRel(_FakeWindow(_FakeWall(101))),
+                       _FakeRel(_FakeWindow(_FakeWall(102)))]
+    assert cr.window_wall_count(space) == 2
+
+
+def test_window_wall_count_same_wall_counted_once():
+    wall = _FakeWall(101)
+    space = _FakeSpace()
+    space.BoundedBy = [_FakeRel(_FakeWindow(wall)), _FakeRel(_FakeWindow(wall))]
+    assert cr.window_wall_count(space) == 1
+
+
+def test_window_wall_count_ignores_windows_with_no_host_wall():
+    space = _FakeSpace()
+    space.BoundedBy = [_FakeRel(_FakeWindow(host_wall=None))]
+    assert cr.window_wall_count(space) == 0
+
+
+def test_window_wall_count_no_windows():
+    space = _FakeSpace()
+    assert cr.window_wall_count(space) == 0
+
+
+def test_get_patterns_full_resolves_force_ids_to_names(tmp_path):
+    from bsos.persistence.models import ForceRow, PatternRow
+
+    db_path = tmp_path / "patterns.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Meeting Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        s.add(ForceRow(id="f1", name="Improved daylight penetration depth",
+                       direction="increase", affects='["e-room"]',
+                       source_model="test", created_at=NOW, confidence=0.9,
+                       status="accepted", knowledge_origin="physical"))
+        s.add(PatternRow(
+            id="p1", name="Light on Two Sides", subject_id="e-room",
+            context='["Meeting rooms"]', problem="Harsh shadows.",
+            solution="Add a second window wall.",
+            force_ids='["f1"]', force_descriptions="[]",
+            source_model="test", created_at=NOW, confidence=0.85,
+            status="accepted", knowledge_origin="physical"))
+        s.commit()
+
+    assert cr.get_patterns_full(db_path, "Meeting Room") == [{
+        "name": "Light on Two Sides",
+        "problem": "Harsh shadows.",
+        "solution": "Add a second window wall.",
+        "context": ["Meeting rooms"],
+        "forces": ["Improved daylight penetration depth"],
+        "confidence": 0.85,
+    }]
+
+
+def test_get_patterns_full_falls_back_to_force_descriptions(tmp_path):
+    from bsos.persistence.models import PatternRow
+
+    db_path = tmp_path / "patterns_desc.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Meeting Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        s.add(PatternRow(
+            id="p1", name="Light on Two Sides", subject_id="e-room",
+            problem="Harsh shadows.", solution="Add a second window wall.",
+            force_ids="[]", force_descriptions='["raw daylight force"]',
+            source_model="test", created_at=NOW, confidence=0.85,
+            status="accepted", knowledge_origin="physical"))
+        s.commit()
+
+    assert cr.get_patterns_full(db_path, "Meeting Room")[0]["forces"] == ["raw daylight force"]
+
+
+def test_get_patterns_full_filters_by_min_confidence(tmp_path):
+    from bsos.persistence.models import PatternRow
+
+    db_path = tmp_path / "patterns_conf.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Meeting Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        s.add(PatternRow(
+            id="p1", name="Low Confidence Pattern", subject_id="e-room",
+            problem="p", solution="s", source_model="test", created_at=NOW,
+            confidence=0.2, status="accepted", knowledge_origin="physical"))
+        s.commit()
+
+    assert cr.get_patterns_full(db_path, "Meeting Room", min_confidence=0.5) == []
+    assert len(cr.get_patterns_full(db_path, "Meeting Room", min_confidence=0.0)) == 1
+
+
+def test_get_forces_full_matches_affects_array(tmp_path):
+    from bsos.persistence.models import ForceRow
+
+    db_path = tmp_path / "forces.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Meeting Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        s.add(EntityRow(id="e-other", name="Other Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        s.add(ForceRow(id="f1", name="Daylight increase", direction="increase",
+                       affects='["e-room"]', rationale="more light",
+                       source_model="test", created_at=NOW, confidence=0.9,
+                       status="accepted", knowledge_origin="physical"))
+        s.add(ForceRow(id="f2", name="Unrelated force", direction="increase",
+                       affects='["e-other"]', source_model="test", created_at=NOW,
+                       confidence=0.9, status="accepted", knowledge_origin="physical"))
+        s.commit()
+
+    assert cr.get_forces_full(db_path, "Meeting Room") == [
+        {"name": "Daylight increase", "direction": "increase",
+         "rationale": "more light", "confidence": 0.9}
+    ]
+
+
+def test_get_forces_full_unknown_entity_returns_empty(tmp_path):
+    db_path = tmp_path / "forces_unknown.db"
+    create_db_engine(str(db_path))
+    assert cr.get_forces_full(db_path, "Nonexistent") == []
+
+
+def _add_pattern(session, pid, entity_id, name, problem, solution,
+                 force_ids="[]", force_descriptions="[]", confidence=0.85):
+    from bsos.persistence.models import PatternRow
+
+    session.add(PatternRow(
+        id=pid, name=name, subject_id=entity_id, problem=problem, solution=solution,
+        force_ids=force_ids, force_descriptions=force_descriptions,
+        source_model="test", created_at=NOW, confidence=confidence,
+        status="accepted", knowledge_origin="physical"))
+
+
+def test_critique_patterns_flags_single_sided_room(tmp_path, monkeypatch):
+    from bsos.persistence.models import ForceRow
+
+    db_path = tmp_path / "critique_fail.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Meeting Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        s.add(ForceRow(id="f1", name="Improved daylight penetration depth",
+                       direction="increase", affects='["e-room"]',
+                       source_model="test", created_at=NOW, confidence=0.9,
+                       status="accepted", knowledge_origin="physical"))
+        _add_pattern(s, "p1", "e-room", "Light on Two Sides",
+                    "Meeting rooms lit from only one side create harsh shadows.",
+                    "Add a second window wall.", force_ids='["f1"]')
+        s.commit()
+
+    space = _FakeSpace()
+    space.BoundedBy = [_FakeRel(_FakeWindow(_FakeWall(101)))]  # one wall only
+
+    fake_ifc = _FakeSweepIfc(spaces=[space])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr, "resolve_space_entity",
+                        lambda session, space, _embedder=None: "Meeting Room")
+
+    result = cr.critique_patterns_report(Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    assert result["summary"]["fail"] == 1
+    assert result["summary"]["pass"] == 0
+    critique = result["critiques"][0]
+    assert critique["status"] == "FAIL"
+    assert critique["pattern"] == "Light on Two Sides"
+    assert critique["pattern_forces"] == ["Improved daylight penetration depth"]
+    assert critique["forces"] == [{
+        "name": "Improved daylight penetration depth", "direction": "increase",
+        "rationale": "", "confidence": 0.9,
+    }]
+
+
+def test_critique_patterns_passes_two_sided_room(tmp_path, monkeypatch):
+    db_path = tmp_path / "critique_pass.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Meeting Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        _add_pattern(s, "p1", "e-room", "Light on Two Sides",
+                    "Meeting rooms lit from only one side create harsh shadows.",
+                    "Add a second window wall.")
+        s.commit()
+
+    space = _FakeSpace()
+    space.BoundedBy = [_FakeRel(_FakeWindow(_FakeWall(101))),
+                       _FakeRel(_FakeWindow(_FakeWall(102)))]
+
+    fake_ifc = _FakeSweepIfc(spaces=[space])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr, "resolve_space_entity",
+                        lambda session, space, _embedder=None: "Meeting Room")
+
+    result = cr.critique_patterns_report(Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    assert result["summary"]["pass"] == 1
+    assert result["summary"]["fail"] == 0
+    assert result["critiques"][0]["status"] == "PASS"
+
+
+def test_critique_patterns_counts_unmapped_patterns_as_unchecked(tmp_path, monkeypatch):
+    db_path = tmp_path / "critique_unchecked.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Office", entity_type="space",
+                        source_model="test", created_at=NOW))
+        _add_pattern(s, "p1", "e-room", "Window-Connected Individual Workstations",
+                    "Workers lack daylight.", "Arrange workstations near windows.")
+        s.commit()
+
+    space = _FakeSpace()
+    fake_ifc = _FakeSweepIfc(spaces=[space])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr, "resolve_space_entity",
+                        lambda session, space, _embedder=None: "Office")
+
+    result = cr.critique_patterns_report(Path("dummy.ifc"), db_path, _embedder=_StubEmbedder())
+
+    assert result["summary"]["unchecked_patterns"] == 1
+    assert result["critiques"] == []
+
+
+def test_critique_patterns_min_confidence_filters(tmp_path, monkeypatch):
+    db_path = tmp_path / "critique_conf.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-room", name="Meeting Room", entity_type="space",
+                        source_model="test", created_at=NOW))
+        _add_pattern(s, "p1", "e-room", "Light on Two Sides",
+                    "Harsh shadows.", "Add a second window wall.", confidence=0.2)
+        s.commit()
+
+    space = _FakeSpace()
+    fake_ifc = _FakeSweepIfc(spaces=[space])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr, "resolve_space_entity",
+                        lambda session, space, _embedder=None: "Meeting Room")
+
+    result = cr.critique_patterns_report(
+        Path("dummy.ifc"), db_path, min_confidence=0.5, _embedder=_StubEmbedder())
+
+    assert result["critiques"] == []
+    assert result["summary"]["unchecked_patterns"] == 0

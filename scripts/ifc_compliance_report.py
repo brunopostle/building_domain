@@ -290,6 +290,32 @@ def count_bounded_by_type(space, ifc_class: str) -> int:
     return n
 
 
+def window_wall_count(space) -> int:
+    """Distinct walls carrying a window that bounds this space.
+
+    'Light on N sides' is about facade diversity, not raw window tally — a
+    single wall punched with three windows is still one-sided lighting. Each
+    bounding IfcWindow is resolved to its hosting wall via the standard
+    FillsVoids -> RelatingOpeningElement -> VoidsElements -> RelatingBuilding-
+    Element opening chain; windows whose host wall cannot be resolved (no
+    opening relation in the model) are not counted.
+    """
+    wall_ids: set[int] = set()
+    for rel in getattr(space, "BoundedBy", []):
+        elem = getattr(rel, "RelatedBuildingElement", None)
+        if elem is None or not elem.is_a("IfcWindow"):
+            continue
+        for fills in getattr(elem, "FillsVoids", []):
+            opening = getattr(fills, "RelatingOpeningElement", None)
+            if opening is None:
+                continue
+            for voids in getattr(opening, "VoidsElements", []):
+                wall = getattr(voids, "RelatingBuildingElement", None)
+                if wall is not None:
+                    wall_ids.add(wall.id())
+    return len(wall_ids)
+
+
 _mep_cache: dict[str, bool] = {}
 
 def mep_present(ifc, system: str) -> bool:
@@ -750,6 +776,171 @@ def annotate_clash_report(ifc_path: Path, db_path: Path, element_id: int,
     }
 
 
+# ── Alexander-pattern spatial critique (building_domain-l5w.6) ───────────────
+# get_patterns/get_forces are normally retrieved per-entity by an agent that
+# already knows what to ask about, returning every recorded pattern/force
+# regardless of whether the loaded model actually satisfies it. This checks
+# each resolved space's patterns against facts derived from the model (e.g.
+# window_wall_count, which extends window_count to count distinct host walls
+# rather than raw window instances, since "light on N sides" is about facade
+# diversity) via validation.classify_pattern (mirrors classify_constraint's
+# keyword approach), and cites the pattern's own recorded forces — the actual
+# design tradeoff BSOS captured for it (e.g. daylight-penetration-increase vs
+# solar-heat-gain-decrease) — as rationale instead of generic advice.
+
+def get_patterns_full(db_path: Path, entity_name: str, min_confidence: float = 0.0) -> list[dict]:
+    """Full pattern records (name/problem/solution/context/forces/confidence)
+    for an entity, matching the `get_patterns` MCP tool's shape (force_ids
+    resolved to force names, falling back to raw force_descriptions).
+    """
+    with sqlite3.connect(db_path) as conn:
+        rows = conn.execute("""
+            SELECT p.name, p.problem, p.solution, p.context,
+                   p.force_ids, p.force_descriptions, p.confidence
+            FROM patterns p
+            JOIN entities e ON e.id = p.subject_id
+            WHERE e.name = ?
+              AND p.status != 'deprecated'
+              AND p.confidence >= ?
+            ORDER BY p.confidence DESC
+        """, (entity_name, min_confidence)).fetchall()
+
+        out = []
+        for name, problem, solution, context, force_ids_json, force_descs_json, confidence in rows:
+            force_ids = json.loads(force_ids_json or "[]")
+            if force_ids:
+                placeholders = ",".join("?" * len(force_ids))
+                forces = [r[0] for r in conn.execute(
+                    f"SELECT name FROM forces WHERE id IN ({placeholders})", force_ids
+                ).fetchall()]
+            else:
+                forces = json.loads(force_descs_json or "[]")
+            out.append({
+                "name": name,
+                "problem": problem,
+                "solution": solution,
+                "context": json.loads(context or "[]"),
+                "forces": forces,
+                "confidence": confidence,
+            })
+    return out
+
+
+def get_forces_full(db_path: Path, entity_name: str, min_confidence: float = 0.0) -> list[dict]:
+    """Full force records (name/direction/rationale/confidence) affecting an
+    entity, matching the `get_forces` MCP tool's affects-JSON-array matching.
+    """
+    with sqlite3.connect(db_path) as conn:
+        eid_row = conn.execute(
+            "SELECT id FROM entities WHERE name = ? AND status != 'merged'",
+            (entity_name,)).fetchone()
+        if eid_row is None:
+            return []
+        eid = eid_row[0]
+        rows = conn.execute("""
+            SELECT name, direction, rationale, confidence, affects
+            FROM forces
+            WHERE status != 'deprecated'
+              AND confidence >= ?
+            ORDER BY confidence DESC
+        """, (min_confidence,)).fetchall()
+
+    out = []
+    for name, direction, rationale, confidence, affects in rows:
+        if eid in json.loads(affects or "[]"):
+            out.append({
+                "name": name,
+                "direction": direction,
+                "rationale": rationale or "",
+                "confidence": confidence,
+            })
+    return out
+
+
+def critique_patterns_report(ifc_path: Path, db_path: Path,
+                             min_confidence: float = 0.0, _embedder=None) -> dict:
+    """Alexander-pattern spatial critique of every resolved space in a loaded
+    IFC model.
+
+    For each modelled space (resolved to a bsos 'space' entity the same way
+    as `check_model`), fetches its recorded patterns and, for the subset
+    validation.classify_pattern can map to a check object (currently: "light
+    on two sides" wording), evaluates it against facts derived from the model
+    -- e.g. window_wall_count, so a room lit from only one wall is flagged
+    even though it does have windows. Patterns with no deterministic matcher
+    are counted but not evaluated (they need a human/LLM read, same as
+    report_constraints' "not mechanically checkable" bucket).
+
+    Each result cites the forces recorded against the resolved space entity
+    (the same data `get_forces` returns) as rationale, so a FAIL comes with
+    the actual tradeoff BSOS captured for this space -- e.g. "Improved
+    daylight penetration depth" (increase) alongside "Reduced glare risk from
+    single-side fenestration" (decrease) -- rather than generic advice. The
+    entity-level forces are the primary citation because they are populated
+    for essentially every space entity, unlike the pattern's own force_ids/
+    force_descriptions link (populated for only ~0.5% of the corpus as of
+    2026-07-12); those are still surfaced separately as pattern_forces when
+    present, since they are the more specifically-linked citation when they
+    exist.
+    """
+    ifc = ifcopenshell.open(str(ifc_path))
+    engine = create_db_engine(str(db_path))
+    embedder = _embedder or _get_embedder()
+
+    spaces_by_entity: dict[str, list] = defaultdict(list)
+    with Session(engine) as session:
+        for space in ifc.by_type("IfcSpace"):
+            entity_name = resolve_space_entity(session, space, _embedder=embedder)
+            if entity_name:
+                spaces_by_entity[entity_name].append(space)
+
+    critiques: list[dict] = []
+    unchecked_patterns = 0
+
+    for entity_name in sorted(spaces_by_entity):
+        patterns = get_patterns_full(db_path, entity_name, min_confidence)
+        if not patterns:
+            continue
+        entity_forces = get_forces_full(db_path, entity_name, min_confidence)
+
+        for pattern in patterns:
+            obj = validation.classify_pattern(
+                pattern["name"], pattern["problem"], pattern["solution"])
+            if obj is None:
+                unchecked_patterns += 1
+                continue
+            for space in spaces_by_entity[entity_name]:
+                facts = build_facts(ifc, space)
+                status, detail = validation.evaluate(obj, facts)
+                critiques.append({
+                    "space": space.Name or "?",
+                    "entity": entity_name,
+                    "pattern": pattern["name"],
+                    "problem": pattern["problem"],
+                    "solution": pattern["solution"],
+                    "check_object": obj,
+                    "status": status.upper(),
+                    "detail": detail,
+                    "confidence": pattern["confidence"],
+                    "forces": entity_forces,
+                    "pattern_forces": pattern["forces"],
+                })
+
+    critiques.sort(key=lambda c: (c["status"] != "FAIL", -c["confidence"]))
+
+    return {
+        "model": Path(ifc_path).name,
+        "summary": {
+            "spaces_scanned": sum(len(sps) for sps in spaces_by_entity.values()),
+            "checkable_patterns": len(critiques),
+            "unchecked_patterns": unchecked_patterns,
+            "fail": sum(1 for c in critiques if c["status"] == "FAIL"),
+            "pass": sum(1 for c in critiques if c["status"] == "PASS"),
+        },
+        "critiques": critiques,
+    }
+
+
 # ── Fact extraction ───────────────────────────────────────────────────────────
 # Turn an IfcSpace into the model-fact dict the shared validation engine
 # consumes. An MCP agent populates the same shape from the `ifc` server tools.
@@ -759,6 +950,7 @@ def build_facts(ifc, space) -> dict:
     return {
         "floor_materials": sorted(get_floor_materials(space)),
         "window_count":    count_bounded_by_type(space, "IfcWindow"),
+        "window_wall_count": window_wall_count(space),
         "door_count":      count_bounded_by_type(space, "IfcDoor"),
         "systems_present": [s for s in MEP_PRESENCE
                             if system_present_for_space(ifc, space, s)],
