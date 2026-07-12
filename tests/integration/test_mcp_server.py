@@ -481,3 +481,28 @@ def test_sweep_failure_modes_missing_ifc_file(tmp_path):
     create_db_engine(str(db))
     result = sweep_failure_modes_tool(str(tmp_path / "nonexistent.ifc"), str(db))
     assert result["error"] == "ifc_file_not_found"
+
+
+# ---------------------------------------------------------------------------
+# annotate_clash (building_domain-l5w.3)
+# ---------------------------------------------------------------------------
+# Full behaviour (entity resolution + rationale construction against a real
+# clash result) is covered with fakes/stub embedder in
+# tests/unit/test_compliance_report.py. What's covered here is registration
+# and the fast-fail path that doesn't require loading the model or a real IFC
+# file.
+
+def test_annotate_clash_registered_on_server(tmp_path):
+    db = tmp_path / "reg.db"
+    server = create_server(str(db))
+    import asyncio
+    tools = asyncio.run(server.list_tools())
+    assert "annotate_clash" in {t.name for t in tools}
+
+
+def test_annotate_clash_missing_ifc_file(tmp_path):
+    from bsos.mcp_server.server import annotate_clash_tool
+    db = tmp_path / "reg.db"
+    create_db_engine(str(db))
+    result = annotate_clash_tool(str(tmp_path / "nonexistent.ifc"), 1, str(db))
+    assert result["error"] == "ifc_file_not_found"

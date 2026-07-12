@@ -30,6 +30,7 @@ import ifcopenshell.geom
 import ifcopenshell.util.element
 import ifcopenshell.util.shape
 import numpy as np
+from ifcquery import clash as clash_mod
 from sqlmodel import Session
 
 # The deterministic check engine is shared with the bsos `validate_element` MCP
@@ -575,6 +576,177 @@ def sweep_failure_modes_report(ifc_path: Path, db_path: Path,
             "total_failure_modes": sum(len(f["failure_modes"]) for f in flags),
         },
         "flags": flags,
+    }
+
+
+# ── Clash reports annotated with BSOS rationale (building_domain-l5w.3) ──────
+# The `ifc` server's ifc_clash reports bare geometric intersections ("X
+# intersects Y"). This cross-references the colliding elements against bsos's
+# spatial_relations/constraints/antipatterns tables to explain *why* a clash
+# matters instead of leaving that judgement to the calling agent.
+
+def get_direct_spatial_relation(db_path: Path, name_a: str, name_b: str) -> list[tuple]:
+    """(subject_name, relation, object_name, confidence) rows directly between
+    name_a and name_b in either direction, highest confidence first."""
+    with sqlite3.connect(db_path) as conn:
+        return conn.execute("""
+            SELECT e.name, sr.relation, e2.name, sr.confidence
+            FROM spatial_relations sr
+            JOIN entities e  ON e.id  = sr.subject_id
+            JOIN entities e2 ON e2.id = sr.object_id
+            WHERE ((e.name = ? AND e2.name = ?) OR (e.name = ? AND e2.name = ?))
+              AND sr.status != 'deprecated'
+            ORDER BY sr.confidence DESC
+        """, (name_a, name_b, name_b, name_a)).fetchall()
+
+
+def resolve_element_entity(session: Session, element, db_path: Path,
+                           _embedder=None) -> str | None:
+    """Resolve an ifcopenshell element to its best-matching bsos entity name.
+
+    Tries an exact match against the schema-authoritative `ifc_class` entity
+    for element.is_a() first (same channel as sweep_failure_modes' ifc_class
+    check), then falls back to semantic matching of Name/ObjectType/material
+    text against component/material entities (the sweep's component_or_material
+    channel), so a clashing element without a canonical class hit can still
+    resolve to something.
+    """
+    cls = element.is_a()
+    if get_entity_type(db_path, cls) == "ifc_class":
+        return cls
+
+    texts = []
+    for attr in ("Name", "ObjectType"):
+        val = getattr(element, attr, None)
+        if val and val.strip():
+            texts.append(val.strip())
+    materials: set[str] = set()
+    _collect_layer_materials(element, materials)
+    texts.extend(materials)
+
+    for text in texts:
+        name = semantic_match_entity(session, text, entity_type={"component", "material"},
+                                     min_score=FAILURE_MODE_MATCH_MIN_SCORE, _embedder=_embedder)
+        if name:
+            return name
+    return None
+
+
+def annotate_clash_report(ifc_path: Path, db_path: Path, element_id: int,
+                          clearance: float = 0.0, tolerance: float = 0.002,
+                          scope: str = "storey", _embedder=None) -> dict:
+    """Run the ifc server's clash check for element_id and annotate results
+    with BSOS domain rationale.
+
+    For each clashing pair this resolves both elements to bsos entities (exact
+    ifc_class match first, then semantic match on Name/ObjectType/material text
+    against component/material entities) and looks up, in priority order:
+
+      1. a direct spatial_relations row between the two resolved entities
+         (e.g. a duct clashing with a beam that 'supports' the slab above);
+      2. failing that, the clashing element's own top spatial relations, so
+         its structural/functional role is still visible with no direct edge;
+      3. failing that, whether either resolved entity has failure_modes or
+         'must' constraints on record at all, as weaker supporting context.
+
+    Distinct from the bare ifc_clash tool: that reports "X intersects Y" with
+    coordinates; this explains why the intersection is likely to matter, or
+    says plainly that BSOS has no relevant knowledge for this pair.
+    """
+    ifc = ifcopenshell.open(str(ifc_path))
+    element = ifc.by_id(element_id)
+    if element is None:
+        return {"error": "element_not_found", "query": element_id}
+
+    raw = clash_mod.clash(
+        ifc, element,
+        clearance=clearance if clearance and clearance > 0.0 else None,
+        tolerance=tolerance, scope=scope,
+    )
+    if raw.get("error"):
+        return {"error": "clash_check_failed", "detail": raw["error"]}
+
+    engine = create_db_engine(str(db_path))
+    embedder = _embedder or _get_embedder()
+
+    with Session(engine) as session:
+        subject_entity = resolve_element_entity(session, element, db_path, _embedder=embedder)
+        subject_constraints = [
+            {"constraint_type": ctype, "rule": rule, "confidence": conf}
+            for ctype, rule, conf in get_constraints(db_path, subject_entity)
+            if ctype == "must"
+        ] if subject_entity else []
+        subject_failure_modes = (
+            get_failure_modes_full(db_path, subject_entity) if subject_entity else []
+        )
+
+        resolved_cache: dict[int, str | None] = {}
+        annotated = []
+        for check_name, check in raw.get("checks", {}).items():
+            for clash_item in check.get("clashes", []):
+                other_id = clash_item["element"]["id"]
+                if other_id not in resolved_cache:
+                    other = ifc.by_id(other_id)
+                    resolved_cache[other_id] = (
+                        resolve_element_entity(session, other, db_path, _embedder=embedder)
+                        if other is not None else None
+                    )
+                other_entity = resolved_cache[other_id]
+
+                direct = (
+                    get_direct_spatial_relation(db_path, subject_entity, other_entity)
+                    if subject_entity and other_entity else []
+                )
+                other_context = get_spatial_relations(db_path, other_entity)[:3] if other_entity else []
+                other_failure_modes = (
+                    get_failure_modes_full(db_path, other_entity) if other_entity else []
+                )
+
+                if direct:
+                    a, rel, b, conf = direct[0]
+                    rationale = (f"{a} {rel} {b} (confidence {conf:.2f}) -- this clash "
+                                f"may violate that relation.")
+                elif other_context:
+                    rel, obj, conf = other_context[0]
+                    rationale = (f"{other_entity} {rel} {obj} (confidence {conf:.2f}) -- the "
+                                f"clashing element plays this role, so the clash may compromise it.")
+                elif subject_failure_modes or other_failure_modes:
+                    rationale = ("No direct BSOS spatial relation between the two elements; "
+                                "see failure_modes for weaker supporting context.")
+                else:
+                    rationale = "No BSOS knowledge resolved for one or both clashing elements."
+
+                annotated.append({
+                    "check": check_name,
+                    "clashing_element": clash_item["element"],
+                    "distance": clash_item.get("distance"),
+                    "object_entity": other_entity,
+                    "direct_spatial_relations": [
+                        {"subject": a, "relation": rel, "object": b, "confidence": conf}
+                        for a, rel, b, conf in direct
+                    ],
+                    "other_entity_context": [
+                        {"relation": rel, "object": obj, "confidence": conf}
+                        for rel, obj, conf in other_context
+                    ],
+                    "object_failure_modes": other_failure_modes,
+                    "rationale": rationale,
+                })
+
+    return {
+        "model": Path(ifc_path).name,
+        "subject_element": raw["element"],
+        "subject_entity": subject_entity,
+        "subject_constraints": subject_constraints,
+        "subject_failure_modes": subject_failure_modes,
+        "scope": raw.get("scope"),
+        "pass": raw.get("pass"),
+        "clashes": annotated,
+        "summary": {
+            "total_clashes": len(annotated),
+            "resolved_pairs": sum(
+                1 for a in annotated if subject_entity and a["object_entity"]),
+        },
     }
 
 

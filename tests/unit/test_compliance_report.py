@@ -627,3 +627,231 @@ def test_sweep_failure_modes_min_confidence_filters_flags(tmp_path, monkeypatch)
     assert result["flags"] == []
     assert result["summary"]["entities_scanned"] == 1
     assert result["summary"]["entities_with_flags"] == 0
+
+
+# ── Clash reports annotated with BSOS rationale (building_domain-l5w.3) ──────
+
+class _FakeClashElem:
+    def __init__(self, eid, cls, name=None, object_type=None):
+        self._id = eid
+        self._cls = cls
+        self.Name = name
+        self.ObjectType = object_type
+
+    def id(self):
+        return self._id
+
+    def is_a(self, other=None):
+        return self._cls if other is None else self._cls == other
+
+
+class _FakeClashIfc:
+    """ifc.by_id(eid) lookup only -- clash_mod.clash itself is monkeypatched
+    in these tests so no real geometry engine is exercised."""
+    def __init__(self, elements):
+        self._by_id = {e.id(): e for e in elements}
+
+    def by_id(self, eid):
+        return self._by_id.get(eid)
+
+
+def test_get_direct_spatial_relation_either_direction(tmp_path):
+    from bsos.persistence.models import SpatialRelationRow
+
+    db_path = tmp_path / "direct.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-duct", name="Duct", entity_type="component",
+                        source_model="test", created_at=NOW))
+        s.add(EntityRow(id="e-beam", name="Beam", entity_type="component",
+                        source_model="test", created_at=NOW))
+        s.add(SpatialRelationRow(id="sr1", subject_id="e-beam", object_id="e-duct",
+                                 relation="conflicts_with", confidence=0.8, status="accepted",
+                                 knowledge_origin="physical", source_model="test", created_at=NOW))
+        s.commit()
+
+    assert cr.get_direct_spatial_relation(db_path, "Duct", "Beam") == [
+        ("Beam", "conflicts_with", "Duct", 0.8)
+    ]
+    # order of the query args must not matter
+    assert cr.get_direct_spatial_relation(db_path, "Beam", "Duct") == [
+        ("Beam", "conflicts_with", "Duct", 0.8)
+    ]
+
+
+def test_resolve_element_entity_exact_ifc_class_match(tmp_path):
+    db_path = tmp_path / "resolve_class.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-duct", name="IfcDuctSegment", entity_type="ifc_class",
+                        source_model="test", created_at=NOW))
+        s.commit()
+        elem = _FakeClashElem(1, "IfcDuctSegment")
+        assert cr.resolve_element_entity(s, elem, db_path) == "IfcDuctSegment"
+
+
+def test_resolve_element_entity_semantic_fallback(tmp_path, monkeypatch):
+    db_path = tmp_path / "resolve_semantic.db"
+    engine = create_db_engine(str(db_path))
+    monkeypatch.setattr(cr, "_collect_layer_materials", lambda element, out: None)
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-counter", name="Kitchen Counter", entity_type="component",
+                        source_model="test", created_at=NOW))
+        s.add(EmbeddingRow(item_type="entity", item_id="e-counter", model=SEARCH_EMBEDDING_MODEL,
+                           dim=DIM, content_hash="test", vector=_vec([1.0, 0.0, 0.0, 0.0]).tobytes()))
+        s.commit()
+        elem = _FakeClashElem(2, "IfcFurniture", name="kitchen")
+        assert cr.resolve_element_entity(s, elem, db_path, _embedder=_StubEmbedder()) == "Kitchen Counter"
+
+
+def test_resolve_element_entity_no_match_returns_none(tmp_path, monkeypatch):
+    db_path = tmp_path / "resolve_none.db"
+    engine = create_db_engine(str(db_path))
+    monkeypatch.setattr(cr, "_collect_layer_materials", lambda element, out: None)
+    with Session(engine) as s:
+        elem = _FakeClashElem(3, "IfcBuildingElementProxy")
+        assert cr.resolve_element_entity(s, elem, db_path, _embedder=_StubEmbedder()) is None
+
+
+def test_annotate_clash_report_element_not_found(tmp_path, monkeypatch):
+    db_path = tmp_path / "clash_missing.db"
+    create_db_engine(str(db_path))
+    fake_ifc = _FakeClashIfc([])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+
+    result = cr.annotate_clash_report(Path("dummy.ifc"), db_path, 99, _embedder=_StubEmbedder())
+    assert result == {"error": "element_not_found", "query": 99}
+
+
+def test_annotate_clash_report_propagates_clash_error(tmp_path, monkeypatch):
+    db_path = tmp_path / "clash_error.db"
+    create_db_engine(str(db_path))
+    duct = _FakeClashElem(1, "IfcDuctSegment")
+    fake_ifc = _FakeClashIfc([duct])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr.clash_mod, "clash", lambda *a, **kw: {
+        "element": {"id": 1, "type": "IfcDuctSegment"}, "pass": None,
+        "error": "No geometry for element #1",
+    })
+
+    result = cr.annotate_clash_report(Path("dummy.ifc"), db_path, 1, _embedder=_StubEmbedder())
+    assert result == {"error": "clash_check_failed", "detail": "No geometry for element #1"}
+
+
+def _fake_clash_result(subject_ref, other_ref, distance=0.0):
+    return {
+        "element": subject_ref,
+        "scope": "storey",
+        "pass": False,
+        "checks": {
+            "intersection": {
+                "pass": False,
+                "tolerance": 0.002,
+                "clashes": [
+                    {"element": other_ref, "type": "protrusion", "distance": distance,
+                     "p1": [0.0, 0.0, 0.0], "p2": [0.0, 0.0, 0.0]},
+                ],
+            },
+        },
+    }
+
+
+def test_annotate_clash_report_uses_other_entitys_own_relation_as_rationale(tmp_path, monkeypatch):
+    # Mirrors the motivating example: a duct clashes with a beam that has no
+    # *direct* BSOS relation to the duct, but does 'support' a slab -- that
+    # role should surface as the rationale (building_domain-l5w.3).
+    from bsos.persistence.models import SpatialRelationRow
+
+    db_path = tmp_path / "clash_context.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-duct", name="IfcDuctSegment", entity_type="ifc_class",
+                        source_model="test", created_at=NOW))
+        s.add(EntityRow(id="e-beam", name="IfcBeam", entity_type="ifc_class",
+                        source_model="test", created_at=NOW))
+        s.add(EntityRow(id="e-slab", name="Slab", entity_type="component",
+                        source_model="test", created_at=NOW))
+        s.add(SpatialRelationRow(id="sr1", subject_id="e-beam", object_id="e-slab",
+                                 relation="supports", confidence=0.9, status="accepted",
+                                 knowledge_origin="physical", source_model="test", created_at=NOW))
+        s.commit()
+
+    duct = _FakeClashElem(1, "IfcDuctSegment")
+    beam = _FakeClashElem(2, "IfcBeam", name="B1")
+    fake_ifc = _FakeClashIfc([duct, beam])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr.clash_mod, "clash", lambda *a, **kw: _fake_clash_result(
+        {"id": 1, "type": "IfcDuctSegment"}, {"id": 2, "type": "IfcBeam", "name": "B1"}))
+
+    result = cr.annotate_clash_report(Path("dummy.ifc"), db_path, 1, _embedder=_StubEmbedder())
+
+    assert result["subject_entity"] == "IfcDuctSegment"
+    assert result["summary"] == {"total_clashes": 1, "resolved_pairs": 1}
+    clash = result["clashes"][0]
+    assert clash["object_entity"] == "IfcBeam"
+    assert clash["direct_spatial_relations"] == []
+    assert clash["other_entity_context"] == [
+        {"relation": "supports", "object": "Slab", "confidence": 0.9}
+    ]
+    assert clash["rationale"] == (
+        "IfcBeam supports Slab (confidence 0.90) -- the clashing element "
+        "plays this role, so the clash may compromise it."
+    )
+
+
+def test_annotate_clash_report_prefers_direct_relation_over_context(tmp_path, monkeypatch):
+    from bsos.persistence.models import SpatialRelationRow
+
+    db_path = tmp_path / "clash_direct.db"
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as s:
+        s.add(EntityRow(id="e-duct", name="IfcDuctSegment", entity_type="ifc_class",
+                        source_model="test", created_at=NOW))
+        s.add(EntityRow(id="e-beam", name="IfcBeam", entity_type="ifc_class",
+                        source_model="test", created_at=NOW))
+        s.add(EntityRow(id="e-slab", name="Slab", entity_type="component",
+                        source_model="test", created_at=NOW))
+        # A weaker "own relation" that would otherwise be picked up as context.
+        s.add(SpatialRelationRow(id="sr1", subject_id="e-beam", object_id="e-slab",
+                                 relation="supports", confidence=0.5, status="accepted",
+                                 knowledge_origin="physical", source_model="test", created_at=NOW))
+        # The direct relation between the two clashing entities takes priority.
+        s.add(SpatialRelationRow(id="sr2", subject_id="e-duct", object_id="e-beam",
+                                 relation="must_clear", confidence=0.95, status="accepted",
+                                 knowledge_origin="physical", source_model="test", created_at=NOW))
+        s.commit()
+
+    duct = _FakeClashElem(1, "IfcDuctSegment")
+    beam = _FakeClashElem(2, "IfcBeam")
+    fake_ifc = _FakeClashIfc([duct, beam])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr.clash_mod, "clash", lambda *a, **kw: _fake_clash_result(
+        {"id": 1, "type": "IfcDuctSegment"}, {"id": 2, "type": "IfcBeam"}))
+
+    result = cr.annotate_clash_report(Path("dummy.ifc"), db_path, 1, _embedder=_StubEmbedder())
+    clash = result["clashes"][0]
+    assert clash["direct_spatial_relations"] == [
+        {"subject": "IfcDuctSegment", "relation": "must_clear", "object": "IfcBeam", "confidence": 0.95}
+    ]
+    assert clash["rationale"] == (
+        "IfcDuctSegment must_clear IfcBeam (confidence 0.95) -- this clash may violate that relation."
+    )
+
+
+def test_annotate_clash_report_no_bsos_knowledge_resolved(tmp_path, monkeypatch):
+    db_path = tmp_path / "clash_unknown.db"
+    create_db_engine(str(db_path))
+
+    subject = _FakeClashElem(1, "IfcBuildingElementProxy")
+    other = _FakeClashElem(2, "IfcBuildingElementProxy")
+    fake_ifc = _FakeClashIfc([subject, other])
+    monkeypatch.setattr(cr.ifcopenshell, "open", lambda path: fake_ifc)
+    monkeypatch.setattr(cr, "_collect_layer_materials", lambda element, out: None)
+    monkeypatch.setattr(cr.clash_mod, "clash", lambda *a, **kw: _fake_clash_result(
+        {"id": 1, "type": "IfcBuildingElementProxy"}, {"id": 2, "type": "IfcBuildingElementProxy"}))
+
+    result = cr.annotate_clash_report(Path("dummy.ifc"), db_path, 1, _embedder=_StubEmbedder())
+    clash = result["clashes"][0]
+    assert clash["object_entity"] is None
+    assert clash["rationale"] == "No BSOS knowledge resolved for one or both clashing elements."
+    assert result["summary"] == {"total_clashes": 1, "resolved_pairs": 0}

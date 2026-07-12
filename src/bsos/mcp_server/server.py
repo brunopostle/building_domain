@@ -861,6 +861,49 @@ def sweep_failure_modes_tool(ifc_path: str, db_path: str,
                                              min_confidence=min_confidence, _embedder=_embedder)
 
 
+def annotate_clash_tool(ifc_path: str, element_id: int, db_path: str,
+                        clearance: float = 0.0, tolerance: float = 0.002,
+                        scope: str = "storey", _embedder=None) -> dict:
+    """Run a geometric clash check for element_id and annotate results with
+    BSOS domain rationale, instead of a bare "X intersects Y" report.
+
+    For each clashing pair, resolves both elements to bsos entities (exact
+    ifc_class match first, then semantic match on Name/ObjectType/material
+    text against component/material entities) and explains why the clash
+    matters: a direct spatial_relations row between the two resolved entities
+    if one exists (e.g. a duct clashing with a beam that 'supports' the slab
+    above), else the clashing element's own top spatial relations so its
+    structural/functional role is still visible, else notes when no BSOS
+    knowledge resolves for the pair at all.
+
+    entity resolution and clash mechanics mirror the `ifc` server's ifc_clash
+    tool (same geometry engine, same clearance/tolerance/scope semantics) —
+    call this instead when you need the "why" behind an intersection, not
+    just the coordinates.
+
+    ifc_path is a filesystem path to an .ifc file (e.g. one already loaded via
+    the `ifc` server's ifc_load). element_id is the STEP id of the element to
+    check (e.g. from ifc_select/ifc_list). clearance=0.0 means no clearance
+    check, only geometric intersection. scope is "storey" (default, checks
+    against elements in the same spatial container) or "all".
+    """
+    from pathlib import Path
+
+    module = _get_compliance_report_module()
+    if module is None:
+        return {"error": "compliance_report_unavailable",
+                "detail": "scripts/ifc_compliance_report.py not found — this "
+                          "tool requires a full repo checkout, not a packaged install."}
+
+    ifc_file = Path(ifc_path)
+    if not ifc_file.exists():
+        return {"error": "ifc_file_not_found", "query": ifc_path}
+
+    return module.annotate_clash_report(ifc_file, Path(db_path), element_id,
+                                        clearance=clearance, tolerance=tolerance,
+                                        scope=scope, _embedder=_embedder)
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -987,5 +1030,10 @@ def create_server(db_path: str) -> FastMCP:
     @mcp.tool(description=sweep_failure_modes_tool.__doc__)
     def sweep_failure_modes(ifc_path: str, min_confidence: float = 0.0) -> dict:
         return sweep_failure_modes_tool(ifc_path, db_path, min_confidence)
+
+    @mcp.tool(description=annotate_clash_tool.__doc__)
+    def annotate_clash(ifc_path: str, element_id: int, clearance: float = 0.0,
+                       tolerance: float = 0.002, scope: str = "storey") -> dict:
+        return annotate_clash_tool(ifc_path, element_id, db_path, clearance, tolerance, scope)
 
     return mcp

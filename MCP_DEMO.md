@@ -64,6 +64,7 @@ Add to `claude_desktop_config.json` (Linux: `~/.config/claude/`, macOS: `~/Libra
 | `check_model` | Full requirements/constraints/spatial/anti-pattern compliance report for a loaded IFC model file |
 | `check_prerequisites` | Design-time guardrail — prerequisites for an entity not yet evidenced in a loaded IFC model, call before ifc_edit/ifc_new |
 | `sweep_failure_modes` | Anti-pattern sweep — every IFC class, MEP system, space, and component/material present in a loaded model checked against known BSOS failure modes |
+| `annotate_clash` | Runs a geometric clash check for an element and annotates each clashing pair with BSOS spatial-relation/failure-mode rationale, instead of a bare "X intersects Y" |
 
 ## Example Session
 
@@ -275,7 +276,12 @@ compose them directly:
 - **`scripts/ifc_boq_check.py`** — cross-references a model's costed/quantified elements against
   `get_requirements` to flag likely bill-of-quantities omissions (e.g. a costed foundation with
   no damp-proof-course line item).
+- **`annotate_clash`** (this server) — runs the same geometric clash check as the `ifc` server's
+  `ifc_clash`, then resolves each clashing pair to bsos entities and explains why the clash
+  matters: a direct spatial relation between the two if one exists, else the clashing element's
+  own top spatial relations (e.g. a duct clashing with a beam that 'supports' the slab above),
+  else a plain statement that no BSOS knowledge resolves for the pair.
 
 Further compositions are tracked under `building_domain-l5w` (`bd show building_domain-l5w`)
-and not yet built: clash reports annotated with BSOS rationale, and an Alexander-pattern spatial
-critique using `get_patterns` + `get_forces` against derived model facts.
+and not yet built: an Alexander-pattern spatial critique using `get_patterns` + `get_forces`
+against derived model facts.
