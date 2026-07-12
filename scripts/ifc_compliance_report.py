@@ -29,6 +29,7 @@ import ifcopenshell
 import ifcopenshell.geom
 import ifcopenshell.util.element
 import ifcopenshell.util.shape
+import numpy as np
 from sqlmodel import Session
 
 # The deterministic check engine is shared with the bsos `validate_element` MCP
@@ -37,7 +38,7 @@ from sqlmodel import Session
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from bsos import validation  # noqa: E402
 from bsos.persistence.database import create_db_engine  # noqa: E402
-from bsos.mcp_server.server import search_entities_tool  # noqa: E402
+from bsos.mcp_server.server import search_entities_tool, resolve_entity, _get_embedder  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 IFC_PATH = ROOT / "_test.ifc"
@@ -154,6 +155,32 @@ def get_entity_type(db_path: Path, entity_name: str) -> str | None:
             SELECT entity_type FROM entities WHERE name = ? AND status != 'merged'
         """, (entity_name,)).fetchone()
         return row[0] if row else None
+
+
+def get_process_predecessors(db_path: Path, entity_name: str) -> list[tuple]:
+    """Direct process-sequence predecessors of entity_name.
+
+    Returns (name, hard_constraint, confidence, rationale) — the activities/
+    components BSOS says must (hard_constraint) or should precede
+    entity_name. Deduplicated to the single highest-confidence edge per
+    predecessor, since the same predecessor->successor pair can be asserted
+    from more than one source_model.
+    """
+    with sqlite3.connect(db_path) as conn:
+        rows = conn.execute("""
+            SELECT e.name, pr.hard_constraint, pr.confidence, pr.rationale
+            FROM process_relations pr
+            JOIN entities e  ON e.id = pr.predecessor_id
+            JOIN entities e2 ON e2.id = pr.successor_id
+            WHERE e2.name = ?
+              AND pr.status != 'deprecated'
+            ORDER BY pr.confidence DESC
+        """, (entity_name,)).fetchall()
+    best: dict[str, tuple] = {}
+    for name, hard, conf, rationale in rows:
+        if name not in best or conf > best[name][2]:
+            best[name] = (name, bool(hard), conf, rationale)
+    return sorted(best.values(), key=lambda r: -r[2])
 
 
 def semantic_match_entity(session: Session, query: str, entity_type: str | None = None,
@@ -311,6 +338,129 @@ def wall_has_insulation(ifc) -> bool:
                 if layer.Material and "insulation" in layer.Material.Name.lower():
                     return True
     return False
+
+
+# ── Design-time prerequisite check (building_domain-l5w.4) ──────────────────
+# IFC models don't record *when* something was built, only what's currently
+# modelled — so "has this prerequisite happened yet" is approximated as "is
+# there anything in the model whose name/type/material reads like it". This
+# reuses the same embedding-similarity technique as resolve_space_entity, at
+# the same calibrated threshold, just matched against free model text instead
+# of entity embeddings looked up from the bsos entities table.
+PREREQUISITE_EVIDENCE_MIN_SCORE = SPACE_MATCH_MIN_SCORE
+
+
+def collect_model_evidence_texts(ifc) -> list[str]:
+    """Distinct human-readable strings naming what's actually modelled.
+
+    Drawn from every IfcProduct's Name/ObjectType and every IfcMaterial's
+    Name, deduplicated case-insensitively (first-seen casing wins).
+    """
+    texts: dict[str, str] = {}
+    for product in ifc.by_type("IfcProduct"):
+        for attr in ("Name", "ObjectType"):
+            val = getattr(product, attr, None)
+            if val and val.strip():
+                texts.setdefault(val.strip().lower(), val.strip())
+    for mat in ifc.by_type("IfcMaterial"):
+        if mat.Name and mat.Name.strip():
+            texts.setdefault(mat.Name.strip().lower(), mat.Name.strip())
+    return list(texts.values())
+
+
+def _best_text_match(query: str, texts: list[str], text_vecs: "np.ndarray",
+                     embedder, min_score: float = PREREQUISITE_EVIDENCE_MIN_SCORE
+                     ) -> tuple[bool, str | None, float | None]:
+    """Best cosine-similarity match for `query` among pre-embedded `texts`."""
+    if not texts:
+        return False, None, None
+    q_vec = np.array(embedder.encode([query])[0], dtype=np.float32)
+    q_norm = np.linalg.norm(q_vec)
+    if q_norm == 0:
+        return False, None, None
+    best_score, best_text = -1.0, None
+    for text, vec in zip(texts, text_vecs):
+        norm = np.linalg.norm(vec)
+        if norm == 0:
+            continue
+        score = float(np.dot(q_vec, vec) / (q_norm * norm))
+        if score > best_score:
+            best_score, best_text = score, text
+    return best_score >= min_score, best_text, best_score
+
+
+def check_prerequisites_report(ifc_path: Path, db_path: Path, entity_name: str,
+                               _embedder=None) -> dict:
+    """Design-time prerequisite guardrail for authoring an IFC element.
+
+    Call this before adding `entity_name` to a model via ifc_edit/ifc_new. It
+    looks up entity_name's direct process-sequence predecessors (what BSOS
+    says must/should happen first) and 'must' constraints, then checks each
+    predecessor against text evidence already in the loaded model (product
+    names/types, material names) so an agent can see which prerequisites are
+    missing before authoring — e.g. adding interior finishes when no
+    waterproofing is yet evidenced.
+    """
+    engine = create_db_engine(str(db_path))
+    with Session(engine) as session:
+        entity_row = resolve_entity(session, entity_name)
+        if entity_row is None:
+            return {"error": "entity_not_found", "query": entity_name}
+        resolved_name = entity_row.name
+
+    predecessors = get_process_predecessors(db_path, resolved_name)
+    constraints = get_constraints(db_path, resolved_name)
+
+    ifc = ifcopenshell.open(str(ifc_path))
+    model_texts = collect_model_evidence_texts(ifc)
+    embedder = _embedder or _get_embedder()
+    text_vecs = (np.array(embedder.encode(model_texts), dtype=np.float32)
+                if model_texts else np.empty((0, 0), dtype=np.float32))
+
+    prereq_results = []
+    for name, hard_constraint, confidence, rationale in predecessors:
+        evidenced, matched_text, score = _best_text_match(name, model_texts, text_vecs, embedder)
+        prereq_results.append({
+            "prerequisite": name,
+            "hard_constraint": hard_constraint,
+            "confidence": confidence,
+            "rationale": rationale,
+            "evidenced": evidenced,
+            "matched_text": matched_text,
+            "match_score": round(score, 4) if score is not None else None,
+        })
+
+    missing = [r for r in prereq_results if not r["evidenced"]]
+    missing_hard = [r for r in missing if r["hard_constraint"]]
+
+    if missing_hard:
+        recommendation = (
+            f"Hold: {len(missing_hard)} hard-constraint prerequisite(s) not yet "
+            "evidenced in the model"
+        )
+    elif missing:
+        recommendation = (
+            f"Proceed with caution: {len(missing)} soft prerequisite(s) not yet "
+            "evidenced in the model"
+        )
+    else:
+        recommendation = "OK to proceed"
+
+    return {
+        "entity": resolved_name,
+        "prerequisites": prereq_results,
+        "constraints": [
+            {"constraint_type": ctype, "rule": rule, "confidence": conf}
+            for ctype, rule, conf in constraints
+        ],
+        "summary": {
+            "total_prerequisites": len(prereq_results),
+            "evidenced": len(prereq_results) - len(missing),
+            "missing": len(missing),
+            "missing_hard_constraints": len(missing_hard),
+        },
+        "recommendation": recommendation,
+    }
 
 
 # ── Fact extraction ───────────────────────────────────────────────────────────

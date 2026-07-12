@@ -786,6 +786,39 @@ def check_model_tool(ifc_path: str, db_path: str, _embedder=None) -> dict:
     }
 
 
+def check_prerequisites_tool(entity: str, ifc_path: str, db_path: str, _embedder=None) -> dict:
+    """Design-time prerequisite guardrail — call before ifc_edit/ifc_new adds `entity`.
+
+    Looks up entity's direct process-sequence predecessors (what BSOS says
+    must/should happen first, via get_process_sequence's underlying data) and
+    its 'must' constraints, then checks each predecessor against text already
+    present in the loaded IFC model (product names/types, material names) to
+    report which prerequisites are not yet evidenced.
+
+    entity is a bsos entity name (e.g. "Interior Finishes"), resolved
+    case-insensitively. ifc_path is a filesystem path to an .ifc file (e.g.
+    one already loaded via the `ifc` server's ifc_load).
+
+    Returns each prerequisite with hard_constraint/confidence/rationale plus
+    evidenced (bool) and the best-matching model text (if any), a summary
+    count, and a plain-language recommendation (OK to proceed / proceed with
+    caution / hold) an agent can act on before authoring the new element.
+    """
+    from pathlib import Path
+
+    module = _get_compliance_report_module()
+    if module is None:
+        return {"error": "compliance_report_unavailable",
+                "detail": "scripts/ifc_compliance_report.py not found — this "
+                          "tool requires a full repo checkout, not a packaged install."}
+
+    ifc_file = Path(ifc_path)
+    if not ifc_file.exists():
+        return {"error": "ifc_file_not_found", "query": ifc_path}
+
+    return module.check_prerequisites_report(ifc_file, Path(db_path), entity, _embedder=_embedder)
+
+
 # ---------------------------------------------------------------------------
 # MCP server factory
 # ---------------------------------------------------------------------------
@@ -904,5 +937,9 @@ def create_server(db_path: str) -> FastMCP:
     @mcp.tool(description=check_model_tool.__doc__)
     def check_model(ifc_path: str) -> dict:
         return check_model_tool(ifc_path, db_path)
+
+    @mcp.tool(description=check_prerequisites_tool.__doc__)
+    def check_prerequisites(entity: str, ifc_path: str) -> dict:
+        return check_prerequisites_tool(entity, ifc_path, db_path)
 
     return mcp

@@ -432,3 +432,28 @@ def test_get_compliance_report_module_loads_real_script():
     assert module is not None
     assert hasattr(module, "run_report")
     assert hasattr(module, "summarize")
+
+
+# ---------------------------------------------------------------------------
+# check_prerequisites (building_domain-l5w.4)
+# ---------------------------------------------------------------------------
+# Full behaviour (embedding-similarity evidence matching against a real IFC
+# model) is covered with a stub embedder in tests/unit/test_compliance_report.py.
+# What's covered here is registration and the fast-fail paths that don't
+# require loading the model or a real IFC file.
+
+def test_check_prerequisites_registered_on_server(tmp_path):
+    db = tmp_path / "reg.db"
+    server = create_server(str(db))
+    import asyncio
+    tools = asyncio.run(server.list_tools())
+    assert "check_prerequisites" in {t.name for t in tools}
+
+
+def test_check_prerequisites_missing_ifc_file(tmp_path):
+    from bsos.mcp_server.server import check_prerequisites_tool
+    db = tmp_path / "reg.db"
+    create_db_engine(str(db))
+    result = check_prerequisites_tool(
+        "Interior Finishes", str(tmp_path / "nonexistent.ifc"), str(db))
+    assert result["error"] == "ifc_file_not_found"

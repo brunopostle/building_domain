@@ -62,6 +62,7 @@ Add to `claude_desktop_config.json` (Linux: `~/.config/claude/`, macOS: `~/Libra
 | `get_spatial_relations` | Spatial topology (above, adjacent, encloses, …) |
 | `get_process_sequence` | Construction process ordering for an entity |
 | `check_model` | Full requirements/constraints/spatial/anti-pattern compliance report for a loaded IFC model file |
+| `check_prerequisites` | Design-time guardrail — prerequisites for an entity not yet evidenced in a loaded IFC model, call before ifc_edit/ifc_new |
 
 ## Example Session
 
