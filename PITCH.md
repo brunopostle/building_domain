@@ -12,37 +12,40 @@ The result is that AI agents working with building models produce generic advice
 
 BSOS (Building System of Systems) is an open, queryable building domain knowledge graph, served via the Model Context Protocol (MCP) so AI agents can retrieve relevant domain knowledge on demand rather than hoping it is spontaneously recalled.
 
-**Current scale (passes 1–3 complete):**
+**Current scale (all 12 extraction passes complete, reviewed, and promoted):**
 
-- **9,934 building entities** — physical components, spaces, activities, materials, systems, and IFC schema classes, covering standard commercial and residential construction
-- **22,548 typed assertions** across 9 relationship predicates: *requires*, *depends\_on*, *contains*, *supports*, *connects\_to*, *protects\_from*, *conflicts\_with*, *improves*, *unsuitable\_for*
-- **253 Christopher Alexander patterns** from *A Pattern Language* — with the first computational connectivity analysis of the full 253-pattern network: 1,754 edges, diameter 6, seven community clusters, and hub patterns identified for the first time quantitatively
-- **MCP server** (`bsos serve`) connecting the knowledge graph to Claude Code and Claude Desktop — agents query it live during building model analysis
+- **19,200 active building entities** — 13,499 activities, 2,648 components, 1,007 spaces, 771 IFC schema classes, 668 systems, 607 materials (a further 3,680 near-duplicates were identified and merged away)
+- **20,732 typed assertions** across 9 relationship predicates: *requires*, *depends\_on*, *contains*, *supports*, *connects\_to*, *protects\_from*, *conflicts\_with*, *improves*, *unsuitable\_for*
+- **14,004 hard constraints**, **23,522 anti-patterns/failure modes**, **12,617 design forces**, and **8,865 spatial relations** — the full building-intelligence layer: not just what an element depends on, but where it sits spatially, what can go wrong, and what design pressures shaped it
+- **21,609 process relations** encoding construction ordering, and **437 synthesised abstraction nodes** summarising clusters of related assertions
+- **12,401 design patterns**, including the original **253 Christopher Alexander patterns** from *A Pattern Language* used as ground truth — with the first computational connectivity analysis of the full 253-pattern network: 1,754 edges, diameter 6, seven community clusters, and hub patterns identified for the first time quantitatively
+- **MCP server** (`bsos serve`) connecting the knowledge graph to Claude Code and Claude Desktop, plus a composed `check_model` tool that runs a full requirements/constraints/spatial/anti-pattern compliance report against a loaded IFC model in one call
 
-This works today, with passes 1–3 data only. The knowledge base is entirely LLM-synthesised, ships under **ODbL 1.0**, and is hosted at [github.com/brunopostle/building_domain](https://github.com/brunopostle/building_domain).
+This works today. The knowledge base is entirely LLM-synthesised, ships under **ODbL 1.0**, and is hosted at [github.com/brunopostle/building_domain](https://github.com/brunopostle/building_domain).
 
-## What Funding Enables: Passes 4–12
+## What Funding Enables: From Knowledge Base to Agent Capability
 
-Nine further extraction passes are implemented, tested, and ready to run — they are blocked only by API cost. These transform the current dependency graph into a full building intelligence layer:
+The extraction pipeline's job is done — all 12 passes ran, and the output has been reviewed down
+to zero items left in `proposed` for assertions, constraints, patterns, forces, and anti-patterns.
+What remains is turning a queryable graph into composed agent capability, and closing two review
+queues the pipeline surfaced rather than resolved:
 
-| Pass | What it adds |
-|------|-------------|
-| **4** Spatial relations | Topological rules — what is above, adjacent to, enclosed by, or penetrates what |
-| **5** Process sequences | Construction ordering — what must happen before and after each activity or element |
-| **6** Hard constraints | Binary safety and buildability rules (must / must\_not) with no valid exceptions |
-| **7** Anti-patterns | Documented failure conditions — what goes wrong, why, and how to avoid it |
-| **8** Design patterns | Alexander-style recurring solutions linked to entities in the graph |
-| **9** Design forces | Competing pressures that drive design decisions for each element |
-| **10** Normalisation | Reference resolution, predicate stabilisation, abstraction synthesis |
-| **11** Adversarial validation | Multi-model quality filtering — assertions challenged by ≥2 independent models are flagged for review |
-| **12** IFC schema extraction | Schema-level relationships and constraints extracted from the official IFC specification |
-
-After passes 4–12, every entity will carry not just *what it depends on* but *where it sits spatially*, *when it is built*, *what can go wrong*, *what design forces act on it*, and *whether the assertions have survived independent challenge*.
-
-The compliance report will gain constraint checking and failure mode warnings on top of the current element-presence checks.
+- **Compose the BSOS and IFC MCP servers into capabilities beyond lookup** — a design-time advisor
+  that checks `get_process_sequence` prerequisites before an IFC edit, an anti-pattern sweep that
+  scans a whole loaded model against `get_failure_modes`, an Alexander-pattern spatial critique,
+  and clash reports annotated with BSOS rationale. Two compositions are already live (`check_model`,
+  a BOQ sanity-check script); four more are scoped and ready to build.
+- **Spatial relations review** — 8,865 Pass 4 topological assertions are extracted but not yet
+  through the manual accept/reject pass the other five tables received.
+- **Process-relation cycle review** — extraction independently produced 432 "X precedes Y" /
+  "Y precedes X" ordering conflicts across 16 activity clusters; resolving each requires a human
+  judgement call on the correct construction order, plus a small tooling gap fix to make that queue
+  reviewable at all.
+- **Entity deduplication** — 18,429 of the 19,200 active entities remain in `proposed` status
+  (this doesn't block MCP queries, but embedding-based dedup would tighten the graph further).
 
 ## Why This Is Achievable
 
-The hard problems are already solved. The extraction pipeline, MCP server, IFC integration, data model, test suite, and contributor workflow are all built and in production. What remains is API budget to run passes 4–12 across 9,934 entities and human review time for the adversarial validation findings that pass 11 surfaces for manual decision.
+The hard problems are already solved. The extraction pipeline, MCP server, IFC integration, data model, test suite, and contributor workflow are all built and in production, and have already processed the full corpus once. What remains is scoped engineering work on the composition tools above, plus review time for the two open queues — not further extraction spend.
 
 Contributors can run additional passes and open pull requests — the merge workflow is already documented and tested. Domain-specific extensions (hospitals, data centres, heritage buildings, industrial facilities) can be added via targeted seed concepts without re-running the full pipeline.
