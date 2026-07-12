@@ -226,7 +226,8 @@ def test_status_json_includes_phase2(tmp_path):
     assert result.exit_code == 0, result.output
     data = json.loads(result.output)
     assert "phase2" in data
-    assert data["phase2"]["antipatterns"] == 1
+    assert data["phase2"]["antipatterns"]["total"] == 1
+    assert data["phase2"]["antipatterns"]["proposed"] == 1
     assert "pending" in data
 
 

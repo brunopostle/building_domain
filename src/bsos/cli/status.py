@@ -34,15 +34,33 @@ def _count_all(session, model) -> int:
     return session.exec(select(func.count()).select_from(model)).one()  # type: ignore[arg-type]
 
 
+def _count_by_status_grouped(session, model) -> dict[str, int]:
+    rows = session.exec(
+        select(model.status, func.count()).group_by(model.status)  # type: ignore[attr-defined]
+    ).all()
+    return {status: count for status, count in rows}
+
+
 def run_status(session, json_out: bool) -> None:
     entity_counts = _count_by_status(session, EntityRow, ["proposed", "accepted", "deprecated"])
     assertion_counts = _count_by_status(
         session, AssertionRow, ["proposed", "accepted", "conflicted", "deprecated"]
     )
 
-    phase2_counts: dict[str, int] = {}
+    phase2_counts: dict[str, dict[str, int]] = {}
     for label, model in _PHASE2_MODELS:
-        phase2_counts[label] = _count_all(session, model)
+        raw = _count_by_status_grouped(session, model)
+        # "rejected" is a legacy/manually-applied status on some phase2 tables
+        # (constraints, antipatterns); fold it into "deprecated" for display —
+        # both mean the item is excluded from the active graph.
+        deprecated = raw.get("deprecated", 0) + raw.get("rejected", 0)
+        phase2_counts[label] = {
+            "proposed": raw.get("proposed", 0),
+            "accepted": raw.get("accepted", 0),
+            "conflicted": raw.get("conflicted", 0),
+            "deprecated": deprecated,
+            "total": sum(raw.values()),
+        }
 
     pending_predicates = _count_all(session, PendingPredicateRow)
     pending_spatial_types = _count_all(session, PendingSpatialRelationTypeRow)
@@ -93,10 +111,9 @@ def run_status(session, json_out: bool) -> None:
          assertion_counts.get("conflicted", 0), assertion_counts.get("deprecated", 0),
          sum(assertion_counts.values())),
     ]
-    # Phase 2 rows (total only; no status breakdown yet)
     p2_rows_data = [
-        (label, phase2_counts[label], "—", "—", "—", phase2_counts[label])
-        for label, _ in _PHASE2_MODELS
+        (label, c["proposed"], c["accepted"], c["conflicted"], c["deprecated"], c["total"])
+        for label, c in phase2_counts.items()
     ]
     all_rows = p1_rows_data + p2_rows_data
 
