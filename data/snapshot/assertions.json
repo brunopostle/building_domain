@@ -11510,7 +11510,7 @@
     "exceptions": [
       "when colour is defined by other colour models like HSL or CMYK"
     ],
-    "status": "accepted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:10:48.412662"
   },
   {
@@ -13536,7 +13536,7 @@
       "when a surface-based connection topology is defined"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:13:25.269231"
   },
   {
@@ -15089,7 +15089,7 @@
       "when resource type is labor-related"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:14:50.947574"
   },
   {
@@ -43358,7 +43358,7 @@
       "When using non-SI units that need conversion to SI"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:44:27.390453"
   },
   {
@@ -54723,7 +54723,7 @@
       "when single-value property definitions are needed"
     ],
     "exceptions": [],
-    "status": "accepted",
+    "status": "deprecated",
     "created_at": "2026-06-29T07:54:09.046025"
   },
   {
@@ -89143,7 +89143,7 @@
     ],
     "conditions": [],
     "exceptions": [],
-    "status": "accepted",
+    "status": "deprecated",
     "created_at": "2026-06-29T08:22:57.344620"
   },
   {
