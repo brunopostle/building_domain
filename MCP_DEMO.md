@@ -242,7 +242,7 @@ Tool: get_process_sequence("Install Windows", max_depth=1)
 The current database (`bsos.db`) holds the output of the full 12-pass extraction pipeline
 (`bsos extract --passes 1,2,3,4,5,6,7,8,9,10,11,12`), reviewed and promoted (`bd show building_domain-lfy`):
 
-- **19,200 active entities** (3,680 additional near-duplicates merged away by Pass 2/normalization): 13,499 activities, 2,648 components, 1,007 spaces, 771 IFC schema classes, 668 systems, 607 materials
+- **19,174 active entities** (3,706 near-duplicates merged away by Pass 2/normalization and `building_domain-b4p` entity-level curation): 13,499 activities, 2,630 components, 1,005 spaces, 771 IFC schema classes, 667 systems, 602 materials
 - **20,732 assertions** across 9 predicate types — `requires` (7,591), `depends_on` (4,700), `supports` (2,873), `connects_to` (2,580), `contains` (2,440), `protects_from` (323), `improves` (109), `conflicts_with` (78), `unsuitable_for` (38) — fully reviewed, 0 left in `proposed`
 - **14,004 constraints** (Pass 6) — binary must/must\_not buildability and safety rules with conditions and exceptions
 - **23,522 anti-patterns / failure modes** (Pass 7) — documented failure conditions with consequences and mitigations

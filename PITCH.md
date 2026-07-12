@@ -14,7 +14,7 @@ BSOS (Building System of Systems) is an open, queryable building domain knowledg
 
 **Current scale (all 12 extraction passes complete, reviewed, and promoted):**
 
-- **19,200 active building entities** — 13,499 activities, 2,648 components, 1,007 spaces, 771 IFC schema classes, 668 systems, 607 materials (a further 3,680 near-duplicates were identified and merged away)
+- **19,174 active building entities** — 13,499 activities, 2,630 components, 1,005 spaces, 771 IFC schema classes, 667 systems, 602 materials (a further 3,706 near-duplicates were identified and merged away)
 - **20,732 typed assertions** across 9 relationship predicates: *requires*, *depends\_on*, *contains*, *supports*, *connects\_to*, *protects\_from*, *conflicts\_with*, *improves*, *unsuitable\_for*
 - **14,004 hard constraints**, **23,522 anti-patterns/failure modes**, **12,617 design forces**, and **8,865 spatial relations** — the full building-intelligence layer: not just what an element depends on, but where it sits spatially, what can go wrong, and what design pressures shaped it
 - **21,609 process relations** encoding construction ordering, and **437 synthesised abstraction nodes** summarising clusters of related assertions
@@ -30,8 +30,10 @@ to zero items left in `proposed` for assertions, constraints, patterns, forces, 
 The process-relation ordering conflicts (432 "X precedes Y" / "Y precedes X" cycles the extraction
 produced independently across unrelated parts of the graph) are also fully resolved: a context-scoping
 fix cleared all but 8 as false cross-context artifacts, and the remaining 8 same-context reversals
-were resolved by hand. What remains is turning a queryable graph into composed agent capability, and
-closing the one review queue still open:
+were resolved by hand. Entity-level curation (embedding-based dedup of near-duplicate components,
+materials, spaces and systems) is also done: 26 more near-duplicates merged in `building_domain-b4p`,
+on top of the 3,680 Pass 2/normalization already caught. What remains is turning a queryable graph
+into composed agent capability, and closing the one review queue still open:
 
 - **Compose the BSOS and IFC MCP servers into capabilities beyond lookup** — a design-time advisor
   that checks `get_process_sequence` prerequisites before an IFC edit, an anti-pattern sweep that
@@ -40,8 +42,6 @@ closing the one review queue still open:
   a BOQ sanity-check script); four more are scoped and ready to build.
 - **Spatial relations review** — 8,865 Pass 4 topological assertions are extracted but not yet
   through the manual accept/reject pass the other five tables received.
-- **Entity deduplication** — 18,429 of the 19,200 active entities remain in `proposed` status
-  (this doesn't block MCP queries, but embedding-based dedup would tighten the graph further).
 
 ## Why This Is Achievable
 
