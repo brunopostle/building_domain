@@ -6,13 +6,13 @@ import uuid
 from datetime import datetime, timezone
 
 import pytest
-from sqlmodel import Session
+from sqlmodel import Session, select
 from typer.testing import CliRunner
 
 from bsos.cli.doctor import app
 from bsos.normalization.conflict_detection import _run_cycle_detection
 from bsos.persistence.database import create_db_engine, create_views
-from bsos.persistence.models import EntityRow, ProcessRelationRow
+from bsos.persistence.models import EntityRow, PendingForceRefRow, ProcessRelationRow
 
 NOW = datetime.now(timezone.utc)
 runner = CliRunner()
@@ -79,3 +79,37 @@ def test_doctor_flags_cycle_conflicted_process_relations(db_path):
     assert "3 process_relation(s) conflicted by cycle detection" in result.output
     assert "bsos review pending --type process_relation" in result.output
     assert result.exit_code == 1
+
+
+def test_doctor_flags_validation_failure_pending_force_refs(db_path):
+    path, eng = db_path
+    with Session(eng) as session:
+        session.add(PendingForceRefRow(
+            description="Wind Load Downward",
+            failure_type="validation_failure",
+            created_at=NOW,
+        ))
+        session.commit()
+
+    result = runner.invoke(app, ["--db", path])
+    assert "1 pending_force_ref(s) with failure_type=validation_failure" in result.output
+    assert "review-pending --type force" not in result.output
+    assert result.exit_code == 1
+
+
+def test_doctor_fix_clears_validation_failure_pending_force_refs(db_path):
+    path, eng = db_path
+    with Session(eng) as session:
+        session.add(PendingForceRefRow(
+            description="Wind Load Downward",
+            failure_type="validation_failure",
+            created_at=NOW,
+        ))
+        session.commit()
+
+    result = runner.invoke(app, ["--db", path, "--fix"])
+    assert "1 pending_force_ref(s) cleared" in result.output
+
+    with Session(eng) as session:
+        remaining = session.exec(select(PendingForceRefRow)).all()
+    assert remaining == []

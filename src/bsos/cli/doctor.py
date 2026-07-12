@@ -123,10 +123,18 @@ def doctor(
         else:
             _fail(
                 f"{len(vf_rows)} pending_force_ref(s) with failure_type=validation_failure"
-                " — resolve via: bsos review-pending --type force"
+                " — these are inert diagnostic records of forces whose direction was"
+                " inconsistent with the force name and so were correctly discarded"
+                " (never written to the forces table); no action needed",
+                fixable=fix,
             )
             for row in vf_rows:
                 typer.echo(f"         id={row.id}  {row.description[:80]}", err=True)
+            if fix:
+                for row in vf_rows:
+                    session.delete(row)
+                session.commit()
+                _fixed(f"{len(vf_rows)} pending_force_ref(s) cleared")
 
         # ── Check 4: stale conflict pairs ────────────────────────────────────
         stale_pairs = session.exec(
