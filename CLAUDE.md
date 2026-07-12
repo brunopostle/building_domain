@@ -174,6 +174,17 @@ reproduce the junk earlier runs needed manual SQL to remove:
   phases), folding each cluster into one canonical via `merge_entity` (which
   repoints the `process_relations` FKs). Scoped to `entity_type='activity'`
   only (building_domain-e9k).
+- **Context-scoped process ordering** — Pass 5 sets `process_relations.subject_id`
+  to the entity it is currently processing, so `bsos validate --conflicts`'s cycle
+  detection can partition the ordering graph per subject context instead of
+  unioning every edge into one graph. Without this, generic shared activities
+  ('Concrete Curing', 'Foundation Construction') referenced from many unrelated
+  contexts accumulate locally-true-but-globally-incompatible orderings that look
+  like one large contradiction (432 edges/16 cycles in the pre-fix DB, 400 of
+  them false cross-context artifacts). A fresh run needs no manual reset —
+  `subject_id` is populated at write time. `bsos curate backfill-process-context`
+  exists only to backfill rows written before this field existed
+  (building_domain-eue).
 
 ### Model routing (`bsos/llm/__init__.py`)
 

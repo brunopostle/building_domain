@@ -38,9 +38,11 @@ queues the pipeline surfaced rather than resolved:
 - **Spatial relations review** — 8,865 Pass 4 topological assertions are extracted but not yet
   through the manual accept/reject pass the other five tables received.
 - **Process-relation cycle review** — extraction independently produced 432 "X precedes Y" /
-  "Y precedes X" ordering conflicts across 16 activity clusters; resolving each requires a human
-  judgement call on the correct construction order, plus a small tooling gap fix to make that queue
-  reviewable at all.
+  "Y precedes X" ordering conflicts across 16 activity clusters. The tooling gap that made the
+  queue unreviewable is fixed, and a follow-up architecture fix (context-scoped ordering, so
+  unrelated parts of the graph sharing a generic activity node no longer collide into a false
+  conflict) resolved all but 8 edges automatically; the last 8 are small same-context reversals
+  awaiting a final human judgement call.
 - **Entity deduplication** — 18,429 of the 19,200 active entities remain in `proposed` status
   (this doesn't block MCP queries, but embedding-based dedup would tighten the graph further).
 
