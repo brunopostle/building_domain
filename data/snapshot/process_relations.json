@@ -183,7 +183,7 @@
     "rationale": "Beams are typically placed on or between columns to transfer loads; columns must be in place to support the beams.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:34:09.006588"
   },
   {
@@ -205,7 +205,7 @@
     "rationale": "Steel reinforcement must be positioned within the formwork before concrete is poured for the beam.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:34:09.006588"
   },
   {
@@ -216,7 +216,7 @@
     "rationale": "Beams provide primary support for floor or roof slabs; slabs are poured after beams are in place to ensure proper load transfer and structural continuity.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:34:09.006588"
   },
   {
@@ -227,7 +227,7 @@
     "rationale": "Mechanical, electrical, and plumbing rough-in work above ceilings can begin after beams are installed to use beams for support and routing, though this is a soft preference as some work can be done in parallel.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:34:09.006588"
   },
   {
@@ -1349,7 +1349,7 @@
     "rationale": "A damp-proof membrane must be placed at the base of masonry walls to prevent rising damp before bricks are laid.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:34:56.375426"
   },
   {
@@ -1371,7 +1371,7 @@
     "rationale": "Roof trusses and rafters bear on the completed masonry walls; walls must be fully built and cured to support roof loads.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:34:56.375426"
   },
   {
@@ -1492,7 +1492,7 @@
     "rationale": "Structural framing (walls, ceilings, roof structure) must be in place to provide support and attachment points for ductwork, and to define the spaces through which ducts will run.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:05.594650"
   },
   {
@@ -1503,7 +1503,7 @@
     "rationale": "Electrical rough-in must be completed first to avoid conflicts with ductwork placement and to ensure that ducts are not installed where electrical conduits or boxes need to go.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:05.594650"
   },
   {
@@ -1514,7 +1514,7 @@
     "rationale": "Plumbing pipes must be installed before ductwork to prevent clashes and to allow proper routing of both systems without interference.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:05.594650"
   },
   {
@@ -1525,7 +1525,7 @@
     "rationale": "Ductwork should be tested and sealed before insulation is applied around ducts to ensure accessibility for leak testing and to prevent insulating over unsealed joints.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:05.594650"
   },
   {
@@ -1822,7 +1822,7 @@
     "rationale": "Plumbing pipes must be installed in walls and ceilings before insulation, as insulation would obscure and prevent access to plumbing rough-in work.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:22.276791"
   },
   {
@@ -1844,7 +1844,7 @@
     "rationale": "The vapor barrier (if separate from faced insulation) must be installed immediately after insulation to seal the thermal envelope, and prior to any interior finish work.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:22.276791"
   },
   {
@@ -1910,7 +1910,7 @@
     "rationale": "The structural framing (roof trusses, rafters, or decking) provides the necessary support structure for the roofing materials to be installed upon.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:27.815997"
   },
   {
@@ -1921,7 +1921,7 @@
     "rationale": "Roof sheathing (plywood or OSB panels) must be installed over the framing to create a solid base for the roofing underlayment and finish materials.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:27.815997"
   },
   {
@@ -1954,7 +1954,7 @@
     "rationale": "Although electrical wiring can be run before the roof is complete, completing the roof first protects the interior from weather and allows safer working conditions for electrical installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:27.815997"
   },
   {
@@ -2559,7 +2559,7 @@
     "rationale": "Walls provide the vertical support structure that the roof rests upon; roof cannot be installed without completed walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:58.710549"
   },
   {
@@ -2570,7 +2570,7 @@
     "rationale": "The floor slab provides a stable working platform and reference elevation for erecting walls and roof structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:58.710549"
   },
   {
@@ -2581,7 +2581,7 @@
     "rationale": "Roof sheathing is installed directly onto the roof framing members; the structural frame must be in place first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:58.710549"
   },
   {
@@ -2592,7 +2592,7 @@
     "rationale": "Insulation is placed between or over the roof structural members after the frame is complete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:35:58.710549"
   },
   {
@@ -2900,7 +2900,7 @@
     "rationale": "The roof decking must be installed to create the roof opening and substrate that the rooflight/skylight integrates into.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:36:15.202619"
   },
   {
@@ -2922,7 +2922,7 @@
     "rationale": "Flashing is installed around the skylight to seal the gap between the skylight and the roof; the skylight must be in place first for flashing to be properly fitted.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:36:15.202619"
   },
   {
@@ -3197,7 +3197,7 @@
     "rationale": "The roof deck or sheathing provides the structural base onto which waterproofing membranes are applied; the surface must be continuous and stable before any waterproofing layer can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:01.734682"
   },
   {
@@ -3230,7 +3230,7 @@
     "rationale": "Flashing (at valleys, vents, chimneys, and edges) is installed after the main waterproofing membrane to cap and seal joints, ensuring water-tightness at transitions.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:01.734682"
   },
   {
@@ -3252,7 +3252,7 @@
     "rationale": "The roof deck (typically plywood or OSB sheathing) must be installed to provide a structural base for the insulation to be placed upon or between.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:06.904876"
   },
   {
@@ -3472,7 +3472,7 @@
     "rationale": "Load-bearing walls must be built on top of a properly constructed foundation to distribute the wall's vertical loads evenly into the ground and prevent settlement or structural failure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:17.739554"
   },
   {
@@ -3494,7 +3494,7 @@
     "rationale": "Load-bearing walls typically rest on the ground floor slab or floor structure; the floor must be in place to provide a stable base and to properly locate the wall.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:17.739554"
   },
   {
@@ -3505,7 +3505,7 @@
     "rationale": "The roof structure (rafters, trusses, or roof deck) bears directly on load-bearing walls; the walls must be fully erected, aligned, and braced before roof loads can be applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:17.739554"
   },
   {
@@ -3659,7 +3659,7 @@
     "rationale": "The damp proof course must be laid on the foundation or slab prior to the cavity wall to prevent moisture rising into the wall structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:24.366809"
   },
   {
@@ -3681,7 +3681,7 @@
     "rationale": "Insulation is installed within the cavity after the wall is erected; the cavity must exist before it can be filled.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:24.366809"
   },
   {
@@ -3692,7 +3692,7 @@
     "rationale": "Shear walls require a stable load-bearing foundation to transfer lateral and vertical loads to the ground; without foundation, the wall has no structural support.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:27.627155"
   },
   {
@@ -3725,7 +3725,7 @@
     "rationale": "Shear walls provide lateral bracing and vertical support for floor slabs; slabs typically bear on or connect to the completed shear walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:27.627155"
   },
   {
@@ -3747,7 +3747,7 @@
     "rationale": "Foundations must be excavated before any wall construction can begin, including party walls, as the wall requires a stable base.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:29.257953"
   },
   {
@@ -3758,7 +3758,7 @@
     "rationale": "Concrete foundations must be poured and cured before party wall construction can commence to provide structural support for the wall.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:29.257953"
   },
   {
@@ -3769,7 +3769,7 @@
     "rationale": "Party walls are load-bearing and support the roof structure, so they must be completed before roof installation begins.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:29.257953"
   },
   {
@@ -3923,7 +3923,7 @@
     "rationale": "The floor slab (if present) must be in place before wall framing to provide the surface on which bottom plates rest and to ensure wall layout accuracy.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:39.085393"
   },
   {
@@ -3934,7 +3934,7 @@
     "rationale": "Roof framing rests on top of load-bearing walls. Walls must be framed, plumbed, and braced before roof trusses or rafters can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:39.085393"
   },
   {
@@ -3945,7 +3945,7 @@
     "rationale": "Structural sheathing (plywood/OSB) is attached directly to the wall frame. The frame must be complete to provide the nailing substrate for sheathing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:39.085393"
   },
   {
@@ -4132,7 +4132,7 @@
     "rationale": "Wall ties must be anchored into a stable foundation structure; without the foundation, there is no base to support or anchor the wall tie system.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:50.564594"
   },
   {
@@ -4165,7 +4165,7 @@
     "rationale": "While wall ties are typically installed before cavity insulation, in some sequences insulation can be placed as the wall is built up; however, optimal practice is to install ties first to maintain cavity integrity.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:50.564594"
   },
   {
@@ -4176,7 +4176,7 @@
     "rationale": "Wall ties often penetrate the cavity and must be correctly positioned relative to the damp proof course to prevent moisture bridging; the DPC installation usually follows or is coordinated with wall tie placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:50.564594"
   },
   {
@@ -4198,7 +4198,7 @@
     "rationale": "Trenches or pits must be excavated to the required depth and width to accommodate the wall footings and foundation walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:52.219285"
   },
   {
@@ -4209,7 +4209,7 @@
     "rationale": "The bearing soil must be tested for adequate load-bearing capacity and compacted to prevent differential settlement under the foundation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:52.219285"
   },
   {
@@ -4264,7 +4264,7 @@
     "rationale": "Underslab utilities must be roughed in after the foundation wall forms are set but before the slab is poured; the wall itself must be in place to define the building footprint.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:52.219285"
   },
   {
@@ -4330,7 +4330,7 @@
     "rationale": "Walls require a stable load-bearing foundation to transfer vertical loads to the ground; building walls without a foundation would cause settlement and structural failure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:58.440865"
   },
   {
@@ -4341,7 +4341,7 @@
     "rationale": "The ground floor slab provides a level working platform and base for wall layout; walls are typically built on or anchored to the slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:58.440865"
   },
   {
@@ -4363,7 +4363,7 @@
     "rationale": "Roof trusses or rafters bear directly onto wall top plates; walls must be fully erected, plumb, and braced to support roof loads.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:58.440865"
   },
   {
@@ -4385,7 +4385,7 @@
     "rationale": "Electrical wiring is run through wall cavities; walls must be framed and sheathed before electricians can install cables and outlet boxes within them.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:58.440865"
   },
   {
@@ -4396,7 +4396,7 @@
     "rationale": "Plumbing pipes for supply and drainage are installed inside wall cavities; walls must be built first to route pipes through stud spaces.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:58.440865"
   },
   {
@@ -4407,7 +4407,7 @@
     "rationale": "Insulation is placed between wall studs; the wall frame must be complete and enclosed (sheathing on exterior side) before insulation can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:37:58.440865"
   },
   {
@@ -4429,7 +4429,7 @@
     "rationale": "Wall framing creates the structural cavity that holds insulation; insulation cannot be installed before the wall frame is in place.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:38:03.599829"
   },
   {
@@ -4440,7 +4440,7 @@
     "rationale": "Electrical wiring must be run through the wall cavities before insulation is blown or placed, otherwise the wiring would be inaccessible or would have to be installed on top of insulation, violating code.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:38:03.599829"
   },
   {
@@ -4451,7 +4451,7 @@
     "rationale": "Plumbing pipes within wall cavities must be installed before insulation fills the cavity, as adding pipes afterward would require removing insulation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:38:03.599829"
   },
   {
@@ -5067,7 +5067,7 @@
     "rationale": "The subgrade soil must be tested for bearing capacity and properly compacted to provide a stable base before placing the foundation wall to prevent settlement or structural failure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:38:33.741011"
   },
   {
@@ -5111,7 +5111,7 @@
     "rationale": "Interior floor slabs are typically poured after foundation walls are complete, as the walls define the perimeter and provide lateral support for the slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:38:33.741011"
   },
   {
@@ -5122,7 +5122,7 @@
     "rationale": "The superstructure framing (walls, columns, beams) is erected on top of or anchored to the foundation wall; the foundation must be complete to provide the load-bearing platform.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:38:33.741011"
   },
   {
@@ -5573,7 +5573,7 @@
     "rationale": "Many waterproofing systems require a primer coat to ensure adhesion between the substrate and the waterproofing membrane. Primer must be applied and allowed to dry/cure per manufacturer specifications.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:39:22.866792"
   },
   {
@@ -5760,7 +5760,7 @@
     "rationale": "The steel beam provides the primary structural support; roof decking is placed on top of and supported by the steel beams.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:39:29.368739"
   },
   {
@@ -5771,7 +5771,7 @@
     "rationale": "Steel beams are typically connected to and supported by vertical columns; columns must be erected first to provide attachment points for beams.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:39:29.368739"
   },
   {
@@ -6442,7 +6442,7 @@
     "rationale": "Columns provide vertical support for beams; beam formwork cannot be installed until columns are poured and sufficiently cured to bear the load from beam shoring.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:28.905539"
   },
   {
@@ -6453,7 +6453,7 @@
     "rationale": "In monolithic construction, beam and slab formwork are often installed together; however, if slab formwork is erected first, it can serve as a working platform for beam side formwork, though this is a sequencing preference rather than a strict physical requirement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:28.905539"
   },
   {
@@ -6464,7 +6464,7 @@
     "rationale": "Beam reinforcement must be placed inside the formwork; typically, bottom reinforcement is laid after the beam bottom form is in place, but the sequence can vary. In some methods, rebar cages are pre-assembled and lowered into formwork, requiring formwork to be partially installed first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:28.905539"
   },
   {
@@ -6475,7 +6475,7 @@
     "rationale": "Concrete for beams cannot be poured until the formwork is fully erected, aligned, braced, and checked for dimensions and stability to contain the wet concrete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:28.905539"
   },
   {
@@ -6486,7 +6486,7 @@
     "rationale": "In typical cast-in-situ construction, the beam bottom formwork is installed first, then rebar is placed, followed by beam side formwork. So formwork installation and rebar installation are interleaved, not strictly sequential.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:28.905539"
   },
   {
@@ -6497,7 +6497,7 @@
     "rationale": "Formwork provides the mold and support structure for the beam; reinforcement bars must be placed within the formwork before concrete is poured, so formwork must be complete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:29.456690"
   },
   {
@@ -6530,7 +6530,7 @@
     "rationale": "Concrete for the beam cannot be poured until the reinforcement cage is fully placed, tied, and positioned within the formwork per the engineering design.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:29.456690"
   },
   {
@@ -6904,7 +6904,7 @@
     "rationale": "Concrete must reach sufficient strength through curing before formwork can be safely removed without damaging the column.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:40:45.617865"
   },
   {
@@ -7311,7 +7311,7 @@
     "rationale": "The foundation concrete must be fully cured to sufficient strength to bear the load of the column and base plate before installation can proceed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:41:02.247510"
   },
   {
@@ -7322,7 +7322,7 @@
     "rationale": "The column base plate must be in place and leveled before the steel column can be erected and welded or bolted to the base plate.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:41:02.247510"
   },
   {
@@ -7366,7 +7366,7 @@
     "rationale": "The column must be poured and cured to provide structural support for the column capital, which is cast or placed on top of the column.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:41:03.255883"
   },
   {
@@ -7377,7 +7377,7 @@
     "rationale": "The column capital acts as a support or head for the slab formwork; slab formwork often rests on or is supported by the column capital, so the capital must be in place first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:41:03.255883"
   },
   {
@@ -7443,7 +7443,7 @@
     "rationale": "Reinforcement bars (rebar) must be placed and tied inside the column before formwork can be erected around them, as formwork encloses the reinforcement cage.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:41:07.677229"
   },
   {
@@ -7476,7 +7476,7 @@
     "rationale": "Formwork must be fully assembled, aligned, braced, and checked before concrete can be placed into the column.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:41:07.677229"
   },
   {
@@ -7938,7 +7938,7 @@
     "rationale": "Walls must be built to support the roof slab; the roof slab rests directly on the walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:42:01.539244"
   },
   {
@@ -7982,7 +7982,7 @@
     "rationale": "Waterproofing membrane/layer must be applied after the roof slab has cured to protect the slab from water ingress.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:42:01.539244"
   },
   {
@@ -8532,7 +8532,7 @@
     "rationale": "Steel reinforcement bars must be placed and tied within the formwork before concrete is poured to provide tensile strength to the slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:42:23.319612"
   },
   {
@@ -8554,7 +8554,7 @@
     "rationale": "Freshly poured concrete must undergo a controlled curing process to achieve design strength and prevent cracking due to rapid moisture loss.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:42:23.319612"
   },
   {
@@ -8686,7 +8686,7 @@
     "rationale": "The formwork provides the mold and structural support for the wet concrete; reinforcement bars (rebar) must be placed inside the formwork before concrete pouring, making formwork installation a prerequisite.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:42:32.550160"
   },
   {
@@ -8697,7 +8697,7 @@
     "rationale": "Reinforcement steel must be fully placed, tied, and inspected before concrete can be poured; pouring concrete before reinforcement is complete would result in a structurally unsafe slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:42:32.550160"
   },
   {
@@ -9764,7 +9764,7 @@
     "rationale": "The skylight must be installed on a completed roof deck structure; the roof deck provides the structural support and opening for the skylight.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:43:15.107611"
   },
   {
@@ -9775,7 +9775,7 @@
     "rationale": "Roof framing defines the rough opening and structural support needed for skylight placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:43:15.107611"
   },
   {
@@ -9786,7 +9786,7 @@
     "rationale": "Flashing is installed around the skylight after it is placed to create a watertight seal and prevent leaks.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:43:15.107611"
   },
   {
@@ -10501,7 +10501,7 @@
     "rationale": "The door stop creates the physical stop that limits the door's swing; the door must be hung after the stop is in place so it can close against the stop properly.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:43:43.424987"
   },
   {
@@ -10523,7 +10523,7 @@
     "rationale": "If the door stop is floor-mounted (e.g., a rubber floor stop), the finished flooring should be in place. However, it is a soft preference as a stop could be installed on subfloor and later adjusted.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:43:43.424987"
   },
   {
@@ -10842,7 +10842,7 @@
     "rationale": "The door slab must be hung on the frame before hardware such as locks, latches, and handles can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:44:00.159877"
   },
   {
@@ -15528,7 +15528,7 @@
     "rationale": "Ceiling grids are often installed before partitions so that partition heads can be fixed to the ceiling framework, though this can be sequenced differently depending on design.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:49:31.548103"
   },
   {
@@ -15539,7 +15539,7 @@
     "rationale": "Once glazed partitions are installed, electrical outlets and conduits integrated into or passing through the partition can be roughed in, though this may be done concurrently.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:49:31.548103"
   },
   {
@@ -15682,7 +15682,7 @@
     "rationale": "Mechanical, electrical, and plumbing rough-in work within walls must be completed before the acoustic partition is closed up, to avoid costly rework and ensure access.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:49:40.306430"
   },
   {
@@ -15693,7 +15693,7 @@
     "rationale": "Acoustic insulation (e.g., batts) is typically placed within the partition cavity after the partition framing and one side of the board are in place, but before the second side is fully closed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:49:40.306430"
   },
   {
@@ -15902,7 +15902,7 @@
     "rationale": "Any plumbing or electrical conduits that run beneath the slab must be installed before the slab is poured, which must be complete before framing begins; otherwise partition walls cannot be properly located or anchored.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:50:20.881183"
   },
   {
@@ -15935,7 +15935,7 @@
     "rationale": "Plumbing pipes that run inside partition walls must be installed after the stud walls are framed, as the pipes are placed within the wall cavities before being covered by sheathing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:50:20.881183"
   },
   {
@@ -15957,7 +15957,7 @@
     "rationale": "Mechanical, electrical, and plumbing rough-in work within the partition must be completed before furring is installed, as furring covers these elements and access would be lost or require rework.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:50:21.156837"
   },
   {
@@ -15968,7 +15968,7 @@
     "rationale": "Furring creates the cavity depth needed to hold insulation; insulation is placed into the furred space before the final finish layer is applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:50:21.156837"
   },
   {
@@ -16210,7 +16210,7 @@
     "rationale": "Acoustic sealing is typically applied at joints, edges, and penetrations after at least one layer of board is fixed, as the sealant fills gaps between boards and between board and frame.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T00:50:34.992312"
   },
   {
@@ -16221,7 +16221,7 @@
     "rationale": "Where double-layer boarding is specified, acoustic sealing between layers (e.g., acoustic sealant at perimeter and joints) must be applied before the second layer is fixed to ensure continuous airtightness.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T00:50:34.992312"
   },
   {
@@ -16639,7 +16639,7 @@
     "rationale": "Structural framing must be in place to support ductwork hangers and provide the basic building envelope for routing ductwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:51:22.935792"
   },
   {
@@ -16650,7 +16650,7 @@
     "rationale": "Electrical and plumbing rough-ins that share ceiling space must be completed before ductwork to avoid conflicts and rework, as ducts are bulky and less flexible to route around other services.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:51:22.935792"
   },
   {
@@ -16672,7 +16672,7 @@
     "rationale": "Ceiling grids are installed after ductwork is complete to enclose the ducts within the plenum space.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T00:51:22.935792"
   },
   {
@@ -27023,7 +27023,7 @@
     "rationale": "The excavation must be completed to expose the foundation area and provide working space for making connections between foundation elements.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:10:17.403667"
   },
   {
@@ -27056,7 +27056,7 @@
     "rationale": "Foundation connections (e.g., base plates, anchor bolts, embedded plates) must be completed to provide the load-transfer interface before steel columns or beams can be erected.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:10:17.403667"
   },
   {
@@ -27067,7 +27067,7 @@
     "rationale": "While it is preferable to complete all connections before waterproofing to avoid disturbing the membrane, some connections may be done concurrently; this is a soft preference for sequencing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:10:17.403667"
   },
   {
@@ -29564,7 +29564,7 @@
     "rationale": "One side of the wall sheathing is typically installed before the door to allow proper alignment and fastening of the door frame.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T01:12:00.631999"
   },
   {
@@ -29575,7 +29575,7 @@
     "rationale": "The door assembly must be in place before the opposite side of drywall is installed, as the drywall butts against the door frame.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T01:12:00.631999"
   },
   {
@@ -29872,7 +29872,7 @@
     "rationale": "Landings are structural components that require a stable foundation or supporting structure to be in place before they can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:12:45.170138"
   },
   {
@@ -29916,7 +29916,7 @@
     "rationale": "While finishing can be done after landing installation, it is a soft preference as finishing could theoretically be done prior if protected, but sequential finishing is typical for consistency.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:12:45.170138"
   },
   {
@@ -35317,7 +35317,7 @@
     "rationale": "Floor drains require connection to the plumbing waste pipe system, which must be roughed-in before the drain body can be positioned and connected.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:21:50.146100"
   },
   {
@@ -35339,7 +35339,7 @@
     "rationale": "The floor drain body must be installed and secured in place before the concrete slab is poured around it to ensure proper embedment and a watertight seal.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:21:50.146100"
   },
   {
@@ -39629,7 +39629,7 @@
     "rationale": "Base trim and other floor-related trim must be installed before finished flooring, as flooring is often run up to or under the trim, and trim covers floor expansion gaps.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:28:45.790779"
   },
   {
@@ -39651,7 +39651,7 @@
     "rationale": "Cabinets must be installed before trim and hardware such as drawer pulls and knobs are attached, as these are mounted directly onto cabinet fronts.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:28:45.790779"
   },
   {
@@ -41356,7 +41356,7 @@
     "rationale": "After concrete is poured into the beam formwork, it must undergo a curing period to gain sufficient strength before any loads are applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:30:03.083929"
   },
   {
@@ -41862,7 +41862,7 @@
     "rationale": "Concrete must be placed and poured before its surface can be finished; finishing is performed on freshly placed concrete while it is still workable.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:30:59.120411"
   },
   {
@@ -41884,7 +41884,7 @@
     "rationale": "Surface finishing (floating, troweling, brooming) must be completed before the curing process begins, as curing is the controlled maintenance of moisture and temperature after finishing is done.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:30:59.120411"
   },
   {
@@ -41928,7 +41928,7 @@
     "rationale": "Reinforcement steel (rebar) must be positioned and tied in the footing or slab area before anchor bolts or embedment plates are set, so they can be properly integrated into the reinforcing cage.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:30:59.751964"
   },
   {
@@ -41939,7 +41939,7 @@
     "rationale": "Anchors and embedments must be positioned, leveled, and secured in place before concrete is poured so that they become permanently embedded in the cured concrete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:30:59.751964"
   },
   {
@@ -42049,7 +42049,7 @@
     "rationale": "The ground floor slab provides the working platform and base for erecting the timber frame; posts and beams bear on the slab or on embedded connections in the foundation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:31:07.232932"
   },
   {
@@ -42093,7 +42093,7 @@
     "rationale": "If SIPs are used as the enclosure system, they are typically installed directly onto the timber frame, but in some sequences SIPs can be installed as the frame is raised (panelized approach), so this is a strong preference but not an absolute physical constraint.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:31:07.232932"
   },
   {
@@ -43017,7 +43017,7 @@
     "rationale": "Steel trusses require stable and level foundation support to bear their load; without completed foundations, trusses cannot be safely placed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:31:51.463777"
   },
   {
@@ -43039,7 +43039,7 @@
     "rationale": "If concrete foundations or columns are used, they must be fully cured to achieve required strength before accepting truss loads.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:31:51.463777"
   },
   {
@@ -43050,7 +43050,7 @@
     "rationale": "Roof decking or sheathing is placed directly on top of the steel trusses; trusses must be fully installed and secured to provide the supporting framework.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:31:51.463777"
   },
   {
@@ -43347,7 +43347,7 @@
     "rationale": "Structural steel columns and frames require stable foundation systems (footings, piers, or pile caps) to transfer loads to the ground; steel cannot be erected on unprepared ground.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:32:41.121123"
   },
   {
@@ -43380,7 +43380,7 @@
     "rationale": "The site must be graded and drained to prevent standing water or soft soils that could compromise crane stability and steel placement safety.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:32:41.121123"
   },
   {
@@ -44491,7 +44491,7 @@
     "rationale": "SIPs panels require a level, structurally sound foundation (slab or basement walls) to bear the load and provide a base for wall and roof panels.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:34:29.873221"
   },
   {
@@ -44502,7 +44502,7 @@
     "rationale": "All below-grade plumbing, electrical conduits, and ground preparations must be completed before the floor SIPs are placed, as access is impossible afterward.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:34:29.873221"
   },
   {
@@ -44513,7 +44513,7 @@
     "rationale": "The SIP roof panels must be installed before weatherproofing membranes and roofing can be applied to seal the structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:34:29.873221"
   },
   {
@@ -44557,7 +44557,7 @@
     "rationale": "The roof deck must be installed before air sealing can be applied at the attic floor or roof plane to create a continuous air barrier.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:34:34.467747"
   },
   {
@@ -44579,7 +44579,7 @@
     "rationale": "Air sealing must be completed before insulation is installed because insulation cannot properly stop air leakage, and sealing behind insulation would be inaccessible or ineffective once insulation is in place.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:34:34.467747"
   },
   {
@@ -45162,7 +45162,7 @@
     "rationale": "Concrete must reach sufficient strength (typically 7+ days of curing) before the weight of brickwork can be applied; premature loading can crack or fail the foundation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:01.733634"
   },
   {
@@ -45184,7 +45184,7 @@
     "rationale": "Roof trusses typically bear on top of the wall structure; the load-bearing brick walls must be complete to support the roof framing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:01.733634"
   },
   {
@@ -45305,7 +45305,7 @@
     "rationale": "A stable foundation must be excavated and prepared to support the weight of the brick pillar/pier before masonry work can begin.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:07.803747"
   },
   {
@@ -45349,7 +45349,7 @@
     "rationale": "While roof framing can proceed once pillars are complete to transfer loads, temporary shoring could allow some roof work; however, full load transfer typically requires completed pillars.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:07.803747"
   },
   {
@@ -45426,7 +45426,7 @@
     "rationale": "A damp proof course must be laid on the foundation before brickwork begins to prevent rising damp from migrating up the wall structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:13.190436"
   },
   {
@@ -45437,7 +45437,7 @@
     "rationale": "While often done concurrently, completing the ground slab before cavity wall construction helps with staging and bracing support, though it is not always physically mandatory.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:13.190436"
   },
   {
@@ -45448,7 +45448,7 @@
     "rationale": "The load-bearing cavity walls must be fully constructed and cured to support roof trusses or rafters, which rest directly on the wall plates.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:13.190436"
   },
   {
@@ -45459,7 +45459,7 @@
     "rationale": "Cavity insulation is installed after the walls are built and cleaned out; it is blown or placed into the cavity space, which requires the full wall height to be in place.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:13.190436"
   },
   {
@@ -45591,7 +45591,7 @@
     "rationale": "A damp proof course must be laid on the foundation before brickwork begins to prevent moisture rising through the walls; this is a critical moisture control layer.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:22.610571"
   },
   {
@@ -45602,7 +45602,7 @@
     "rationale": "The foundation/slab concrete must be sufficiently cured to gain strength before bearing the load of brickwork walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:22.610571"
   },
   {
@@ -45624,7 +45624,7 @@
     "rationale": "Load-bearing brickwork walls must be completed to their full height to provide support for roof trusses, rafters, and roofing materials.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:36:22.610571"
   },
   {
@@ -46669,7 +46669,7 @@
     "rationale": "A mortar bed must be laid first so that the horizontal joint reinforcement can be placed within the fresh mortar before the next course of masonry units is laid.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T01:38:20.291933"
   },
   {
@@ -46680,7 +46680,7 @@
     "rationale": "After placing the horizontal joint reinforcement, the next layer of mortar must be applied over it to embed the reinforcement and continue the masonry wall construction.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T01:38:20.291933"
   },
   {
@@ -47505,7 +47505,7 @@
     "rationale": "This ordering is incorrect as stated; actually Rebar Placing & Fixing must precede Concrete Pouring.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T01:41:05.856510"
   },
   {
@@ -47516,7 +47516,7 @@
     "rationale": "Rebar must be fully placed, tied, and fixed into position before concrete is poured to embed the reinforcement within the concrete element.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T01:41:05.856510"
   },
   {
@@ -48660,7 +48660,7 @@
     "rationale": "Electrical cables and boxes must be installed inside the wall cavities before they are enclosed by drywall, as access is impossible after the drywall is hung.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:42:02.550046"
   },
   {
@@ -48671,7 +48671,7 @@
     "rationale": "Plumbing pipes and drain lines within walls must be installed and pressure-tested before enclosing them with drywall.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:42:02.550046"
   },
   {
@@ -48693,7 +48693,7 @@
     "rationale": "Insulation (batts, rolls, or spray foam) must be placed in wall and ceiling cavities before drywall is installed to close off the spaces.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:42:02.550046"
   },
   {
@@ -51377,7 +51377,7 @@
     "rationale": "While some insulation can be placed above or below the waterproofing depending on system design, in many conventional flat roof assemblies the waterproofing layer is applied first to protect the structure, and insulation is installed above it; however this ordering can vary by design.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:46:13.127700"
   },
   {
@@ -51993,7 +51993,7 @@
     "rationale": "Dampproofing is applied directly to the exterior surface of foundation walls, so the foundation must first be constructed and cured.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:47:12.687830"
   },
   {
@@ -52004,7 +52004,7 @@
     "rationale": "Concrete must be fully cured before dampproofing materials can be applied to ensure proper adhesion and prevent moisture trapping.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:47:12.687830"
   },
   {
@@ -52026,7 +52026,7 @@
     "rationale": "It is preferred to install dampproofing before exterior insulation to protect the insulation from ground moisture, though some systems combine both.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:47:12.687830"
   },
   {
@@ -52224,7 +52224,7 @@
     "rationale": "For post-tensioned concrete structures, stressing operations can only begin after the formwork has been stripped to allow access to the tendon anchorage zones and to avoid restraining the stressing forces.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T01:47:21.647247"
   },
   {
@@ -52719,7 +52719,7 @@
     "rationale": "A minimum curing period is required for the concrete to achieve the necessary early strength before the forms are removed; premature striking could damage the structural integrity.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:48:47.557846"
   },
   {
@@ -52730,7 +52730,7 @@
     "rationale": "Surface finishing and remedial work (e.g., patching tie holes, grinding joints) can only be performed after the slipforms have been struck and the concrete face is exposed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:48:47.557846"
   },
   {
@@ -53016,7 +53016,7 @@
     "rationale": "Rebar and reinforcement must be fully placed, tied, and inspected before concrete can be poured to ensure the reinforcement is properly embedded and positioned within the concrete member.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:01.716039"
   },
   {
@@ -53390,7 +53390,7 @@
     "rationale": "Concrete must be poured and placed into forms before any troweling or finishing operations can begin, as troweling is performed on freshly placed concrete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:17.649948"
   },
   {
@@ -53412,7 +53412,7 @@
     "rationale": "Troweling and finishing must be completed before the curing process begins, as curing involves maintaining moisture and temperature conditions after the final finish has been applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:17.649948"
   },
   {
@@ -53555,7 +53555,7 @@
     "rationale": "Excavation must be completed to expose the foundation area where anchor bolts and embeds will be placed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:24.408524"
   },
   {
@@ -53577,7 +53577,7 @@
     "rationale": "Rebar cage must be in place so that anchor bolts and embeds can be tied or positioned relative to the reinforcement before concrete is poured.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:24.408524"
   },
   {
@@ -53588,7 +53588,7 @@
     "rationale": "Anchor bolts and embeds must be set in their final positions before concrete is poured so they become embedded and fixed in place.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:24.408524"
   },
   {
@@ -54061,7 +54061,7 @@
     "rationale": "The forms holding the wet concrete must be removed to expose the concrete surface before finishing operations such as patching, grinding, or applying coatings can be performed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:47.948503"
   },
   {
@@ -54083,7 +54083,7 @@
     "rationale": "Waterproofing membranes or coatings must be applied to a smooth, finished concrete surface to ensure proper adhesion and uniform coverage; rough or unfinished walls can cause delamination.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:47.948503"
   },
   {
@@ -54270,7 +54270,7 @@
     "rationale": "Concrete must be placed and spread before it can be troweled; troweling finishes the surface after placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:59.458897"
   },
   {
@@ -54303,7 +54303,7 @@
     "rationale": "Troweling produces the final finished surface; curing must begin after the finishing operation is complete to prevent moisture loss and allow hydration.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:49:59.458897"
   },
   {
@@ -54380,7 +54380,7 @@
     "rationale": "Concrete must be poured and placed before joint finishing can begin, as joints are created in the fresh or hardening concrete after placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:50:34.988310"
   },
   {
@@ -54413,7 +54413,7 @@
     "rationale": "Joint finishing must be completed before curing begins, as curing compounds or water curing should be applied after joints are formed to ensure proper curing without damaging the fresh joints.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:50:34.988310"
   },
   {
@@ -54435,7 +54435,7 @@
     "rationale": "Exposed aggregate finish is applied to freshly placed concrete before it fully sets. The concrete must be poured, screeded, and floated first to create the surface that will receive the aggregate exposure treatment.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:50:35.406799"
   },
   {
@@ -54457,7 +54457,7 @@
     "rationale": "After the aggregate is exposed (by washing, brushing, or using a retarder), the concrete must cure properly to develop strength and durability before any loads are applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:50:35.406799"
   },
   {
@@ -56261,7 +56261,7 @@
     "rationale": "Trim and millwork must be physically installed (nailed, glued, or fastened in place) before they can be painted, as painting loose or uninstalled pieces would be impractical and may cause damage during installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:53:01.959955"
   },
   {
@@ -56283,7 +56283,7 @@
     "rationale": "Flooring installation should follow trim painting because paint drips, spills, and sanding dust from the painting process would damage finished flooring surfaces.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:53:01.959955"
   },
   {
@@ -58010,7 +58010,7 @@
     "rationale": "Formwork provides the mould and support structure for the slab; reinforcement bars cannot be placed in position until the formwork is erected and secured.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:56:30.845251"
   },
   {
@@ -58043,7 +58043,7 @@
     "rationale": "Concrete cannot be poured until all reinforcement steel is completely fixed, tied, and inspected to ensure structural integrity and cover requirements.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T01:56:30.845251"
   },
   {
@@ -58802,7 +58802,7 @@
     "rationale": "Lintels and arches span openings in masonry walls; the supporting wall on both sides of the opening must be built up to the level of the lintel/arch springing point before the lintel or arch can be installed or constructed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T01:58:10.047907"
   },
   {
@@ -58824,7 +58824,7 @@
     "rationale": "The masonry above a lintel or arch rests on it; the lintel/arch must be complete and cured (for concrete lintels) or fully set (for masonry arches with keystone in place) before the wall above can be built.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T01:58:10.047907"
   },
   {
@@ -61838,7 +61838,7 @@
     "rationale": "Structural framing must be in place to provide support and attachment points for ductwork hangers and supports.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:01:40.651692"
   },
   {
@@ -61882,7 +61882,7 @@
     "rationale": "Ductwork must be in place before ceiling grids are installed, as ducts are concealed above the ceiling and would be inaccessible afterward.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:01:40.651692"
   },
   {
@@ -64577,7 +64577,7 @@
     "rationale": "Drywall joint compound (mud) is applied over the joints, screw heads, and seams between drywall panels. Therefore, all drywall panels must be fully hung and secured before any joint compound can be applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:06:03.867019"
   },
   {
@@ -64610,7 +64610,7 @@
     "rationale": "The joint compound must be applied, dried, and sanded before primer can be painted onto the drywall surface to seal the paper and compound.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:06:03.867019"
   },
   {
@@ -64654,7 +64654,7 @@
     "rationale": "A bed layer of joint compound must be applied to the joint before tape can be embedded into it.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T02:06:05.592696"
   },
   {
@@ -64665,7 +64665,7 @@
     "rationale": "The embedded tape must be in place and set before a second coat of joint compound can be applied over it.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T02:06:05.592696"
   },
   {
@@ -65457,7 +65457,7 @@
     "rationale": "Wall ties are typically installed during brickwork, but if they haven't been, insulation must go in before or around them.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:07:51.660987"
   },
   {
@@ -66656,7 +66656,7 @@
     "rationale": "Roof flashing is installed directly onto the roof sheathing (deck). The sheathing provides the structural base that flashing is fastened to, so it must be in place first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:09:26.028977"
   },
   {
@@ -66700,7 +66700,7 @@
     "rationale": "Roof drains must be installed on top of the completed roof deck/sheathing so they can be properly integrated into the structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:09:26.869308"
   },
   {
@@ -66722,7 +66722,7 @@
     "rationale": "Insulation is placed around and over the drain assembly, requiring the drain to be secure first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:09:26.869308"
   },
   {
@@ -69758,7 +69758,7 @@
     "rationale": "Electrical connections to the lift car (such as lighting, control signals, and door mechanisms) require the car to be physically installed before final wiring and termination can be completed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T02:13:38.975945"
   },
   {
@@ -69967,7 +69967,7 @@
     "rationale": "The control wiring and electrical connections must be completed before the lift car is installed to allow for wiring of car controllers, call buttons, indicators, and safety circuits.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T02:13:51.345492"
   },
   {
@@ -73619,7 +73619,7 @@
     "rationale": "Waterproofing membranes or coatings must be applied to the exterior of foundation walls before backfilling to protect against moisture ingress; backfilling would otherwise damage or bury the unprotected wall.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:18:07.223212"
   },
   {
@@ -73641,7 +73641,7 @@
     "rationale": "Rough grading and final site shaping around the building typically follow backfilling, as the backfill provides the base material to bring surrounding ground up to final elevations.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:18:07.223212"
   },
   {
@@ -75786,7 +75786,7 @@
     "rationale": "A vapor barrier or geomembrane is typically laid over the prepared subgrade and under the drainage layer to prevent moisture migration from the soil into the drainage system.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:21:47.976823"
   },
   {
@@ -75808,7 +75808,7 @@
     "rationale": "While reinforcement is often placed directly on the drainage layer, the drainage layer should be completed first to provide a clean, level working surface for placing rebar or welded wire mesh.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:21:47.976823"
   },
   {
@@ -76842,7 +76842,7 @@
     "rationale": "After grading and earthwork, the compacted fill must be tested to verify it meets density specifications before further construction proceeds.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:22:32.708421"
   },
   {
@@ -76853,7 +76853,7 @@
     "rationale": "The overall site pad must be brought to rough grade first, so that precise foundation excavations can be laid out and dug to the correct depths.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:22:32.708421"
   },
   {
@@ -76864,7 +76864,7 @@
     "rationale": "Utilities such as water, sewer, storm drainage, and electrical conduit are typically installed after rough grading to avoid disturbing the finished earthwork and to maintain proper trench elevation control.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:22:32.708421"
   },
   {
@@ -79801,7 +79801,7 @@
     "rationale": "The structural frame requires a stable, level foundation to bear the load and ensure structural integrity.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:27:21.885845"
   },
   {
@@ -79823,7 +79823,7 @@
     "rationale": "The concrete slab or footings must be cured and set before the structural frame can be anchored to them.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:27:21.885845"
   },
   {
@@ -79834,7 +79834,7 @@
     "rationale": "The roof structure relies on the frame for support; the frame must be in place to bear roof loads.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:27:21.885845"
   },
   {
@@ -80549,7 +80549,7 @@
     "rationale": "A damp proof course must be installed on top of the foundation to prevent moisture rising into the timber frame, which would cause rot and structural failure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:27:56.768344"
   },
   {
@@ -80571,7 +80571,7 @@
     "rationale": "The timber frame provides the primary vertical support and load-bearing structure; the roof cannot be installed until the walls and frame are erected and braced.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:27:56.768344"
   },
   {
@@ -80615,7 +80615,7 @@
     "rationale": "Insulation is placed within the timber frame cavities; therefore the frame structure must be complete before insulation can be fitted.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:27:56.768344"
   },
   {
@@ -83332,7 +83332,7 @@
     "rationale": "Roof decking provides the base substrate onto which weather protection membranes and canopy materials are installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:02.281563"
   },
   {
@@ -83365,7 +83365,7 @@
     "rationale": "While some MEP rough-in can begin before weather protection, completing the canopy and weather barrier first protects sensitive MEP components from weather exposure during installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:02.281563"
   },
   {
@@ -84036,7 +84036,7 @@
     "rationale": "Structural framing (walls, floors, ceilings) must be in place before MEP rough-in can begin because MEP systems (electrical, plumbing, HVAC) are installed within the structural cavities, and there is no structural support for these systems without framing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:35.387502"
   },
   {
@@ -84047,7 +84047,7 @@
     "rationale": "The building must be enclosed (roof on) to protect MEP rough-in work from weather damage, especially for electrical components and insulation that would be compromised by rain or moisture.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:35.387502"
   },
   {
@@ -84058,7 +84058,7 @@
     "rationale": "Insulation must be installed after MEP rough-in because insulation typically wraps around or fills spaces between MEP runs; installing insulation first would block access for running conduit, ductwork, and piping.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:35.387502"
   },
   {
@@ -84256,7 +84256,7 @@
     "rationale": "Structural framing must be in place to provide support for fire protection system components such as sprinkler piping and fire alarm devices.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:44.128613"
   },
   {
@@ -84278,7 +84278,7 @@
     "rationale": "HVAC ductwork must be installed first so that fire protection system routing can be coordinated around ducts, and fire dampers can be properly integrated.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:44.128613"
   },
   {
@@ -84289,7 +84289,7 @@
     "rationale": "Ceiling grids must be installed after fire protection systems (sprinklers, smoke detectors) so that these components can be properly positioned and accessed above the ceiling.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:32:44.128613"
   },
   {
@@ -86016,7 +86016,7 @@
     "rationale": "The base course (asphalt or concrete) must be laid and compacted before curbs are installed, as curbs are typically placed on top of or adjacent to the finished base course to define the road edge and ensure proper drainage alignment.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T02:34:28.111703"
   },
   {
@@ -86049,7 +86049,7 @@
     "rationale": "Curbs act as forms and edge restraints for the final asphalt or concrete surface course; the surface layer is paved up to the curbs to create a clean, finished edge and proper runoff.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T02:34:28.111703"
   },
   {
@@ -87600,7 +87600,7 @@
     "rationale": "The foundation must be completed to establish the base reference level from which floor-to-floor heights are measured and built upon.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:35:37.061437"
   },
   {
@@ -87611,7 +87611,7 @@
     "rationale": "The ground floor slab must be in place to define the starting elevation for the first floor-to-floor height dimension.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:35:37.061437"
   },
   {
@@ -87633,7 +87633,7 @@
     "rationale": "The floor-to-floor height must be established as a vertical control dimension before pouring the upper floor slab at the correct elevation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:35:37.061437"
   },
   {
@@ -95575,7 +95575,7 @@
     "rationale": "The terrain must be graded to the required levels and slopes before roads and walkways can be constructed, as the road base and pavement depend on a properly prepared subgrade.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:50:22.041634"
   },
   {
@@ -95586,7 +95586,7 @@
     "rationale": "Water, sewer, drainage, electrical, and communication utilities must be laid beneath the road and walkway alignments before paving occurs, to avoid cutting into or damaging finished surfaces later.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:50:22.041634"
   },
   {
@@ -95597,7 +95597,7 @@
     "rationale": "Roads and walkways provide the necessary access routes for construction vehicles and equipment to reach building sites, which is required before foundation work can commence.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:50:22.041634"
   },
   {
@@ -96829,7 +96829,7 @@
     "rationale": "The superstructure (columns, beams, slabs, walls) must be supported on a completed foundation system (footings, pile caps, raft foundations) that transfers loads to the ground. Erection cannot begin without a stable base.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:51:26.409277"
   },
   {
@@ -96851,7 +96851,7 @@
     "rationale": "The roof structure (trusses, roof slab, steel frame) depends on the completed vertical support elements (columns, walls, beams) of the superstructure to bear its loads.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:51:26.409277"
   },
   {
@@ -96994,7 +96994,7 @@
     "rationale": "Structural framing (walls, floors, ceilings) must be in place before MEP rough-in can begin, as MEP systems are installed within the building's structural cavities.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:51:32.658911"
   },
   {
@@ -98083,7 +98083,7 @@
     "rationale": "The wall must be framed to create the recess cavity before the vending machine recess component can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:53:27.039710"
   },
   {
@@ -98094,7 +98094,7 @@
     "rationale": "Electrical wiring and outlet boxes should be roughed in after the recess is in place to ensure proper positioning and connection for the vending machine.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:53:27.039710"
   },
   {
@@ -98127,7 +98127,7 @@
     "rationale": "Although not a strict physical dependency, completing floor finishing before installing the recess can prevent damage to the finished floor from construction debris.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:53:27.039710"
   },
   {
@@ -101614,7 +101614,7 @@
     "rationale": "Load-bearing party walls require a stable foundation to transfer their vertical loads to the ground. Without completed foundations, the walls would have no structural support and would settle or collapse.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:59:29.958564"
   },
   {
@@ -101658,7 +101658,7 @@
     "rationale": "The roof structure, including trusses or rafters, often bears directly onto load-bearing party walls. The walls must be complete to provide vertical support for the roof.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T02:59:29.958564"
   },
   {
@@ -104705,7 +104705,7 @@
     "rationale": "Underground utilities (water, sewer, electrical conduits) that cross the fence line must be installed before the fence is built to avoid digging up or compromising the fence foundation later.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:03:07.752286"
   },
   {
@@ -104716,7 +104716,7 @@
     "rationale": "The perimeter fence establishes the site security boundary and access control, which is required before interior excavation work can commence safely.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:03:07.752286"
   },
   {
@@ -112031,7 +112031,7 @@
     "rationale": "Floor receptacle boxes are typically embedded in or mounted on the concrete floor slab; the slab must be poured and cured to provide the substrate for box placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:12:37.916127"
   },
   {
@@ -112064,7 +112064,7 @@
     "rationale": "After boxes are secured, the wiring can be pulled from the panel or junction boxes to terminate at the receptacle boxes.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:12:37.916127"
   },
   {
@@ -117025,7 +117025,7 @@
     "rationale": "Structural framing (columns, beams, slabs) must be complete before MEP rough-in can begin, as MEP systems are installed within and through the structural frame, and there is no structure to attach MEP components to until framing is in place.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:17:13.877948"
   },
   {
@@ -117058,7 +117058,7 @@
     "rationale": "While insulation can sometimes be installed concurrently in some areas, typically the MEP rough-in is completed first so that insulation can be fitted around the installed pipes, ducts, and wiring without obstruction.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:17:13.877948"
   },
   {
@@ -117564,7 +117564,7 @@
     "rationale": "The mausoleum walls require a stable foundation to bear their weight and prevent settling or cracking.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:17:35.187435"
   },
   {
@@ -117575,7 +117575,7 @@
     "rationale": "The walls must be erected to provide vertical support for the roof or deck structure above.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:17:35.187435"
   },
   {
@@ -118983,7 +118983,7 @@
     "rationale": "The soil must be excavated to the required depth and dimensions before concrete or foundation materials can be placed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:20:35.017766"
   },
   {
@@ -119005,7 +119005,7 @@
     "rationale": "After the foundation concrete is poured, it must be allowed to cure and gain sufficient strength before any loads are applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:20:35.017766"
   },
   {
@@ -120952,7 +120952,7 @@
     "rationale": "Structural framing (walls, floors, ceilings) must be in place to provide the cavities and support structures for MEP (Mechanical, Electrical, Plumbing) rough-in installations such as conduit, piping, and ductwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:23:54.960639"
   },
   {
@@ -120963,7 +120963,7 @@
     "rationale": "The building must be dried-in (roof and basic enclosure) to protect MEP rough-in materials and workers from weather damage during installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:23:54.960639"
   },
   {
@@ -120974,7 +120974,7 @@
     "rationale": "MEP rough-in (electrical wiring, plumbing pipes, HVAC ducts) must be installed and inspected before insulation can be placed, as insulation will cover and conceal these MEP elements.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:23:54.960639"
   },
   {
@@ -121007,7 +121007,7 @@
     "rationale": "Load-bearing walls require a stable and level foundation to transfer vertical loads safely to the ground. Without completed foundations, the walls would have no structural support and would settle or fail.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:23:59.821552"
   },
   {
@@ -121051,7 +121051,7 @@
     "rationale": "The roof structure transfers its weight onto load-bearing walls. Roof framing, trusses, or rafters cannot be installed until the supporting walls are in place and structurally sound.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:23:59.821552"
   },
   {
@@ -121678,7 +121678,7 @@
     "rationale": "Any utilities that run through or under the slab must be installed before walls are framed, as they are inaccessible once the slab and framing are in place.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:24:59.214009"
   },
   {
@@ -121689,7 +121689,7 @@
     "rationale": "Roof structure depends on walls to provide vertical support and load transfer. Roof trusses/rafters bear on top plates of wall framing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:24:59.214009"
   },
   {
@@ -121700,7 +121700,7 @@
     "rationale": "Wall sheathing (plywood/OSB) is applied directly to the exterior of the wall frame for lateral bracing. The frame must be erected first to provide the structural skeleton.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:24:59.214009"
   },
   {
@@ -121733,7 +121733,7 @@
     "rationale": "Plumbing pipes for sinks, showers, etc. are routed through wall cavities after framing is complete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:24:59.214009"
   },
   {
@@ -121744,7 +121744,7 @@
     "rationale": "Insulation is placed between studs in the wall cavities after framing and rough-ins, but before drywall.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:24:59.214009"
   },
   {
@@ -121777,7 +121777,7 @@
     "rationale": "Roof sheathing (plywood/OSB) is applied directly onto the installed trusses to form the roof deck; trusses must be in place to serve as the substrate for sheathing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:00.609014"
   },
   {
@@ -121909,7 +121909,7 @@
     "rationale": "While plumbing and electrical rough-ins can often proceed in parallel, it is a common soft preference to complete plumbing first to avoid conflicts in wall cavities and to allow a single inspection pass for both MEP trades.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:05.790661"
   },
   {
@@ -121920,7 +121920,7 @@
     "rationale": "Structural framing (walls, floors, ceilings) must be in place before electrical rough-in can begin, as electrical wiring, boxes, and conduits are installed within the structural cavities.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:08.382912"
   },
   {
@@ -121931,7 +121931,7 @@
     "rationale": "The building must be weathertight (roof and basic enclosure) before electrical rough-in to protect wiring and components from water damage.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:08.382912"
   },
   {
@@ -121942,7 +121942,7 @@
     "rationale": "Electrical wiring and boxes must be installed before insulation can be placed, as insulation goes over and around the rough electrical work.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:08.382912"
   },
   {
@@ -121964,7 +121964,7 @@
     "rationale": "While often done in parallel, plumbing rough-in is typically sequenced after or concurrently with electrical rough-in to coordinate chases and avoid conflicts in wall cavities.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:08.382912"
   },
   {
@@ -122074,7 +122074,7 @@
     "rationale": "In most sequences, flooring is installed before cabinets so that the flooring runs continuously under the cabinets, allowing for easier replacement and eliminating the need for separate floor pieces.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:13.472671"
   },
   {
@@ -122404,7 +122404,7 @@
     "rationale": "Foundation excavation is needed to expose the building's underground drain lines and set the elevation reference for connecting sewer pipes from the building to the septic tank or municipal sewer.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:28.187871"
   },
   {
@@ -122437,7 +122437,7 @@
     "rationale": "Connection of sewer drains from the building to the septic tank or main sewer line must be completed before pouring the ground floor slab, as these pipes run beneath the slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:25:28.187871"
   },
   {
@@ -124373,7 +124373,7 @@
     "rationale": "Underground plumbing, electrical conduits, and drainage must be installed before slab pouring and framing to avoid rework and structural damage.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:27:18.169879"
   },
   {
@@ -124384,7 +124384,7 @@
     "rationale": "Roof trusses and roofing materials depend on the walls and framing being in place to provide the supporting structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:27:18.169879"
   },
   {
@@ -124395,7 +124395,7 @@
     "rationale": "Rough-in of electrical wiring, plumbing pipes, and HVAC ducts typically occurs after walls are framed so that services can be run through the wall cavities before drywall installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:27:18.169879"
   },
   {
@@ -124846,7 +124846,7 @@
     "rationale": "Plumbing rough-in (pipes, drains) must be completed before electrical work to avoid conflicts in wall/ceiling cavities and to coordinate vertical chases.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:14.089205"
   },
   {
@@ -124868,7 +124868,7 @@
     "rationale": "Electrical wiring and boxes must be in place before insulation is installed to ensure proper coverage and to avoid needing to disturb insulation for later wiring.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:14.089205"
   },
   {
@@ -125000,7 +125000,7 @@
     "rationale": "Foundations (footings, piers, or slabs) must be poured and fully cured to provide a load-bearing base for structural columns, beams, and walls to be erected upon.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:18.863559"
   },
   {
@@ -125011,7 +125011,7 @@
     "rationale": "Plumbing, electrical conduits, and drainage lines running beneath the slab or within footings must be placed and inspected before framing, as they would be inaccessible after the structure is built.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:18.863559"
   },
   {
@@ -125385,7 +125385,7 @@
     "rationale": "Any underground utilities (water, gas, electric, data lines) that will cross the fence line must be installed first to avoid digging after the wall/fence is built.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:34.392673"
   },
   {
@@ -125418,7 +125418,7 @@
     "rationale": "Final grading and drainage swales are often completed after the perimeter wall to direct water away from the structure properly.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:34.392673"
   },
   {
@@ -125495,7 +125495,7 @@
     "rationale": "Roof must be in place to protect HVAC rooftop units and ductwork penetrations from weather damage and to provide a weathertight enclosure before ductwork installation begins.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:41.115903"
   },
   {
@@ -125517,7 +125517,7 @@
     "rationale": "HVAC ductwork occupies ceiling and wall cavities; plumbing rough-in should follow to avoid conflicts with ducts and to allow coordinated routing of pipes around installed ductwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:41.115903"
   },
   {
@@ -125528,7 +125528,7 @@
     "rationale": "Electrical wiring and boxes must be routed around and after HVAC ductwork is in place to avoid conflicts and to ensure proper clearances between electrical components and ductwork as required by code.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:28:41.115903"
   },
   {
@@ -135945,7 +135945,7 @@
     "rationale": "MEP systems must be roughed in before insulation can be placed around them and before insulating exterior walls to ensure proper coverage and firestopping.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:42:50.842750"
   },
   {
@@ -135956,7 +135956,7 @@
     "rationale": "All MEP rough-in work must be installed and in place before the rough-in inspection can be performed by code enforcement authorities.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:42:50.842750"
   },
   {
@@ -136583,7 +136583,7 @@
     "rationale": "The foundation must be constructed first to provide a stable base for the shielded parking structural slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:44:20.435269"
   },
   {
@@ -136616,7 +136616,7 @@
     "rationale": "Waterproofing membranes and coatings are applied after the concrete slab has cured to protect the structure from moisture ingress.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:44:20.435269"
   },
   {
@@ -137936,7 +137936,7 @@
     "rationale": "Structural columns must be supported by a stable foundation to transfer loads properly to the ground.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:22.952711"
   },
   {
@@ -137980,7 +137980,7 @@
     "rationale": "Floor slabs and decks rest on and are supported by the columns, so columns must be completed first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:22.952711"
   },
   {
@@ -138024,7 +138024,7 @@
     "rationale": "Structural beams require a stable foundation to bear their load and transfer forces to the ground; beams cannot be placed without an existing foundation system.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:25.580066"
   },
   {
@@ -138068,7 +138068,7 @@
     "rationale": "While not a physical necessity, it is more efficient to route mechanical, electrical, and plumbing systems after beams are installed, as beams define the available space and supports for hangers.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:25.580066"
   },
   {
@@ -138079,7 +138079,7 @@
     "rationale": "Structural and framing work must be complete to provide support and pathways for ductwork, and rough-in inspections must be passed before concealing ducts in walls/ceilings.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:27.617724"
   },
   {
@@ -138090,7 +138090,7 @@
     "rationale": "Walls, ceilings, and roof structure must be in place to support and enclose the ductwork runs before installation can proceed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:27.617724"
   },
   {
@@ -138101,7 +138101,7 @@
     "rationale": "The building envelope must be weathertight to prevent water damage to ductwork and insulation during installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:27.617724"
   },
   {
@@ -138112,7 +138112,7 @@
     "rationale": "Ductwork must be in place and leak-tested before insulation can be installed around ducts or before wall/ceiling insulation covers the ductwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:27.617724"
   },
   {
@@ -138277,7 +138277,7 @@
     "rationale": "All underground conduits, pipes, and rough-in work must be completed before floor finishing so that no subsequent cutting or chipping of the finished floor is required.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:36.714195"
   },
   {
@@ -138563,7 +138563,7 @@
     "rationale": "While doors can be installed before flooring, it is preferable to install flooring first so door clearance and undercut can be properly set.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:46.867712"
   },
   {
@@ -138585,7 +138585,7 @@
     "rationale": "Door casing and trim are installed after the door is hung to cover gaps and complete the finish.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:46.867712"
   },
   {
@@ -138640,7 +138640,7 @@
     "rationale": "Windows and doors are typically installed after the cladding system is in place so that cladding flashings and weather seals overlap the window frames for proper water management.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:48.510760"
   },
   {
@@ -138662,7 +138662,7 @@
     "rationale": "Steel columns and frames require a stable, level foundation (concrete footings, piers, or slab) to transfer loads safely. Erection cannot begin without completed foundations.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:52.024693"
   },
   {
@@ -138684,7 +138684,7 @@
     "rationale": "The steel frame must be erected and stabilized before roof decking or floor decking can be placed on top of the structural steel.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:45:52.024693"
   },
   {
@@ -141192,7 +141192,7 @@
     "rationale": "Bicycle rack placement zone must be clearly marked and designated during striping before the rack can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:49:15.973383"
   },
   {
@@ -141203,7 +141203,7 @@
     "rationale": "Soft preference: installing the bike rack before lighting allows lighting to be positioned to properly illuminate the rack area, but lighting can also be adjusted around an existing rack.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:49:15.973383"
   },
   {
@@ -141445,7 +141445,7 @@
     "rationale": "While striping can conceptually be done before or after lighting, it is generally preferred to complete striping before installing lighting poles to avoid construction traffic damaging fresh markings and to simplify layout verification using the unobstructed pavement surface.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:49:57.753740"
   },
   {
@@ -141522,7 +141522,7 @@
     "rationale": "It is preferred to have lighting operational before striping so that the illuminated conditions can guide proper line placement and visibility, but striping can technically be done in daylight without lights.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:49:58.060772"
   },
   {
@@ -143711,7 +143711,7 @@
     "rationale": "The subgrade soil must be compacted to the required density and tested to ensure it can support the load of the mat slab without excessive settlement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:54:14.827499"
   },
   {
@@ -143744,7 +143744,7 @@
     "rationale": "After pouring the mat slab, the concrete must be cured properly to achieve design strength and prevent cracking.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:54:14.827499"
   },
   {
@@ -143755,7 +143755,7 @@
     "rationale": "Waterproofing membrane or coating is applied to the cured mat slab to protect the foundation from groundwater intrusion.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:54:14.827499"
   },
   {
@@ -143766,7 +143766,7 @@
     "rationale": "Foundation walls are built atop the completed mat slab, which serves as the base structural element for the walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:54:14.827499"
   },
   {
@@ -147968,7 +147968,7 @@
     "rationale": "Wall framing must be completed to provide vertical support and attachment points for the roof step structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:58:56.985434"
   },
   {
@@ -147979,7 +147979,7 @@
     "rationale": "Roof trusses form the primary roof framework; the step structure is built onto or integrated with this framework.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:58:56.985434"
   },
   {
@@ -147990,7 +147990,7 @@
     "rationale": "Roof sheathing provides the underlying deck onto which the step structure components are installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:58:56.985434"
   },
   {
@@ -148001,7 +148001,7 @@
     "rationale": "Flashing must be installed after the step structure is in place to seal joints and prevent water infiltration around the step transitions.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:58:56.985434"
   },
   {
@@ -148485,7 +148485,7 @@
     "rationale": "The drainage system must be fully installed and in place before it can be commissioned, as commissioning involves testing and verifying the installed system's functionality.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T03:59:49.258763"
   },
   {
@@ -148496,7 +148496,7 @@
     "rationale": "The system must be commissioned (tested and verified) before it can be put into normal operation, to ensure it meets design and safety requirements.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T03:59:49.258763"
   },
   {
@@ -148540,7 +148540,7 @@
     "rationale": "The structural roof framing (beams, trusses, or rafters) must be in place to provide the load-bearing support onto which the roof deck / substrate is installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:59:53.219750"
   },
   {
@@ -148562,7 +148562,7 @@
     "rationale": "Roof insulation boards or layers are typically placed atop the roof deck / substrate to provide thermal performance, requiring the deck to be complete first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:59:53.219750"
   },
   {
@@ -148573,7 +148573,7 @@
     "rationale": "Flashing at roof edges, valleys, and penetrations is installed after the deck is in place to seal transitions and prevent water intrusion.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:59:53.219750"
   },
   {
@@ -148705,7 +148705,7 @@
     "rationale": "Roof overhang/eaves are built as an extension of the roof structure; the main roof framing or trusses must be in place to support and provide the framework for the eaves.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:59:58.564491"
   },
   {
@@ -148727,7 +148727,7 @@
     "rationale": "Eaves form the edge of the roof; roof decking is installed after the eave framing is in place to create a continuous roof surface.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T03:59:58.564491"
   },
   {
@@ -149970,7 +149970,7 @@
     "rationale": "A solid foundation is required to bear the load of the arcade colonnade columns and arches.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:01:31.309801"
   },
   {
@@ -149992,7 +149992,7 @@
     "rationale": "The arcade colonnade provides vertical support for the roof or upper structure, so roof installation cannot proceed until the colonnade is complete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:01:31.309801"
   },
   {
@@ -154073,7 +154073,7 @@
     "rationale": "The central structural core requires a solid foundation to transfer its loads to the ground; without the foundation, the core would have no stable base.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:09:27.392785"
   },
   {
@@ -154095,7 +154095,7 @@
     "rationale": "Floor slabs typically connect to or are supported by the central core; the core must be in place to provide lateral stability and support for floor systems.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:09:27.392785"
   },
   {
@@ -156746,7 +156746,7 @@
     "rationale": "The door slab itself must be hung in place before hardware such as handles, locks, hinges (final adjustment), and strikes can be mounted.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:11:41.322976"
   },
   {
@@ -156768,7 +156768,7 @@
     "rationale": "Door bottoms and thresholds must be set relative to finished flooring; however in many sequences hardware is installed after flooring is complete to avoid damaging hardware during flooring work. Actually, typically flooring is done before door hanging, but if hardware includes bottom sweeps or threshold adjustments, flooring must precede final hardware adjustments.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:11:41.322976"
   },
   {
@@ -158055,7 +158055,7 @@
     "rationale": "Structural framing must be in place to provide support and attachment points for ductwork, and to define the spaces through which ducts will pass.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:13:40.960030"
   },
   {
@@ -158066,7 +158066,7 @@
     "rationale": "Electrical rough-in wiring and boxes must be installed before ductwork to avoid interference and to ensure proper clearances, as ductwork often occupies ceiling and wall cavities that would be inaccessible later.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:13:40.960030"
   },
   {
@@ -158099,7 +158099,7 @@
     "rationale": "While not strictly physically required, it is standard sequencing to complete ductwork before installing ceiling grids to avoid rework and provide easy access for duct adjustments and connections.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:13:40.960030"
   },
   {
@@ -159496,7 +159496,7 @@
     "rationale": "All underground pipes, cables, and drainage systems must be laid before building construction to avoid later excavation and structural conflicts.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:15:48.666910"
   },
   {
@@ -159518,7 +159518,7 @@
     "rationale": "The building structure must be fully erected to provide support for the roof system before roofing installation can commence.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:15:48.666910"
   },
   {
@@ -164468,7 +164468,7 @@
     "rationale": "The floor slab provides the surface upon which walls are erected. Walls must be built on a completed floor to ensure proper alignment and structural integrity.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:20:55.302930"
   },
   {
@@ -164479,7 +164479,7 @@
     "rationale": "Reinforcement steel must be placed and tied within the foundation or slab before walls are installed to ensure continuity of structural reinforcement between foundation and walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:20:55.302930"
   },
   {
@@ -164490,7 +164490,7 @@
     "rationale": "Roof structures require completed load-bearing walls to rest upon and transfer loads to the foundation. Walls must be fully erected, aligned, and secured before roof framing can begin.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:20:55.302930"
   },
   {
@@ -164501,7 +164501,7 @@
     "rationale": "Electrical wiring within walls must be run after wall framing is complete but before wall cladding. However, the wall structure itself must first be fully installed to provide the cavities and support for conduit and wiring.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:20:55.302930"
   },
   {
@@ -173928,7 +173928,7 @@
     "rationale": "The roof structure must be in place to provide support and enclosure before ceiling lining can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:35:52.247796"
   },
   {
@@ -173939,7 +173939,7 @@
     "rationale": "Electrical wiring, cables, and junction boxes must be run in the ceiling cavity before it is closed off with ceiling lining.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:35:52.247796"
   },
   {
@@ -173950,7 +173950,7 @@
     "rationale": "Heating, ventilation, and air conditioning ducts must be installed in the ceiling void before it is enclosed by ceiling lining.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:35:52.247796"
   },
   {
@@ -174016,7 +174016,7 @@
     "rationale": "Ceiling work is typically completed before finished flooring to avoid damage to floors from falling debris or tools, but this is a protective preference rather than a hard constraint.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:35:52.247796"
   },
   {
@@ -174071,7 +174071,7 @@
     "rationale": "Although doors can be installed before flooring, it is generally preferred to install flooring first so the door can be trimmed to the correct finished floor height, avoiding gaps or binding.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:35:53.228546"
   },
   {
@@ -174126,7 +174126,7 @@
     "rationale": "A vapor barrier (if required) is typically installed over the insulation to prevent moisture diffusion, so insulation must be in place first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:35:57.677345"
   },
   {
@@ -174489,7 +174489,7 @@
     "rationale": "Electrical rough-in work must be completed and fully visible before the inspection can be performed to verify compliance with code.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:36:44.930008"
   },
   {
@@ -174500,7 +174500,7 @@
     "rationale": "Insulation is typically installed after electrical rough-in because the wiring and boxes run through wall cavities that need to be insulated, and the insulation would block access to complete the electrical work if installed first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:36:44.930008"
   },
   {
@@ -174522,7 +174522,7 @@
     "rationale": "While not always physically required, coordinating plumbing and electrical rough-in positions is best done with plumbing first to avoid conflicts in wall cavities, and electrical can work around plumbing. This is a soft preference for coordination efficiency.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:36:44.930008"
   },
   {
@@ -174896,7 +174896,7 @@
     "rationale": "Wall framing must be completed to provide the structural support and bearing surface for the gable roof trusses or rafters.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:37:04.372902"
   },
   {
@@ -174907,7 +174907,7 @@
     "rationale": "Installing trusses or rafters is the primary structural activity that defines and creates the gable roof shape; the gable roof cannot exist without its framing members.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:37:04.372902"
   },
   {
@@ -174918,7 +174918,7 @@
     "rationale": "Roof sheathing (plywood/OSB) is installed directly onto the gable roof trusses/rafters, so the gable roof structural frame must be in place first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:37:04.372902"
   },
   {
@@ -178053,7 +178053,7 @@
     "rationale": "Trenches or excavations must be dug along the building perimeter to the required depth and width before placing the edge foundation materials.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:39:56.380327"
   },
   {
@@ -178064,7 +178064,7 @@
     "rationale": "The edge foundation provides the perimeter support and formwork boundary necessary before pouring or installing the interior floor slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:39:56.380327"
   },
   {
@@ -178152,7 +178152,7 @@
     "rationale": "Roof trusses or rafters form the structural framework; roof decking is fastened to them, so trusses must be in place before decking.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:40:03.579654"
   },
   {
@@ -178262,7 +178262,7 @@
     "rationale": "The slab must first be poured and cured to create a physical edge that can be formed or finished as 'Edge of Slab'.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:40:08.379741"
   },
   {
@@ -178273,7 +178273,7 @@
     "rationale": "Formwork for the slab edge must be installed before the edge of the slab can be defined or finished.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:40:08.379741"
   },
   {
@@ -178284,7 +178284,7 @@
     "rationale": "Waterproofing at the slab edge requires the edge to be fully formed and finished before application.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:40:08.379741"
   },
   {
@@ -178306,7 +178306,7 @@
     "rationale": "Insulation at the slab edge must be applied after the slab edge is fully formed and finished to ensure proper fit and thermal performance.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:40:08.379741"
   },
   {
@@ -182794,7 +182794,7 @@
     "rationale": "The access hatch provides entry to service spaces behind the gallery surround; electrical rough-in work behind the surround typically requires access through the hatch, so the hatch must be installed before workers can access those spaces for electrical work.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:45:31.306930"
   },
   {
@@ -182827,7 +182827,7 @@
     "rationale": "The structural wall or substrate that the gallery surround and its access hatch mount to must be framed and in place before the hatch assembly can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:45:31.306930"
   },
   {
@@ -183872,7 +183872,7 @@
     "rationale": "The earth electrode is installed within the foundation excavation, so excavation must be completed first to provide access and space for electrode placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:47:49.337614"
   },
   {
@@ -183894,7 +183894,7 @@
     "rationale": "The earth electrode must be placed and connected before reinforcement is fixed, as the electrode is often tied to or laid beneath the rebar cage and would be inaccessible afterward.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:47:49.337614"
   },
   {
@@ -183905,7 +183905,7 @@
     "rationale": "The earth electrode must be fully installed and connected before concrete is poured, as it is embedded within the foundation concrete and cannot be placed after.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:47:49.337614"
   },
   {
@@ -183916,7 +183916,7 @@
     "rationale": "Backfilling can only proceed after the electrode is installed, since the electrode is located within the foundation zone and backfilling would cover and prevent access to it.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:47:49.337614"
   },
   {
@@ -184763,7 +184763,7 @@
     "rationale": "The foundation must be completed and cured to provide a stable structural base before any tier-level formwork and concrete can be placed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:49:27.864625"
   },
   {
@@ -184796,7 +184796,7 @@
     "rationale": "Immediately after concrete placement, the curing process must begin to maintain moisture and temperature conditions for proper hydration and strength development.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:49:27.864625"
   },
   {
@@ -186655,7 +186655,7 @@
     "rationale": "The first few courses of brickwork or blockwork up to the DPC level must be built so that the DPC material can be laid directly on top of this masonry layer, creating a continuous barrier against moisture rising from the ground.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T04:51:23.008867"
   },
   {
@@ -186666,7 +186666,7 @@
     "rationale": "The DPC must be installed first to form a waterproof barrier; the brickwork above the DPC level can only be built after the DPC is in place to ensure the barrier is continuous and unbroken, preventing moisture bridging.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T04:51:23.008867"
   },
   {
@@ -186886,7 +186886,7 @@
     "rationale": "Steel reinforcement bars must be positioned within the formwork before concrete is poured to ensure structural integrity.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:51:33.619682"
   },
   {
@@ -186908,7 +186908,7 @@
     "rationale": "Formwork cannot be removed until the concrete has set and gained enough strength to support itself.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:51:33.619682"
   },
   {
@@ -191880,7 +191880,7 @@
     "rationale": "The window arch is a structural component within a wall; the wall must be built up to the window level to provide support and an opening for the arch.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:56:46.982688"
   },
   {
@@ -191902,7 +191902,7 @@
     "rationale": "The window arch forms part of the structural or decorative surround for the window; the window unit itself is typically installed after the arch is in place to ensure proper fit and support.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:56:46.982688"
   },
   {
@@ -191935,7 +191935,7 @@
     "rationale": "Windows must be installed first so that backing/blocking can be placed around them to secure and insulate the window frames.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:56:51.606628"
   },
   {
@@ -191979,7 +191979,7 @@
     "rationale": "Insulation around windows is installed after backing/blocking is complete, as the blocking creates the cavity and support for insulation material.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:56:51.606628"
   },
   {
@@ -192375,7 +192375,7 @@
     "rationale": "The roof decking provides the structural base and opening for the dormer. The dormer window sits within or on top of the roof deck, so sheathing must be in place first.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:57:45.094821"
   },
   {
@@ -192386,7 +192386,7 @@
     "rationale": "Flashing is installed around the dormer window to seal the joint between the window and the roof. It must be applied after the dormer window is in place to ensure a watertight seal.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T04:57:45.094821"
   },
   {
@@ -195686,7 +195686,7 @@
     "rationale": "The sleeping partition wall must be built on top of a finished floor slab to provide a stable base and proper load distribution.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:02:07.276986"
   },
   {
@@ -195697,7 +195697,7 @@
     "rationale": "The main structural walls must be in place to define the room boundaries and provide lateral support for the partition wall connections.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:02:07.276986"
   },
   {
@@ -195708,7 +195708,7 @@
     "rationale": "Electrical wiring and outlets for the sleeping area must be routed after the partition wall framing is complete, as the wall cavities provide the conduit pathways.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:02:07.276986"
   },
   {
@@ -200295,7 +200295,7 @@
     "rationale": "The wall must be constructed first to provide the supporting structure on which the half-open wall head beam rests.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:11:04.141101"
   },
   {
@@ -200306,7 +200306,7 @@
     "rationale": "The head beam must be installed to provide a bearing point and support for roof elements above the half-open wall section.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:11:04.141101"
   },
   {
@@ -200350,7 +200350,7 @@
     "rationale": "The foundation must be completed to provide a stable base and load-bearing support for the half-open walls.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:11:08.060994"
   },
   {
@@ -200383,7 +200383,7 @@
     "rationale": "Half-open walls provide vertical support and bearing for roof structural elements, so they must be installed before the roof can be placed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:11:08.060994"
   },
   {
@@ -202297,7 +202297,7 @@
     "rationale": "Thick walls require a stable foundation to bear their significant weight and load; foundation must be fully cured and ready before wall construction begins.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:13:02.430871"
   },
   {
@@ -202319,7 +202319,7 @@
     "rationale": "Thick walls provide the vertical load-bearing support for roof structures; the roof cannot be installed until the walls are built and have achieved sufficient strength.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:13:02.430871"
   },
   {
@@ -202352,7 +202352,7 @@
     "rationale": "Loadbearing thick walls require a stable foundation to transfer vertical loads safely to the ground. Without completed foundations, the wall would lack proper support and could settle unevenly or collapse.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:13:05.888997"
   },
   {
@@ -202374,7 +202374,7 @@
     "rationale": "The roof framing and decking bear directly on top of loadbearing walls. The walls must be fully constructed, aligned, and cured to support roof loads and provide the correct bearing points.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:13:05.888997"
   },
   {
@@ -206840,7 +206840,7 @@
     "rationale": "Walls must be constructed on top of a completed floor slab to provide a level base.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:19:48.396805"
   },
   {
@@ -206862,7 +206862,7 @@
     "rationale": "Electrical work within walls must be done after walls are framed but before they are closed up with drywall.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:19:48.396805"
   },
   {
@@ -206873,7 +206873,7 @@
     "rationale": "Plumbing pipes inside walls require the wall framing to be in place for installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:19:48.396805"
   },
   {
@@ -207764,7 +207764,7 @@
     "rationale": "Structural walls require a stable load-bearing base. The foundation must be completed and cured to support the weight and transfer loads from the wall to the ground.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:21:30.617402"
   },
   {
@@ -207797,7 +207797,7 @@
     "rationale": "Upper floor slabs or decks require completed load-bearing walls below to support their weight and transfer vertical loads through the structure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:21:30.617402"
   },
   {
@@ -207819,7 +207819,7 @@
     "rationale": "The structural connection relies on a stable base provided by completed foundations to ensure load transfer and alignment.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:21:35.098805"
   },
   {
@@ -207852,7 +207852,7 @@
     "rationale": "While some MEP work can start in parallel, full MEP rough-in is typically sequenced after structural connections are complete to avoid conflicts and allow open access.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:21:35.098805"
   },
   {
@@ -207940,7 +207940,7 @@
     "rationale": "Reinforcement steel is typically placed within the formwork; however, formwork erection often precedes or is concurrent with rebar installation. In many sequences, formwork is set first, then rebar is placed inside. But structurally, the foundation or slab must be ready before formwork goes up.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:22:12.987684"
   },
   {
@@ -207973,7 +207973,7 @@
     "rationale": "In some sequences, rebar is placed after formwork is erected, but this is a construction preference rather than a strict physical constraint—rebar can also be pre-assembled before formwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:22:12.987684"
   },
   {
@@ -208138,7 +208138,7 @@
     "rationale": "In post-tensioned structures, the concrete member gains significant pre-compression from tensioning. Forms can often be removed only after post-tensioning has transferred load into the member, ensuring the structure can support itself without formwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T05:22:19.035661"
   },
   {
@@ -208556,7 +208556,7 @@
     "rationale": "A stable foundation is required to support the load of straw bale walls; walls cannot be built without a completed foundation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:22:39.890852"
   },
   {
@@ -208578,7 +208578,7 @@
     "rationale": "The roof structure typically bears on or is supported by the walls; straw bale walls must be complete and stable before the roof can be installed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:22:39.890852"
   },
   {
@@ -209480,7 +209480,7 @@
     "rationale": "The structural framing of the roof must be complete to support both the deck and the insulation layers.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:23:53.098339"
   },
   {
@@ -209491,7 +209491,7 @@
     "rationale": "A vapor barrier (if specified) must be laid down before insulation to prevent moisture migration into the insulation layer.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:23:53.098339"
   },
   {
@@ -209524,7 +209524,7 @@
     "rationale": "The skylight must be installed onto a completed roof deck structure that provides the necessary support and opening for the skylight.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:23:57.175549"
   },
   {
@@ -209535,7 +209535,7 @@
     "rationale": "The roof framing must be complete to create the rough opening and structural support required for skylight placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:23:57.175549"
   },
   {
@@ -209546,7 +209546,7 @@
     "rationale": "Roof sheathing provides the surface onto which the skylight is mounted and flashed; without sheathing the skylight cannot be properly secured.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:23:57.175549"
   },
   {
@@ -209557,7 +209557,7 @@
     "rationale": "Flashing around the skylight must be installed immediately after the skylight is placed to ensure waterproofing and prevent leaks.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:23:57.175549"
   },
   {
@@ -211460,7 +211460,7 @@
     "rationale": "Columns must be built on a stable foundation; without completed foundations, column reinforcement cannot be properly anchored or supported.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:26:46.856489"
   },
   {
@@ -211537,7 +211537,7 @@
     "rationale": "Concrete must be poured and allowed to cure sufficiently before formwork can be safely removed to avoid collapse or deformation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:26:50.093877"
   },
   {
@@ -211845,7 +211845,7 @@
     "rationale": "The column must be erected and in place before the tie beam can be connected to it, as the tie beam spans between columns and relies on the columns for support.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:27:34.557688"
   },
   {
@@ -211856,7 +211856,7 @@
     "rationale": "The tie beam connection provides lateral support and load transfer; floor slabs are typically poured after the tie beam frame is connected and stable.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:27:34.557688"
   },
   {
@@ -212472,7 +212472,7 @@
     "rationale": "Steel reinforcement bars must be positioned within the formwork prior to concrete pouring to ensure structural integrity",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:27:57.884838"
   },
   {
@@ -212483,7 +212483,7 @@
     "rationale": "Freshly poured concrete requires a specified curing period to gain strength before any loads can be applied",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:27:57.884838"
   },
   {
@@ -212494,7 +212494,7 @@
     "rationale": "Waterproofing membrane or coating is applied on top of the cured structural slab to protect against moisture ingress",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:27:57.884838"
   },
   {
@@ -212560,7 +212560,7 @@
     "rationale": "Vapor barrier must be applied to the interior side of exterior wall framing; framing provides the structural surface for the vapor barrier to be attached to.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:28:02.574211"
   },
   {
@@ -212571,7 +212571,7 @@
     "rationale": "Exterior sheathing must be in place before vapor barrier is installed, as the vapor barrier goes between the sheathing and interior finishes.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:28:02.574211"
   },
   {
@@ -212582,7 +212582,7 @@
     "rationale": "In many climate zones, the vapor barrier is installed before insulation to control moisture migration; the vapor barrier must be continuous behind the insulation layer.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:28:02.574211"
   },
   {
@@ -212604,7 +212604,7 @@
     "rationale": "While rough-ins are typically done before vapor barrier to avoid puncturing it, this can be done after with careful sealing; preference is to complete rough-ins first to minimize penetrations through the vapor barrier.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:28:02.574211"
   },
   {
@@ -213066,7 +213066,7 @@
     "rationale": "The roof must be in place to protect insulation materials from moisture before installation in attic or ceiling cavities.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:28:26.509914"
   },
   {
@@ -213088,7 +213088,7 @@
     "rationale": "Electrical wiring, outlet boxes, and plumbing pipes must be routed through the wall cavities before insulation fills the space.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:28:26.509914"
   },
   {
@@ -213099,7 +213099,7 @@
     "rationale": "Vapor barrier or vapor retarder is typically placed over the insulation (on the warm side of the wall) to control moisture diffusion.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:28:26.509914"
   },
   {
@@ -213242,7 +213242,7 @@
     "rationale": "Slab void formers are placed within the reinforcement cage of the slab. The bottom layer of reinforcement must be installed first to provide support and positioning for void formers, which are then tied or fixed in place before the top reinforcement is placed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:29:03.283680"
   },
   {
@@ -213264,7 +213264,7 @@
     "rationale": "After slab void formers are positioned and secured, the top layer of slab reinforcement must be placed over them. The top reinforcement cannot be installed before void formers are in place as the void formers occupy the mid-depth zone of the slab.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:29:03.283680"
   },
   {
@@ -213275,7 +213275,7 @@
     "rationale": "Concrete cannot be poured over slab void formers until all void formers have been correctly positioned, secured against flotation, and inspected. Pouring concrete is the final step after all reinforcement and void formers are in place.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:29:03.283680"
   },
   {
@@ -213891,7 +213891,7 @@
     "rationale": "The lower segment of the box column must already be erected and stabilized before the splice connection to the upper segment can be performed.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "accepted",
     "created_at": "2026-06-30T05:29:29.653487"
   },
   {
@@ -213913,7 +213913,7 @@
     "rationale": "The splice connection must be completed before the next upper column section can be placed and aligned on top of it.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "deprecated",
     "created_at": "2026-06-30T05:29:29.653487"
   },
   {
@@ -217829,7 +217829,7 @@
     "rationale": "Windows and doors must be in place so that weather sealing can integrate with their frames, flashing, and perimeter seals to prevent water intrusion.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:35:34.233884"
   },
   {
@@ -217840,7 +217840,7 @@
     "rationale": "Weather sealing (e.g., weather-resistant barrier, flashing, sealants) must be completed before cladding is installed to provide a continuous waterproof layer behind the finished exterior finish.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:35:34.233884"
   },
   {
@@ -219666,7 +219666,7 @@
     "rationale": "The edge formwork is installed after the main slab formwork is in place, as the edge formwork connects to and is supported by the main slab forms.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:38:11.373616"
   },
   {
@@ -219688,7 +219688,7 @@
     "rationale": "Edge formwork must be fully installed, aligned, and secured before concrete is poured to contain the concrete at the slab perimeter and achieve the correct edge profile.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:38:11.373616"
   },
   {
@@ -219787,7 +219787,7 @@
     "rationale": "Foundation walls must be built before edge insulation can be applied to them, as the insulation is installed directly against the foundation wall surface.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:38:47.213857"
   },
   {
@@ -219809,7 +219809,7 @@
     "rationale": "Edge insulation must be in place along the perimeter before the concrete slab is poured, so that the insulation is embedded and forms a continuous thermal break at the slab edge.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:38:47.213857"
   },
   {
@@ -219853,7 +219853,7 @@
     "rationale": "Steel reinforcement bars must be positioned and tied within the formwork prior to pouring concrete so that they become fully encased and bonded within the structural element for strength.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:39:17.966755"
   },
   {
@@ -219864,7 +219864,7 @@
     "rationale": "After pouring, the concrete must undergo a specified curing period to achieve sufficient strength and durability before any loads are applied or subsequent construction proceeds.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:39:17.966755"
   },
   {
@@ -219875,7 +219875,7 @@
     "rationale": "The forms cannot be removed until the poured concrete has set and gained enough strength to support its own weight and maintain the edge shape without deformation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:39:17.966755"
   },
   {
@@ -219952,7 +219952,7 @@
     "rationale": "Underslab rough-in services must be completed before thermal break installation to avoid penetrating or damaging the thermal barrier.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:39:23.826964"
   },
   {
@@ -219963,7 +219963,7 @@
     "rationale": "The thermal break must be in place before the floor slab is poured to create a continuous thermal barrier and prevent thermal bridging at the foundation-to-wall interface.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:39:23.826964"
   },
   {
@@ -220524,7 +220524,7 @@
     "rationale": "The foundation area must be excavated to expose the ground where the base plate will be placed and the concrete foundation poured.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:40:22.425195"
   },
   {
@@ -220557,7 +220557,7 @@
     "rationale": "The embedded base plate must be positioned, leveled, and secured in place before concrete is poured so that it becomes cast into the foundation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:40:22.425195"
   },
   {
@@ -222273,7 +222273,7 @@
     "rationale": "Structural steel or building frame must be in place to provide support and attachment points for ductwork.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:42:40.051294"
   },
   {
@@ -222284,7 +222284,7 @@
     "rationale": "Electrical conduits and plumbing pipes that may conflict with duct paths must be roughed in first to avoid clashes and rework.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:42:40.051294"
   },
   {
@@ -223329,7 +223329,7 @@
     "rationale": "The dormer must be framed onto the main roof structure; the main roof framing must be in place to tie the dormer into the main roof system.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:43:29.503345"
   },
   {
@@ -223351,7 +223351,7 @@
     "rationale": "The dormer frame defines the window opening and provides structural support; windows must be installed after the frame is secure.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:43:29.503345"
   },
   {
@@ -223703,7 +223703,7 @@
     "rationale": "Dormer construction is built within or onto the existing roof structure. The roof framing must be complete to provide the structural support and opening needed for dormer installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:43:51.077557"
   },
   {
@@ -223714,7 +223714,7 @@
     "rationale": "After the dormer is framed and constructed, the roof sheathing can be installed around and up to the dormer structure to ensure a watertight and continuous roof deck.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:43:51.077557"
   },
   {
@@ -223725,7 +223725,7 @@
     "rationale": "Flashing around the dormer must be installed after the dormer is fully constructed to seal the joint between the dormer and the main roof, preventing water infiltration.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:43:51.077557"
   },
   {
@@ -223747,7 +223747,7 @@
     "rationale": "Dormer windows must be installed after the dormer frame is complete, as the rough opening for the window is prepared during dormer framing.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:43:51.077557"
   },
   {
@@ -223868,7 +223868,7 @@
     "rationale": "The roof cap substrate/deck requires structural support from the underlying framing and walls to bear the load before installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:44:06.293769"
   },
   {
@@ -223879,7 +223879,7 @@
     "rationale": "Roof insulation is typically installed before the roof cap substrate/deck to provide thermal performance and a base layer for the roofing system.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:44:06.293769"
   },
   {
@@ -223901,7 +223901,7 @@
     "rationale": "Flashing is installed after the substrate/deck is in place to seal joints and transitions around the roof perimeter and penetrations.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:44:06.293769"
   },
   {
@@ -224044,7 +224044,7 @@
     "rationale": "The roof deck forms the base surface upon which the precast concrete roof cap is placed or secured; the deck must be completed before cap installation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:44:22.266708"
   },
   {
@@ -224066,7 +224066,7 @@
     "rationale": "Thermal insulation is typically laid over or around the roof cap components; the cap structure must be completed first to provide a substrate for insulation.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:44:22.266708"
   },
   {
@@ -226057,7 +226057,7 @@
     "rationale": "The building's foundation must be fully completed and cured before any interior wall construction can begin, as interior walls require a stable, level base to build upon.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:47:21.057016"
   },
   {
@@ -226079,7 +226079,7 @@
     "rationale": "Floor slabs or decks must be completed to provide the walking surface and support for interior wall placement.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:47:21.057016"
   },
   {
@@ -226090,7 +226090,7 @@
     "rationale": "Electrical wiring and outlets are installed within the interior wall cavities after the wall framing is complete.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:47:21.057016"
   },
   {
@@ -226101,7 +226101,7 @@
     "rationale": "Plumbing pipes and fixtures must be run inside interior walls after the walls are framed but before wall cladding is applied.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:47:21.057016"
   },
   {
@@ -226112,7 +226112,7 @@
     "rationale": "Insulation is placed inside interior wall cavities after framing is complete to improve thermal and acoustic performance.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:47:21.057016"
   },
   {
@@ -229698,7 +229698,7 @@
     "rationale": "Trim must be installed and in place before it can be primed and painted, as priming and painting are finishing applied to the installed material surface.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:52:00.005924"
   },
   {
@@ -229731,7 +229731,7 @@
     "rationale": "Trim painting should be completed before flooring installation to prevent paint drips, overspray, or damage to finished flooring surfaces.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:52:00.005924"
   },
   {
@@ -229819,7 +229819,7 @@
     "rationale": "Baseboard trim typically sits on top of finished flooring; installing flooring first ensures the baseboard covers the expansion gap and sits flush. However, some installers prefer to trim first and run flooring up to it.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:52:03.847079"
   },
   {
@@ -229841,7 +229841,7 @@
     "rationale": "In kitchens and bathrooms, cabinets may be installed before or after trim; however, installing cabinets first can simplify baseboard runs along cabinet toe kicks.",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
-    "status": "proposed",
+    "status": "conflicted",
     "created_at": "2026-06-30T05:52:03.847079"
   },
   {
