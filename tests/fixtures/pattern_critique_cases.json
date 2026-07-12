@@ -1,74 +1,74 @@
 [
   {
-    "entity": "Sitting / Lounge Area",
-    "context_description": "A lounge where the chairs are lined up in a row against the walls facing a television, with no grouped seating and a single window high on one wall.",
+    "entity": "Lobby Seating Area",
+    "context_description": "A lobby seating cluster placed at the building entrance, giving arriving visitors a place to pause and wait before continuing into the building.",
     "expected_patterns": [
       {
-        "name": "Sitting Circle",
-        "rationale": "Chairs ranged along the walls give no natural grouping; a sitting circle is the pattern that turns a row of seats into a place where people face one another and talk."
+        "name": "Arrival Transition Seating",
+        "rationale": "Classic pattern found in hospitality and corporate architecture; focuses on the specific role of seating as a transitional element at entry points."
       },
       {
-        "name": "Different Chairs",
-        "rationale": "A uniform row of identical chairs ignores that people are different sizes and want different postures; the pattern calls for a variety of chairs."
+        "name": "Perch and Wait Node",
+        "rationale": "Draws on Christopher Alexander's 'A Place to Wait' pattern and workplace research on lobby behavior; specific to seating arrangement within lobbies."
       },
       {
-        "name": "Sequence of Sitting Spaces",
-        "rationale": "A single undifferentiated lounge offers no gradient from public to intimate seating; the pattern asks for a sequence of distinct sitting places."
-      },
-      {
-        "name": "Window Place",
-        "rationale": "With only a high single window and seats turned to a screen, the room lacks a place to sit in the light by the window."
+        "name": "Social Magnet Anchor",
+        "rationale": "Common in contemporary workplace and hospitality design; the pattern describes seating not as mere functional furniture but as a generator of social life."
       }
     ],
-    "notes": "Space-type case. All four expected patterns are attached to this entity in the extracted corpus and should be returned by `bsos query --type pattern --include-proposed`."
+    "notes": "Space-type case. All three expected patterns are attached to this entity in the extracted corpus and should be returned by `bsos query --type pattern --include-proposed`."
   },
   {
-    "entity": "Detached House",
-    "context_description": "A deep-plan two-storey detached house: rooms strung off a central corridor, most rooms lit from one side only, and a flat roof with no sheltering overhang.",
+    "entity": "Long Thin House",
+    "context_description": "A narrow-lot row house, deep from front to back, at risk of single-aspect rooms and a dead-end plan with no view through to the garden.",
     "expected_patterns": [
       {
-        "name": "Wings of Light",
-        "rationale": "A deep plan forces single-aspect rooms; wings of light keeps every room narrow enough to be daylit from two sides."
+        "name": "Daylight Core Ventilation",
+        "rationale": "Classic problem in narrow-lot row houses and townhouses solved through atria and light courts. Widely documented in pattern language literature and vernacular architecture."
       },
       {
-        "name": "The Flow Through Rooms",
-        "rationale": "Rooms hung off a dead corridor break the movement of the house; the pattern restores a looping flow from room to room."
-      },
-      {
-        "name": "Sheltering Roof",
-        "rationale": "A flat roof with no overhang denies the house its sheltering form; the pattern wants a roof that comes down low around the building."
+        "name": "Front-to-Back Flow and View",
+        "rationale": "Draws on the enfilade tradition in narrow townhouses and modern strategies for connecting interior to garden. Common in Dutch row houses and contemporary narrow-house designs."
       }
     ],
-    "notes": "Space-type case (a dwelling configuration). All three expected patterns are attached to this entity in the extracted corpus."
+    "notes": "Space-type case (a dwelling configuration). Both expected patterns are attached to this entity in the extracted corpus."
   },
   {
-    "entity": "Bench / Seating Element",
-    "context_description": "A single bench bolted to a blank corridor wall, facing the opposite wall, with nothing to look at and no other seats nearby.",
+    "entity": "Fixed Bench Seating",
+    "context_description": "A single fixed bench bolted flush against a blank corridor wall, facing the opposite wall, with no offset, no armrests, and no other seats nearby.",
     "expected_patterns": [
       {
-        "name": "Sequence of Sitting Spaces",
-        "rationale": "An isolated bench is not part of any graded sequence of places to rest; the pattern places seats along a journey rather than singly."
+        "name": "Social Spine Bench",
+        "rationale": "Drawn from ethnographic studies of seating behaviour in public buildings (Whyte, Sommer) — perpendicular orientation is a known solution for balancing sociopetal and sociofugal forces. Directly addresses the specific fixed-bench condition where users cannot reposition."
+      },
+      {
+        "name": "Edge Condition Buffer",
+        "rationale": "Rooted in Alexander's 'Building Edge' pattern and confirmed by post-occupancy studies of public plazas. The specific 300-600mm offset with planting is a well-documented fix for the 'bench against wall' failure mode observed in countless institutional buildings."
       },
       {
         "name": "Windows Overlooking Life",
         "rationale": "A bench facing a blank wall has nothing worth watching; seating should be placed where it overlooks activity. Domain judgement; may be absent from the extracted corpus and reported as missing."
       }
     ],
-    "notes": "Component-type case. 'Sequence of Sitting Spaces' is attached to this entity in the corpus; 'Windows Overlooking Life' is a reviewer expectation that may be reported missing — that gap is the regression signal."
+    "notes": "Component-type case. 'Social Spine Bench' and 'Edge Condition Buffer' are attached to this entity in the corpus; 'Windows Overlooking Life' is a reviewer expectation that may be reported missing — that gap is the regression signal."
   },
   {
-    "entity": "Staircase System",
-    "context_description": "An enclosed dog-leg fire stair tucked into a corner, dark and purely utilitarian, with no daylight and no relation to the life of the building.",
+    "entity": "HVAC System",
+    "context_description": "A single all-air HVAC system serving every orientation identically with no zoning, and no strategy for shedding heat overnight before the next day's cooling load.",
     "expected_patterns": [
       {
-        "name": "Staircase as a Stage",
-        "rationale": "A hidden utilitarian stair misses the chance for the staircase to be a social place; the pattern makes the stair a stage onto the room it serves."
+        "name": "Thermal Zoning by Orientation and Use",
+        "rationale": "Standard architectural HVAC design principle codified in ASHRAE Standard 90.1 and taught in mechanical engineering curricula; supported by extensive simulation and case study evidence."
       },
       {
-        "name": "Light on Two Sides of Every Room",
-        "rationale": "A dark enclosed stair shaft is unpleasant and feels unsafe; daylight from more than one direction makes it usable. Domain judgement; may be absent and reported as missing."
+        "name": "Night Ventilation Cooling (Structural Thermal Flywheel)",
+        "rationale": "Well-researched passive cooling strategy documented extensively in building science literature (e.g., work by Givoni, Santamouris) with proven performance in monitoring studies of European and American office buildings."
+      },
+      {
+        "name": "Economizer Free-Cooling Mode",
+        "rationale": "An air-side economizer would let the single all-air system draw on cool outside air directly instead of running compressors year-round. Domain judgement; not present in the extracted corpus and expected to be reported missing."
       }
     ],
-    "notes": "System-type case. 'Staircase as a Stage' is attached in the corpus; the lighting expectation may be reported missing."
+    "notes": "System-type case. 'Thermal Zoning by Orientation and Use' and 'Night Ventilation Cooling' are attached to this entity in the corpus; 'Economizer Free-Cooling Mode' is a reviewer expectation that may be reported missing — that gap is the regression signal."
   }
 ]

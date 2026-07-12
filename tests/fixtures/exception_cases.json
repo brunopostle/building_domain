@@ -36,14 +36,14 @@
     "expected_exception": "A beam normally requires support at both ends, but cantilever beams are supported at one end only; deflection limits relax for non-brittle finishes."
   },
   {
-    "entity": "lintel",
+    "entity": "Wall Lintel",
     "entity_type": "component",
-    "expected_exception": "A lintel is normally required over an opening in masonry, except where an arch or a structural frame already spans the opening."
+    "expected_exception": "A wall lintel is normally required over an opening in a load-bearing wall, but non-load-bearing partition walls may not require a lintel in some configurations."
   },
   {
-    "entity": "damp-proof course",
+    "entity": "Damp-proof courses",
     "entity_type": "component",
-    "expected_exception": "A damp-proof course is normally required 150mm above ground, except for cavity-tray and integral-DPM constructions and certain solid-wall heritage repairs."
+    "expected_exception": "A damp-proof course normally requires mortar bedding, except pre-formed plastic DPCs and liquid-applied (bitumen-based or polymer-modified cementitious) DPCs, which are laid or coated without mortar."
   },
   {
     "entity": "balcony",
@@ -51,19 +51,19 @@
     "expected_exception": "A balcony edge above a drop normally requires 1100mm guarding, except for low-level thresholds and Juliet balconies where the door itself forms the barrier."
   },
   {
-    "entity": "Kitchen",
+    "entity": "Family Kitchen",
     "entity_type": "space",
-    "expected_exception": "A kitchen normally requires mechanical extract, except where adequate openable windows or a passive stack provide equivalent ventilation."
+    "expected_exception": "A family kitchen normally requires full cabinetry, except in hospitality settings (e.g. a hotel room kitchenette) where open shelving or minimal storage is used instead."
   },
   {
-    "entity": "Bathroom",
+    "entity": "Family Bathroom",
     "entity_type": "space",
-    "expected_exception": "A bathroom normally requires extract ventilation, except where it has an openable window of adequate area in some codes."
+    "expected_exception": "A family bathroom normally contains a toilet directly within the room, except in commercial/public hospitality settings where partitioned or separate toilet stalls are required instead."
   },
   {
-    "entity": "Bedroom",
+    "entity": "Master Bedroom",
     "entity_type": "space",
-    "expected_exception": "A bedroom normally requires an escape window, except where it opens onto a protected stair or is on the ground floor with a final exit door."
+    "expected_exception": "A master bedroom normally requires a dedicated HVAC system, except in mild climates where natural ventilation suffices, or where a central/ductless system serves the room instead."
   },
   {
     "entity": "Corridor",
