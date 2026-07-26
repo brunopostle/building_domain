@@ -8,8 +8,8 @@ from sqlmodel import Session, select
 from bsos.cli.main import app
 from bsos.persistence.database import create_db_engine
 from bsos.persistence.models import (
-    AbstractionNodeRow, AssertionRow, EntityAliasRow, EntityRow, ForceRow,
-    PatternRow,
+    AbstractionNodeRow, AntiPatternRow, AssertionRow, ConstraintRow,
+    EntityAliasRow, EntityRow, ForceRow, PatternRow,
 )
 
 runner = CliRunner(mix_stderr=False)
@@ -285,3 +285,64 @@ def test_import_drops_pattern_refs_for_missing_force_and_pattern(tmp_path):
         pattern = s.exec(select(PatternRow)).one()
         assert json.loads(pattern.force_ids) == []
         assert json.loads(pattern.related_pattern_ids) == []
+
+
+# ---------------------------------------------------------------------------
+# constraints.rationale / antipatterns.rationale
+# ---------------------------------------------------------------------------
+
+def test_import_round_trips_constraint_rationale(tmp_path):
+    db1 = _init_db(tmp_path, "t1.db")
+    with Session(_engine(db1)) as s:
+        s.add(EntityRow(id="e-wall", name="Wall", entity_type="component",
+                         status="accepted", source_model="test", created_at=NOW))
+        s.add(ConstraintRow(
+            id="c-1", subject_id="e-wall", rule="Must be load-bearing",
+            constraint_type="structural", source_model="test", created_at=NOW,
+            confidence=0.9, status="accepted", knowledge_origin="test",
+            rationale="Because the roof loads onto it directly.",
+        ))
+        s.commit()
+    out = tmp_path / "export.json"
+    result = runner.invoke(app, ["export", "--db", db1, "-o", str(out)])
+    assert result.exit_code == 0, result.output
+    assert json.loads(out.read_text())["constraints"][0]["rationale"] == (
+        "Because the roof loads onto it directly."
+    )
+
+    db2 = _init_db(tmp_path, "t2.db")
+    result = runner.invoke(app, [
+        "import", "--db", db2, "-i", str(out), "--force", "--skip-index",
+    ])
+    assert result.exit_code == 0, result.output
+    with Session(_engine(db2)) as s:
+        constraint = s.exec(select(ConstraintRow)).one()
+        assert constraint.rationale == "Because the roof loads onto it directly."
+
+
+def test_import_round_trips_antipattern_rationale(tmp_path):
+    db1 = _init_db(tmp_path, "t1.db")
+    with Session(_engine(db1)) as s:
+        s.add(EntityRow(id="e-wall", name="Wall", entity_type="component",
+                         status="accepted", source_model="test", created_at=NOW))
+        s.add(AntiPatternRow(
+            id="ap-1", name="Thermal bridge at wall junction", subject_id="e-wall",
+            source_model="test", created_at=NOW, confidence=0.9, status="accepted",
+            knowledge_origin="test", rationale="Uninsulated junction leaks heat.",
+        ))
+        s.commit()
+    out = tmp_path / "export.json"
+    result = runner.invoke(app, ["export", "--db", db1, "-o", str(out)])
+    assert result.exit_code == 0, result.output
+    assert json.loads(out.read_text())["antipatterns"][0]["rationale"] == (
+        "Uninsulated junction leaks heat."
+    )
+
+    db2 = _init_db(tmp_path, "t2.db")
+    result = runner.invoke(app, [
+        "import", "--db", db2, "-i", str(out), "--force", "--skip-index",
+    ])
+    assert result.exit_code == 0, result.output
+    with Session(_engine(db2)) as s:
+        antipattern = s.exec(select(AntiPatternRow)).one()
+        assert antipattern.rationale == "Uninsulated junction leaks heat."

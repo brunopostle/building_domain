@@ -111,6 +111,7 @@ def _export_constraints(session, status_filter, names) -> list[dict]:
             "exceptions": _decode(r.exceptions),
             "confidence": r.confidence,
             "knowledge_origin": r.knowledge_origin,
+            "rationale": r.rationale or "",
             "status": r.status,
             "created_at": r.created_at.isoformat() if r.created_at else None,
         })
@@ -182,6 +183,7 @@ def _export_antipatterns(session, status_filter, names) -> list[dict]:
             "mitigations": _decode(r.mitigations),
             "confidence": r.confidence,
             "knowledge_origin": r.knowledge_origin,
+            "rationale": r.rationale or "",
             "status": r.status,
             "created_at": r.created_at.isoformat() if r.created_at else None,
         })
