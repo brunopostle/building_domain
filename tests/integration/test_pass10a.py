@@ -104,6 +104,7 @@ def _add_pattern(
     name: str,
     force_descriptions: list[str] | None = None,
     related_pattern_names: list[str] | None = None,
+    related_pattern_ids: list[str] | None = None,
 ) -> str:
     pid = str(uuid.uuid4())
     session.add(PatternRow(
@@ -111,7 +112,7 @@ def _add_pattern(
         force_descriptions=json.dumps(force_descriptions or []),
         force_ids=json.dumps([]),
         related_pattern_names=json.dumps(related_pattern_names or []),
-        related_pattern_ids=json.dumps([]),
+        related_pattern_ids=json.dumps(related_pattern_ids or []),
         context=json.dumps([]),
         consequences=json.dumps([]),
         emergent_properties=json.dumps([]),
@@ -286,6 +287,28 @@ class TestRelatedPatternNamesResolution:
             assert json.loads(p.related_pattern_names) == []
             related = json.loads(p.related_pattern_ids)
             assert pid not in related
+
+    def test_stale_foreign_ids_dropped(self, engine):
+        """related_pattern_ids may already carry ids that aren't real PatternRow
+        ids (e.g. building_domain-tt0: apl_patterns.json book slugs written by
+        an older bug in `bsos curate import-apl`). Resolution must not preserve
+        them alongside newly-resolved real ids.
+        """
+        with Session(engine) as s:
+            pid_target = _add_pattern(s, "light on two sides")
+            pid_source = _add_pattern(
+                s, "south courtyard",
+                related_pattern_names=["light on two sides"],
+                related_pattern_ids=["small-public-squares", "old-age-cottage"],
+            )
+            s.commit()
+
+        run_pass10a(engine, _embedder=fake_embedder)
+
+        with Session(engine) as s:
+            p = s.get(PatternRow, pid_source)
+            related = json.loads(p.related_pattern_ids)
+            assert related == [pid_target]
 
 
 # ---------------------------------------------------------------------------

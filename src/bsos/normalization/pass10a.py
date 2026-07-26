@@ -199,6 +199,8 @@ def _resolve_related_pattern_names(
     if not all_p_names:
         return {"resolved": 0, "unresolved": 0}
 
+    all_p_ids_set = set(all_p_ids)
+
     # Pre-embed all pattern names once.
     p_vecs = np.array(embedder(all_p_names), dtype=np.float32)
 
@@ -215,7 +217,13 @@ def _resolve_related_pattern_names(
             if not related_names:
                 continue  # Already resolved — resumable skip
 
-            existing_related: list[str] = json.loads(pattern.related_pattern_ids or "[]")
+            # Drop any ids that aren't real PatternRow ids (e.g. legacy APL book
+            # slugs written before pass10a resolution existed) so they don't
+            # accumulate alongside newly-resolved ids.
+            existing_related: list[str] = [
+                i for i in json.loads(pattern.related_pattern_ids or "[]")
+                if i in all_p_ids_set
+            ]
             now = datetime.now(timezone.utc)
 
             # Exclude self from candidate set.

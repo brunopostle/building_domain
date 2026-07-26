@@ -413,7 +413,6 @@ def import_apl(
                     solution = result.solution
 
             related_names = [r["name"] for r in p.get("higher_patterns", []) + p.get("lower_patterns", [])]
-            related_ids = [r["id"] for r in p.get("higher_patterns", []) + p.get("lower_patterns", [])]
             source_model = model if model else "human"
 
             if name in existing and (provider is not None or p.get("paraphrased")):
@@ -438,8 +437,11 @@ def import_apl(
                     force_ids=_json.dumps([]),
                     solution=solution,
                     consequences=_json.dumps([]),
+                    # related_pattern_ids left empty: apl_patterns.json's higher/lower_patterns
+                    # "id" values are book slugs, not PatternRow ids. Pass 10a resolves the
+                    # names above into real PatternRow ids once all 253 patterns are inserted.
                     related_pattern_names=_json.dumps(related_names),
-                    related_pattern_ids=_json.dumps(related_ids),
+                    related_pattern_ids=_json.dumps([]),
                     emergent_properties=_json.dumps([]),
                     source_model=source_model,
                     source_prompt=None,
