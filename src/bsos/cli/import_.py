@@ -92,9 +92,41 @@ def _import_entities(session, rows: list[dict], replace: bool) -> tuple[int, int
             entity_type=r.get("entity_type", "component"),
             description=r.get("description", ""),
             status=r.get("status", "proposed"),
+            is_entrance=bool(r.get("is_entrance", False)),
             source_model=r.get("source_model", _IMPORT_SOURCE),
             created_at=_parse_dt(r.get("created_at")),
         ))
+        added += 1
+    return added, skipped
+
+
+def _import_entity_aliases(
+    session,
+    rows: list[dict],
+    name_to_id: dict[str, str],
+    id_to_type: dict[str, str],
+) -> tuple[int, int]:
+    from bsos.persistence.models import EntityAliasRow
+    existing = {
+        (r.entity_id, r.alias)
+        for r in session.exec(select(EntityAliasRow)).all()
+    }
+    added = skipped = 0
+    for r in rows:
+        alias = r.get("alias") or ""
+        if not alias:
+            skipped += 1
+            continue
+        entity_id, _ = _resolve(r.get("entity", ""), name_to_id, id_to_type)
+        if not entity_id:
+            skipped += 1
+            continue
+        key = (entity_id, alias)
+        if key in existing:
+            skipped += 1
+            continue
+        session.add(EntityAliasRow(entity_id=entity_id, alias=alias))
+        existing.add(key)
         added += 1
     return added, skipped
 
@@ -199,9 +231,15 @@ def _import_patterns(
     name_to_id: dict[str, str],
     id_to_type: dict[str, str],
 ) -> tuple[int, int]:
-    from bsos.persistence.models import PatternRow
+    from bsos.persistence.models import ForceRow, PatternRow
     skip_ids = set() if replace else _existing_ids(session, PatternRow)
+    valid_force_ids = _existing_ids(session, ForceRow)
     added = skipped = 0
+    dropped_force_refs = 0
+    # related_pattern_ids may point at patterns imported later in this same
+    # batch, so defer their validation to a second pass once every pattern in
+    # this import has been flushed.
+    pending_related: dict[str, list[str]] = {}
     for r in rows:
         eid = r.get("id") or ""
         if not eid:
@@ -214,14 +252,24 @@ def _import_patterns(
         subject_id = None
         if subject_ref:
             subject_id, _ = _resolve(subject_ref, name_to_id, id_to_type)
+        raw_force_ids = r.get("force_ids") if isinstance(r.get("force_ids"), list) else []
+        kept_force_ids = [fid for fid in raw_force_ids if fid in valid_force_ids]
+        dropped_force_refs += len(raw_force_ids) - len(kept_force_ids)
+        raw_related = r.get("related_pattern_ids") if isinstance(r.get("related_pattern_ids"), list) else []
+        if raw_related:
+            pending_related[eid] = raw_related
         session.merge(PatternRow(
             id=eid,
             name=r.get("name", ""),
             subject_id=subject_id,
             context=_enc(r.get("context", [])),
             problem=r.get("problem", ""),
+            force_descriptions=_enc(r.get("force_descriptions", [])),
+            force_ids=_enc(kept_force_ids),
             solution=r.get("solution", ""),
             consequences=_enc(r.get("consequences", [])),
+            related_pattern_names=_enc(r.get("related_pattern_names", [])),
+            related_pattern_ids="[]",
             emergent_properties=_enc(r.get("emergent_properties", [])),
             source_model=_IMPORT_SOURCE,
             created_at=_parse_dt(r.get("created_at")),
@@ -231,13 +279,39 @@ def _import_patterns(
             rationale=r.get("rationale") or None,
         ))
         added += 1
+
+    dropped_pattern_refs = 0
+    if pending_related:
+        session.flush()
+        valid_pattern_ids = _existing_ids(session, PatternRow)
+        for eid, raw_related in pending_related.items():
+            kept = [pid for pid in raw_related if pid in valid_pattern_ids]
+            dropped_pattern_refs += len(raw_related) - len(kept)
+            if kept:
+                row = session.get(PatternRow, eid)
+                row.related_pattern_ids = _enc(kept)
+
+    if dropped_force_refs or dropped_pattern_refs:
+        typer.echo(
+            f"  note: patterns dropped {dropped_force_refs} force reference(s) "
+            f"and {dropped_pattern_refs} related-pattern reference(s) not "
+            "present in this import.",
+            err=True,
+        )
     return added, skipped
 
 
-def _import_forces(session, rows: list[dict], replace: bool) -> tuple[int, int]:
+def _import_forces(
+    session,
+    rows: list[dict],
+    replace: bool,
+    name_to_id: dict[str, str],
+    id_to_type: dict[str, str],
+) -> tuple[int, int]:
     from bsos.persistence.models import ForceRow
     skip_ids = set() if replace else _existing_ids(session, ForceRow)
     added = skipped = 0
+    dropped_affects = 0
     for r in rows:
         eid = r.get("id") or ""
         if not eid:
@@ -246,10 +320,18 @@ def _import_forces(session, rows: list[dict], replace: bool) -> tuple[int, int]:
         if eid in skip_ids:
             skipped += 1
             continue
+        raw_affects = r.get("affects") if isinstance(r.get("affects"), list) else []
+        resolved_affects = []
+        for ref in raw_affects:
+            entity_id, _ = _resolve(ref, name_to_id, id_to_type)
+            if entity_id:
+                resolved_affects.append(entity_id)
+        dropped_affects += len(raw_affects) - len(resolved_affects)
         session.merge(ForceRow(
             id=eid,
             name=r.get("name", ""),
             direction=r.get("direction", ""),
+            affects=_enc(resolved_affects),
             source_model=_IMPORT_SOURCE,
             created_at=_parse_dt(r.get("created_at")),
             confidence=float(r.get("confidence", 0.5)),
@@ -258,6 +340,12 @@ def _import_forces(session, rows: list[dict], replace: bool) -> tuple[int, int]:
             rationale=r.get("rationale") or None,
         ))
         added += 1
+    if dropped_affects:
+        typer.echo(
+            f"  note: {dropped_affects} force 'affects' reference(s) pointed at "
+            "entities not present in this import and were dropped.",
+            err=True,
+        )
     return added, skipped
 
 
@@ -586,13 +674,19 @@ def import_cmd(
     with session:
         if "entities" in data:
             counts["entities"] = _import_entities(session, data["entities"], replace)
-        if "forces" in data:
-            counts["forces"] = _import_forces(session, data["forces"], replace)
 
         # Flush so entity rows are visible to the name-lookup queries below.
         session.flush()
         name_to_id, id_to_type = _build_entity_maps(session)
 
+        if "entity_aliases" in data:
+            counts["entity_aliases"] = _import_entity_aliases(
+                session, data["entity_aliases"], name_to_id, id_to_type
+            )
+        if "forces" in data:
+            counts["forces"] = _import_forces(
+                session, data["forces"], replace, name_to_id, id_to_type
+            )
         if "assertions" in data:
             counts["assertions"] = _import_assertions(
                 session, data["assertions"], replace, name_to_id, id_to_type

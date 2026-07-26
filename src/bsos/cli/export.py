@@ -13,6 +13,7 @@ app = typer.Typer()
 
 ALL_TYPES = [
     "entities",
+    "entity_aliases",
     "assertions",
     "constraints",
     "patterns",
@@ -54,10 +55,20 @@ def _export_entities(session, status_filter) -> list[dict]:
             "entity_type": r.entity_type,
             "description": r.description or "",
             "status": r.status,
+            "is_entrance": r.is_entrance,
             "source_model": r.source_model,
             "created_at": r.created_at.isoformat() if r.created_at else None,
         })
     return result
+
+
+def _export_entity_aliases(session, names) -> list[dict]:
+    from bsos.persistence.models import EntityAliasRow
+    rows = session.exec(select(EntityAliasRow)).all()
+    return [
+        {"entity": names.get(r.entity_id, r.entity_id), "alias": r.alias}
+        for r in rows
+    ]
 
 
 def _export_assertions(session, status_filter, names) -> list[dict]:
@@ -119,8 +130,12 @@ def _export_patterns(session, status_filter, names) -> list[dict]:
             "subject": names.get(r.subject_id, r.subject_id) if r.subject_id else "",
             "context": _decode(r.context),
             "problem": r.problem,
+            "force_descriptions": _decode(r.force_descriptions),
+            "force_ids": _decode(r.force_ids),
             "solution": r.solution,
             "consequences": _decode(r.consequences),
+            "related_pattern_names": _decode(r.related_pattern_names),
+            "related_pattern_ids": _decode(r.related_pattern_ids),
             "emergent_properties": _decode(r.emergent_properties),
             "confidence": r.confidence,
             "knowledge_origin": r.knowledge_origin,
@@ -130,7 +145,7 @@ def _export_patterns(session, status_filter, names) -> list[dict]:
     return result
 
 
-def _export_forces(session, status_filter) -> list[dict]:
+def _export_forces(session, status_filter, names) -> list[dict]:
     from bsos.persistence.models import ForceRow
     rows = session.exec(select(ForceRow)).all()
     result = []
@@ -141,6 +156,7 @@ def _export_forces(session, status_filter) -> list[dict]:
             "id": r.id,
             "name": r.name,
             "direction": r.direction,
+            "affects": [names.get(eid, eid) for eid in _decode(r.affects)],
             "rationale": r.rationale or "",
             "confidence": r.confidence,
             "knowledge_origin": r.knowledge_origin,
@@ -239,10 +255,11 @@ def _gather(session, types: list[str], status_filter: set | None) -> dict[str, l
     result = {}
     dispatch = {
         "entities": lambda: _export_entities(session, status_filter),
+        "entity_aliases": lambda: _export_entity_aliases(session, names),
         "assertions": lambda: _export_assertions(session, status_filter, names),
         "constraints": lambda: _export_constraints(session, status_filter, names),
         "patterns": lambda: _export_patterns(session, status_filter, names),
-        "forces": lambda: _export_forces(session, status_filter),
+        "forces": lambda: _export_forces(session, status_filter, names),
         "antipatterns": lambda: _export_antipatterns(session, status_filter, names),
         "spatial_relations": lambda: _export_spatial_relations(session, status_filter, names),
         "process_relations": lambda: _export_process_relations(session, status_filter, names),
