@@ -68,10 +68,10 @@ def test_status_json(tmp_path):
 def test_query_accepted_only(tmp_path):
     db = _init_db(tmp_path)
     _add_fixture_data(db, tmp_path)
-    result = runner.invoke(app, ["query", "roof", "--db", db])
+    result = runner.invoke(app, ["query", "roof", "--db", db, "--no-include-proposed"])
     assert result.exit_code == 0, result.output
     assert "protects_from" in result.output
-    assert "requires" not in result.output  # proposed, excluded by default
+    assert "requires" not in result.output  # proposed, excluded when opted out
 
 
 def test_query_include_proposed(tmp_path):
@@ -79,6 +79,16 @@ def test_query_include_proposed(tmp_path):
     _add_fixture_data(db, tmp_path)
     result = runner.invoke(app, ["query", "roof", "--db", db, "--include-proposed"])
     assert result.exit_code == 0
+    assert "protects_from" in result.output
+    assert "requires" in result.output
+
+
+def test_query_default_includes_proposed(tmp_path):
+    """Default matches the MCP tool default (include_proposed=True) -- building_domain-v5z."""
+    db = _init_db(tmp_path)
+    _add_fixture_data(db, tmp_path)
+    result = runner.invoke(app, ["query", "roof", "--db", db])
+    assert result.exit_code == 0, result.output
     assert "protects_from" in result.output
     assert "requires" in result.output
 

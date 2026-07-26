@@ -103,7 +103,7 @@ def cmd_query(
         help="Item type: assertion, constraint, pattern, antipattern, force, spatial, process",
     ),
     min_confidence: float = typer.Option(0.0, "--min-confidence"),
-    include_proposed: bool = typer.Option(False, "--include-proposed"),
+    include_proposed: bool = typer.Option(True, "--include-proposed/--no-include-proposed"),
     json_out: bool = typer.Option(False, "--json"),
     db: str = typer.Option(None, "--db"),
 ) -> None:
