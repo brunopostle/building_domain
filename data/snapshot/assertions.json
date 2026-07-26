@@ -93621,7 +93621,7 @@
     "id": "206c06de-5e59-41e6-9772-2b1a452949b4",
     "subject": "Wall",
     "predicate": "requires",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Interior walls require finish materials such as drywall, plaster, or paneling.",
@@ -93808,7 +93808,7 @@
     "id": "e2fdeb79-8cd0-4f03-984a-a7119bfbaf04",
     "subject": "Beam",
     "predicate": "requires",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "A beam may require a load-bearing wall as a support element.",
@@ -94005,7 +94005,7 @@
     "id": "a4eaecf0-8f48-4eac-93b7-994d984c4879",
     "subject": "Slab",
     "predicate": "depends_on",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "In load-bearing wall construction, slabs depend on masonry or concrete walls for support.",
@@ -95011,7 +95011,7 @@
     "id": "5d8b3284-1441-470e-9f21-2ba7bbb52aa5",
     "subject": "Ceiling",
     "predicate": "connects_to",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "Ceilings typically connect around structural columns that penetrate through the floor/ceiling assembly.",
@@ -98612,28 +98612,8 @@
     "created_at": "2026-06-29T08:33:12.204611"
   },
   {
-    "id": "932e5b15-10da-4979-a6b6-adebb2b0e612",
-    "subject": "Roofing Membrane",
-    "predicate": "requires",
-    "object": "Roof Deck",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "A roofing membrane is installed over a roof deck (e.g., concrete, wood, metal) which provides the structural substrate.",
-    "applicability": [
-      "all building types"
-    ],
-    "conditions": [
-      "must be structurally sound"
-    ],
-    "exceptions": [
-      "There exist roofing membrane types (e.g., some ethylene propylene diene monomer (EPDM) or polyvinyl chloride (PVC) systems on certain retrofit applications) that can be directly applied over existing roof surfaces without a new roof deck, provided the existing substrate is adequate. The assertion does not account for this re-roofing scenario."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T08:33:28.470497"
-  },
-  {
     "id": "0edca7ca-3448-4e93-8881-ba15c7f318dd",
-    "subject": "Roofing Membrane",
+    "subject": "Roof Membrane",
     "predicate": "requires",
     "object": "Insulation",
     "confidence": 0.9,
@@ -98653,7 +98633,7 @@
   },
   {
     "id": "4757885f-c674-48ab-a8cd-5541183c61b3",
-    "subject": "Roofing Membrane",
+    "subject": "Roof Membrane",
     "predicate": "depends_on",
     "object": "Roof Flashing",
     "confidence": 0.95,
@@ -98671,7 +98651,7 @@
   },
   {
     "id": "12cd9f88-d216-4609-bd57-84392f4ea105",
-    "subject": "Roofing Membrane",
+    "subject": "Roof Membrane",
     "predicate": "supports",
     "object": "Green Roof System",
     "confidence": 0.85,
@@ -99384,7 +99364,7 @@
     "id": "a98df224-bb56-4abf-8702-66007e1eed1b",
     "subject": "Tile Installation",
     "predicate": "supports",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.9,
     "knowledge_origin": "architectural",
     "rationale": "Tile on walls provides a durable, cleanable, and aesthetic surface finish.",
@@ -100893,7 +100873,7 @@
     "id": "daaad849-b68d-4426-b94d-f940c7e4947a",
     "subject": "Local Transport Areas",
     "predicate": "contains",
-    "object": "Bicycle Parking Facility",
+    "object": "Bicycle Parking Area",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "Bicycle racks and storage are common components of local transport areas to support cycling.",
@@ -112570,7 +112550,7 @@
     "id": "e715a257-0163-43d0-95ed-269c652ccbe1",
     "subject": "Perimeter Beams",
     "predicate": "requires",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Perimeter beams transfer loads to columns and require column support at their ends.",
@@ -115360,7 +115340,7 @@
     "id": "09d3b371-5eb3-4d47-8975-9bbe84ddc701",
     "subject": "Roof Flashing",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "Flashing integrates with the roofing membrane at edges, penetrations, and terminations to form a waterproof seal.",
@@ -115860,7 +115840,7 @@
     "id": "32672ed0-7cdd-4417-a18a-994ab2c51500",
     "subject": "Roof Parapet",
     "predicate": "protects_from",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "The parapet protects the roofing membrane edges from being lifted by wind.",
@@ -116545,64 +116525,8 @@
     "created_at": "2026-06-29T09:10:03.046854"
   },
   {
-    "id": "52cb5503-4dd6-4b96-8845-c4fa85356f9b",
-    "subject": "Load-Bearing Wall",
-    "predicate": "requires",
-    "object": "Foundation",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "Load-bearing walls transfer vertical loads to the foundation, which must be designed to support the imposed loads.",
-    "applicability": [
-      "All building types with load-bearing walls"
-    ],
-    "conditions": [
-      "Must be continuous and properly sized for load distribution"
-    ],
-    "exceptions": [],
-    "status": "accepted",
-    "created_at": "2026-06-29T09:10:20.140497"
-  },
-  {
-    "id": "eff8d661-5478-4cb4-9f36-5591bed67ec8",
-    "subject": "Load-Bearing Wall",
-    "predicate": "requires",
-    "object": "Mortar",
-    "confidence": 0.9,
-    "knowledge_origin": "engineering",
-    "rationale": "Mortar binds masonry units together and distributes loads evenly.",
-    "applicability": [
-      "Masonry construction"
-    ],
-    "conditions": [
-      "For masonry load-bearing walls"
-    ],
-    "exceptions": [
-      "Monolithic concrete walls or timber walls"
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T09:10:20.140497"
-  },
-  {
-    "id": "5ae52a6f-94a0-4d71-91a8-c9653f8eb9b2",
-    "subject": "Load-Bearing Wall",
-    "predicate": "depends_on",
-    "object": "Roof Structure",
-    "confidence": 0.9,
-    "knowledge_origin": "engineering",
-    "rationale": "The roof transfers gravity loads to the load-bearing walls.",
-    "applicability": [
-      "All buildings with load-bearing walls and a roof"
-    ],
-    "conditions": [
-      "Roof must be designed to bear on or be tied to load-bearing walls"
-    ],
-    "exceptions": [],
-    "status": "accepted",
-    "created_at": "2026-06-29T09:10:20.140497"
-  },
-  {
     "id": "49415315-0828-4a5b-a29f-c56508fbec7a",
-    "subject": "Load-Bearing Wall",
+    "subject": "Load-Bearing Walls",
     "predicate": "supports",
     "object": "Roof Structure",
     "confidence": 0.95,
@@ -116620,7 +116544,7 @@
   },
   {
     "id": "c1d38a7d-7057-4efc-ad85-2ab1997aa0d8",
-    "subject": "Load-Bearing Wall",
+    "subject": "Load-Bearing Walls",
     "predicate": "supports",
     "object": "Floor Slab",
     "confidence": 0.9,
@@ -116641,7 +116565,7 @@
   },
   {
     "id": "6feeed53-aed9-42e2-9b13-075bbfa07d99",
-    "subject": "Load-Bearing Wall",
+    "subject": "Load-Bearing Walls",
     "predicate": "contains",
     "object": "Mortar Joint",
     "confidence": 0.95,
@@ -116663,7 +116587,7 @@
     "id": "5e0185ed-c1b9-4470-86d9-cfb22030a802",
     "subject": "Non-Load-Bearing Wall",
     "predicate": "requires",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "Non-load-bearing walls require a finish material (paint, texture, wallcovering) to be functional as interior partitions.",
@@ -116723,7 +116647,7 @@
     "id": "ec702e25-f1a9-4bc1-bafc-329d64744b19",
     "subject": "Non-Load-Bearing Wall",
     "predicate": "supports",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "The non-load-bearing wall assembly provides the substrate to which wall finishes are attached.",
@@ -117504,7 +117428,7 @@
     "id": "3c2dbc21-9c47-4bc5-afab-557c2f25f33f",
     "subject": "Wall Lintel",
     "predicate": "requires",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.9,
     "knowledge_origin": "physical",
     "rationale": "Lintels transfer loads from the wall above the opening to adjacent wall sections or supports.",
@@ -118305,7 +118229,7 @@
     "id": "3b0e604c-2429-4534-9117-233627356dca",
     "subject": "Strip Footing",
     "predicate": "supports",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Strip footings are designed to support continuous load-bearing walls.",
@@ -119929,7 +119853,7 @@
     "id": "ca6d5284-a4a7-4fe7-a8b6-37317142c6e2",
     "subject": "Precast Prestressed Beam",
     "predicate": "connects_to",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Precast prestressed beams are connected to columns through bearing pads, corbels, or moment connections to form the structural frame.",
@@ -122766,7 +122690,7 @@
     "id": "8c7e533f-98ac-4794-806f-e7dd436d60d7",
     "subject": "Suspended Slab",
     "predicate": "depends_on",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Suspended slabs transfer loads to columns or walls.",
@@ -131277,7 +131201,7 @@
   },
   {
     "id": "74dc1cb6-7dc5-40e4-936c-eeb61ca43aba",
-    "subject": "Radiant Ceiling Panel",
+    "subject": "Radiant Ceiling Panels",
     "predicate": "connects_to",
     "object": "Dedicated Outdoor Air System (DOAS)",
     "confidence": 0.9,
@@ -132170,7 +132094,7 @@
     "id": "32d10697-d7fa-4a86-ab30-309cfd87c9db",
     "subject": "Partition Base/Skirting",
     "predicate": "depends_on",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Skirting is typically installed after wall finishing to cover the gap and provide a neat transition.",
@@ -141543,7 +141467,7 @@
     "id": "31555d79-552b-4670-9693-6b16b617b9a1",
     "subject": "Roof Framing System",
     "predicate": "depends_on",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Columns transfer vertical loads from roof framing down to the foundation.",
@@ -142829,7 +142753,7 @@
     "id": "ea7a95d2-11bf-4d4d-95c5-251d10e95006",
     "subject": "Corridor Kickplate",
     "predicate": "protects_from",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.95,
     "knowledge_origin": "architectural",
     "rationale": "The primary function of a kickplate is to protect the wall finish from scuffs, kicks, and damage from carts or cleaning equipment.",
@@ -143305,7 +143229,7 @@
     "id": "f980c144-8d2d-4640-bcf9-590655402f6a",
     "subject": "Corridor Partition Wall",
     "predicate": "connects_to",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "Partition walls are framed around or connected to structural columns that fall within the wall line.",
@@ -146461,7 +146385,7 @@
     "id": "ccce2e21-7fa6-480e-9161-25b6b052fc72",
     "subject": "Car Park Slab",
     "predicate": "depends_on",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Car park slabs depend on columns to transfer loads to foundations.",
@@ -148731,7 +148655,7 @@
     "id": "0129dc62-05ea-4689-916e-fa9d6505760e",
     "subject": "Grab Bar",
     "predicate": "depends_on",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "The grab bar depends on the wall's ability to bear the imposed loads (body weight, pulling forces).",
@@ -160037,7 +159961,7 @@
   },
   {
     "id": "0fa009f1-1d28-4bea-bdd7-c9b0afb8c9f0",
-    "subject": "Liquid-Applied Membrane",
+    "subject": "Fluid-Applied Membrane",
     "predicate": "supports",
     "object": "Green Roof Assembly",
     "confidence": 0.85,
@@ -162098,7 +162022,7 @@
     "id": "18911991-d01b-493a-ba70-20cf237ea350",
     "subject": "Brick Corbelling",
     "predicate": "requires",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "Brick corbelling typically projects from a load-bearing wall to provide structural support for upper elements.",
@@ -168637,7 +168561,7 @@
     "id": "59b8bb46-cd4a-4a97-bb9f-d3dfbbaf7780",
     "subject": "Flashing",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Flashing integrates with roofing membrane to direct water away from roof-wall junctions.",
@@ -180295,7 +180219,7 @@
     "id": "b5f45120-bd88-4d6d-9ba6-2f7ae492a467",
     "subject": "Cover Board",
     "predicate": "supports",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Cover board provides a smooth, uniform substrate that supports the primary roofing membrane.",
@@ -180944,7 +180868,7 @@
     "id": "27c1a14f-bac1-45db-a758-473e0391392e",
     "subject": "Roof Walkway Pads",
     "predicate": "depends_on",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Roof walkway pads are installed on top of the roofing membrane to protect it from foot traffic.",
@@ -181003,7 +180927,7 @@
     "id": "2e14d57e-2e7d-49cf-9b63-e48914be9ca7",
     "subject": "Roof Walkway Pads",
     "predicate": "protects_from",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Primary function of roof walkway pads is to shield the waterproof membrane from damage caused by walking, equipment, or maintenance activities.",
@@ -186316,30 +186240,8 @@
     "created_at": "2026-06-29T12:36:56.612602"
   },
   {
-    "id": "22e87947-0c41-4fd8-8a45-25b283ce1846",
-    "subject": "Kitchen Base Cabinets",
-    "predicate": "requires",
-    "object": "Countertop",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "Kitchen base cabinets almost always require a countertop as the primary work surface mounted on top of them.",
-    "applicability": [
-      "residential",
-      "commercial kitchens"
-    ],
-    "conditions": [
-      "for providing a work surface above cabinets"
-    ],
-    "exceptions": [
-      "Butcher block counters can be integral with some cabinet designs",
-      "In islands or peninsulas, base cabinets may support a countertop directly without any 'cabinet requires countertop' dependency — rather the countertop requires the cabinet. The direction of dependency is reversed; a base cabinet can exist without a countertop (e.g., waiting for countertop installation, or used as a standalone storage unit). The assertion implies base cabinets cannot exist without countertops, which is false in construction sequencing."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T12:37:11.653592"
-  },
-  {
     "id": "e35f6144-7577-4475-b28d-1849e41a546e",
-    "subject": "Kitchen Base Cabinets",
+    "subject": "Base Cabinets",
     "predicate": "depends_on",
     "object": "Wall Framing",
     "confidence": 0.9,
@@ -186360,26 +186262,8 @@
     "created_at": "2026-06-29T12:37:11.653592"
   },
   {
-    "id": "60f1ffda-f260-4c10-99ba-2da322d75889",
-    "subject": "Kitchen Base Cabinets",
-    "predicate": "supports",
-    "object": "Countertop",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "Base cabinets structurally support the weight of the countertop above them.",
-    "applicability": [
-      "all kitchen designs"
-    ],
-    "conditions": [
-      "cabinets provide the structural base for countertop installation"
-    ],
-    "exceptions": [],
-    "status": "accepted",
-    "created_at": "2026-06-29T12:37:11.653592"
-  },
-  {
     "id": "423e0124-14d6-4dcd-95c4-456703aad1af",
-    "subject": "Kitchen Base Cabinets",
+    "subject": "Base Cabinets",
     "predicate": "depends_on",
     "object": "Backsplash",
     "confidence": 0.7,
@@ -186399,7 +186283,7 @@
   },
   {
     "id": "eb460ca3-d764-4eee-af59-3ff05058635d",
-    "subject": "Kitchen Base Cabinets",
+    "subject": "Base Cabinets",
     "predicate": "connects_to",
     "object": "Wall Cabinets",
     "confidence": 0.8,
@@ -186419,7 +186303,7 @@
   },
   {
     "id": "a6d8cf31-ac9e-4408-8396-fed851523fcd",
-    "subject": "Kitchen Wall Cabinets",
+    "subject": "Wall Cabinets",
     "predicate": "supports",
     "object": "Countertop",
     "confidence": 0.7,
@@ -186435,29 +186319,6 @@
     ],
     "exceptions": [
       "not all wall cabinets support countertops; some are standalone"
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T12:37:13.207398"
-  },
-  {
-    "id": "c650fbac-23a4-432f-a79f-5da3b68a5f0f",
-    "subject": "Kitchen Wall Cabinets",
-    "predicate": "connects_to",
-    "object": "Base Cabinets",
-    "confidence": 0.85,
-    "knowledge_origin": "engineering",
-    "rationale": "Wall cabinets are typically designed to complement and align with base cabinets in a kitchen layout.",
-    "applicability": [
-      "residential",
-      "commercial",
-      "'Connects_to' is ambiguous — it could mean physical attachment, spatial adjacency, or design coordination. Wall cabinets and base cabinets are not physically connected to each other; they are separately mounted on walls and floor respectively, with at least a countertop gap between them."
-    ],
-    "conditions": [
-      "when part of a coordinated kitchen cabinet system"
-    ],
-    "exceptions": [
-      "wall cabinets can exist without base cabinets in some designs",
-      "In many commercial kitchens (e.g., stainless steel kitchens), wall cabinets may be omitted entirely while base cabinets remain, contradicting the notion that they 'connect' as part of a system."
     ],
     "status": "accepted",
     "created_at": "2026-06-29T12:37:13.207398"
@@ -188819,50 +188680,6 @@
     ],
     "status": "accepted",
     "created_at": "2026-06-29T12:49:01.987560"
-  },
-  {
-    "id": "fd77514f-bbf1-4b14-b2dc-613050e718da",
-    "subject": "Scaffold Ladders / Stairs",
-    "predicate": "requires",
-    "object": "Guardrail",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "Safety regulations typically require guardrails at ladder/stairs access points on scaffolding to prevent falls.",
-    "applicability": [
-      "construction",
-      "maintenance",
-      "The assertion does not specify whether the 2m threshold refers to the total height of the ladder/stair or the height of the fall exposure. In many jurisdictions (e.g., OSHA, EU standards), the threshold for guardrail requirements on scaffolds differs (e.g., 6ft / ~1.8m for OSHA vs. 2m for others). A flat 2m threshold may conflict with local regulations."
-    ],
-    "conditions": [
-      "When ladder/stairs extend more than 2m above ground or base"
-    ],
-    "exceptions": [
-      "Many scaffold stair towers and ladder access points use built-in guardrails that are part of the scaffold frame itself rather than a separate 'Guardrail' component; the assertion implies a distinct guardrail system is required, which may overstate the requirement in cases where integrated guardrails exist."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T12:49:14.334571"
-  },
-  {
-    "id": "9b934878-ce50-48be-9d36-3208980f19db",
-    "subject": "Scaffold Ladders / Stairs",
-    "predicate": "contains",
-    "object": "Handrail",
-    "confidence": 0.9,
-    "knowledge_origin": "engineering",
-    "rationale": "Scaffold stairs commonly contain handrails as an integral part of the assembly; ladders may or may not.",
-    "applicability": [
-      "construction",
-      "maintenance"
-    ],
-    "conditions": [
-      "Typical scaffold stair units include integrated handrails"
-    ],
-    "exceptions": [
-      "Some ladder access does not include handrails",
-      "The assertion states 'Scaffold Ladders / Stairs contains Handrail' but the existing exceptions already note 'Some ladder access does not include handrails'. This is more than an exception — many scaffold ladders (e.g., vertical ladders, hook-on ladders, climbing ladders) do not have handrails by design; handrails are a feature of stairs and stair-tower ladders, not of vertical or rung ladders. Treating all 'ladders' as containing handrails is misleading."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T12:49:14.334571"
   },
   {
     "id": "fab896f9-2e07-454d-bb37-a318ec5097a4",
@@ -192137,7 +191954,7 @@
     "id": "524644bd-011b-4cd2-b5f8-351363159011",
     "subject": "Finger Wing Structural Frame",
     "predicate": "requires",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Columns are essential vertical load-bearing components of the structural frame.",
@@ -198736,7 +198553,7 @@
     "id": "cf02b960-d46d-46b8-85fe-08b5a155ec9f",
     "subject": "City Magic Entrance Canopy",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "A solid entrance canopy needs a waterproof roofing membrane.",
@@ -200265,7 +200082,7 @@
     "id": "82d3792f-df5d-4fca-9f40-244bc2e4f62c",
     "subject": "Waiting Area / Shelter",
     "predicate": "requires",
-    "object": "Signage / Wayfinding",
+    "object": "Wayfinding Signage",
     "confidence": 0.8,
     "knowledge_origin": "architectural",
     "rationale": "Users need to identify the waiting area and understand service information.",
@@ -205518,48 +205335,6 @@
     "created_at": "2026-06-29T13:33:54.729582"
   },
   {
-    "id": "0a483cc5-10db-4e56-b66c-51fbd5f7f1ce",
-    "subject": "Bicycle Parking Facility",
-    "predicate": "requires",
-    "object": "Bicycle Rack",
-    "confidence": 0.95,
-    "knowledge_origin": "physical",
-    "rationale": "Bicycle parking facilities need physical racks or stands to park and secure bicycles.",
-    "applicability": [
-      "all buildings with bicycle parking"
-    ],
-    "conditions": [
-      "for parking bicycles"
-    ],
-    "exceptions": [
-      "Bicycle parking facilities can include wall-mounted hooks, racks integrated into furniture, or vertical storage systems that are not standard 'Bicycle Racks' as typically defined (e.g., Sheffield stands, wave racks). Some facilities use automated or stacked parking that does not contain traditional racks."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T13:33:56.610751"
-  },
-  {
-    "id": "0d8e974a-a9f3-4fb7-89f7-3adf7bb40273",
-    "subject": "Bicycle Parking Facility",
-    "predicate": "contains",
-    "object": "Bicycle Repair Station",
-    "confidence": 0.75,
-    "knowledge_origin": "physical",
-    "rationale": "Some bicycle parking facilities include a repair station with tools and an air pump.",
-    "applicability": [
-      "office buildings",
-      "university campuses",
-      "transit hubs"
-    ],
-    "conditions": [
-      "in larger or premium facilities"
-    ],
-    "exceptions": [
-      "basic facilities"
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T13:33:56.610751"
-  },
-  {
     "id": "440b8016-6d79-4236-8aab-29dd05d82cbf",
     "subject": "Pedestrian Bridge / Skywalk Connection",
     "predicate": "requires",
@@ -205909,7 +205684,7 @@
     "id": "8cd3a2e6-eb0d-4c94-ad90-b0f05f1550ab",
     "subject": "Transit-Oriented Plaza",
     "predicate": "requires",
-    "object": "Bicycle Parking Facility",
+    "object": "Bicycle Parking Area",
     "confidence": 0.85,
     "knowledge_origin": "physical",
     "rationale": "Bicycle access supports first/last-mile connectivity to transit, a core function of transit-oriented plazas.",
@@ -216921,7 +216696,7 @@
     "id": "6f254e5a-1e20-4ac8-b4ae-dc3db9cb89f8",
     "subject": "Promenade Canopy",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "A waterproof membrane is required to protect pedestrians from rain and ensure durability of the canopy.",
@@ -223513,7 +223288,7 @@
     "id": "8da62b03-e2be-4b63-a94b-a80e3d8b22d3",
     "subject": "Visitor Waiting Area",
     "predicate": "requires",
-    "object": "Signage / Wayfinding",
+    "object": "Wayfinding Signage",
     "confidence": 0.93,
     "knowledge_origin": "architectural",
     "rationale": "Visitors need directional and informational signage to understand queuing, service points, and exits.",
@@ -225774,7 +225549,7 @@
     "id": "68bc4fc3-5c34-4f19-99f1-223086aa2124",
     "subject": "Row House Construction - Roofing Over Multiple Units",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Row house roofing spans multiple units; a continuous waterproof membrane is essential to prevent leaks at party wall junctions.",
@@ -227838,7 +227613,7 @@
     "id": "e974a1c1-7c43-4035-98db-c03545d49074",
     "subject": "Foundation Construction",
     "predicate": "supports",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Foundations distribute wall loads to the soil.",
@@ -236337,7 +236112,7 @@
     "id": "730091fd-0fe5-4439-8c13-08b28937e270",
     "subject": "Unit Entry Alcove",
     "predicate": "requires",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.9,
     "knowledge_origin": "architectural",
     "rationale": "The alcove requires finished interior wall surfaces (paint, paneling, etc.) as a habitable transition space.",
@@ -237725,7 +237500,7 @@
     "id": "f2536e73-e2d6-4c35-b0ea-543bc0692c86",
     "subject": "T-Junction Wall Framing",
     "predicate": "supports",
-    "object": "Interior Partition Wall",
+    "object": "Interior Partition Walls",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "T-junction wall framing structurally supports the intersecting partition wall, connecting it to the main wall.",
@@ -239244,7 +239019,7 @@
     "id": "b2838c57-2aec-45bf-b099-f43c11a5db62",
     "subject": "Gateway Canopy",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "To prevent water ingress through the canopy deck.",
@@ -243674,7 +243449,7 @@
     "id": "7ac07406-28ef-4578-9f9b-ec73cbf8538d",
     "subject": "Accessible Switch / Outlet",
     "predicate": "depends_on",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "The switch/outlet plate sits flush against the finished wall surface (drywall, paneling, etc.).",
@@ -244126,7 +243901,7 @@
   },
   {
     "id": "5b9f89eb-5e7a-4a28-919b-b895760bcb22",
-    "subject": "Pergola or Trellis Structure",
+    "subject": "Trellis and Pergola Structure",
     "predicate": "supports",
     "object": "Outdoor Lighting",
     "confidence": 0.8,
@@ -244540,69 +244315,8 @@
     "created_at": "2026-06-29T15:24:28.199216"
   },
   {
-    "id": "656e4336-117c-4239-90ae-3f486e8c91f7",
-    "subject": "Rooftop Terrace",
-    "predicate": "requires",
-    "object": "Waterproof Membrane",
-    "confidence": 0.98,
-    "knowledge_origin": "engineering",
-    "rationale": "Essential to prevent water infiltration into the building below.",
-    "applicability": [
-      "all building types with rooftop terraces",
-      "The assertion states 'all building types with rooftop terraces' but does not differentiate between rooftop terraces over conditioned space vs. over unconditioned space (e.g., podium decks over parking garages). Over unconditioned space, the waterproofing requirements differ and may be less stringent."
-    ],
-    "conditions": [
-      "must be continuous and properly lapped at penetrations"
-    ],
-    "exceptions": [
-      "Green roofs (extensive) with drainage layers and root barriers may not require a separate waterproof membrane as the system itself provides waterproofing. Additionally, some pre-fabricated terrace systems integrate waterproofing into modular panels, eliminating the need for a separate membrane."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T15:24:41.715829"
-  },
-  {
-    "id": "f6904e40-54bc-4e27-b0d5-a2c9f009eecd",
-    "subject": "Rooftop Terrace",
-    "predicate": "requires",
-    "object": "Drainage System",
-    "confidence": 0.98,
-    "knowledge_origin": "engineering",
-    "rationale": "Needed to remove rainwater and prevent ponding on the terrace.",
-    "applicability": [
-      "all building types with rooftop terraces"
-    ],
-    "conditions": [
-      "must include roof drains, scuppers, or internal drainage with proper slope"
-    ],
-    "exceptions": [
-      "Some rooftop terraces use permeable paving systems where stormwater infiltrates through the terrace surface and is managed by the structural slab drainage below, eliminating the need for traditional roof drains or scuppers. Additionally, 'blue roof' systems intentionally detain water on the roof without conventional drainage outlets."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T15:24:41.715829"
-  },
-  {
-    "id": "36ff9bce-07f0-42c9-a64d-724549bf6e1e",
-    "subject": "Rooftop Terrace",
-    "predicate": "requires",
-    "object": "Insulation Layer",
-    "confidence": 0.85,
-    "knowledge_origin": "engineering",
-    "rationale": "Provides thermal separation between the terrace and the interior space below.",
-    "applicability": [
-      "conditioned buildings with rooftop terraces"
-    ],
-    "conditions": [
-      "thermal insulation appropriate for climate zone"
-    ],
-    "exceptions": [
-      "unoccupied terraces in mild climates may omit"
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T15:24:41.715829"
-  },
-  {
     "id": "f6c9b4e6-b556-4940-b126-afcb5b4cc5ec",
-    "subject": "Rooftop Terrace",
+    "subject": "Roof Terrace",
     "predicate": "requires",
     "object": "Guardrail/Parapet",
     "confidence": 0.97,
@@ -249907,7 +249621,7 @@
     "id": "52b5911e-df50-4747-97c4-0852402a7c34",
     "subject": "Public Outdoor Room Structural Frame",
     "predicate": "requires",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "A structural frame inherently requires columns to support roof and upper loads.",
@@ -249976,7 +249690,7 @@
     "id": "3ec2bd8b-ef6f-4043-a093-3e8d2ee8cd26",
     "subject": "Public Outdoor Room Structural Frame",
     "predicate": "contains",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "The frame system contains columns as its primary vertical components.",
@@ -262280,7 +261994,7 @@
     "id": "1138108d-6e88-468d-b71e-f5a1b6b14c63",
     "subject": "Roofing & Weatherproofing Activity",
     "predicate": "contains",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "The roofing activity includes the installation of waterproof membranes.",
@@ -270880,7 +270594,7 @@
   },
   {
     "id": "7a27fcd3-57d9-4c25-8dcd-0dc5e89a639d",
-    "subject": "Communal Seating Benches",
+    "subject": "Communal Seating Bench",
     "predicate": "connects_to",
     "object": "Pedestrian Pathways",
     "confidence": 0.85,
@@ -277089,7 +276803,7 @@
   },
   {
     "id": "aa21c505-0068-41f3-9840-6b2fea527bb2",
-    "subject": "Lighting and Emergency Lighting System",
+    "subject": "Emergency Lighting System",
     "predicate": "requires",
     "object": "Lighting Fixture",
     "confidence": 0.95,
@@ -277107,7 +276821,7 @@
   },
   {
     "id": "453335bd-2dbf-4857-bf72-36e9363c036a",
-    "subject": "Lighting and Emergency Lighting System",
+    "subject": "Emergency Lighting System",
     "predicate": "depends_on",
     "object": "Fire Alarm System",
     "confidence": 0.75,
@@ -277129,7 +276843,7 @@
   },
   {
     "id": "7a8ca809-0677-429e-b645-14f9c29d9ba8",
-    "subject": "Lighting and Emergency Lighting System",
+    "subject": "Emergency Lighting System",
     "predicate": "depends_on",
     "object": "Building Management System (BMS)",
     "confidence": 0.7,
@@ -277152,7 +276866,7 @@
   },
   {
     "id": "669bc5e0-db86-479f-ae61-8ba3fd9cb710",
-    "subject": "Lighting and Emergency Lighting System",
+    "subject": "Emergency Lighting System",
     "predicate": "contains",
     "object": "Exit Sign",
     "confidence": 0.95,
@@ -277170,7 +276884,7 @@
   },
   {
     "id": "9378e161-77fb-495e-aae2-586698d77b72",
-    "subject": "Lighting and Emergency Lighting System",
+    "subject": "Emergency Lighting System",
     "predicate": "connects_to",
     "object": "Electrical Distribution System",
     "confidence": 0.95,
@@ -277188,7 +276902,7 @@
   },
   {
     "id": "9757c229-d811-4852-ad3d-5f31f720792f",
-    "subject": "Lighting and Emergency Lighting System",
+    "subject": "Emergency Lighting System",
     "predicate": "connects_to",
     "object": "Fire Alarm System",
     "confidence": 0.75,
@@ -278019,7 +277733,7 @@
     "id": "f893e401-11cd-45ea-88ed-61b005241334",
     "subject": "Sheltered Drop-Off Canopy",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "A waterproof roofing membrane is required to keep the area below dry and sheltered.",
@@ -278359,7 +278073,7 @@
     "id": "b06769a4-326b-40aa-91ed-071787b291ca",
     "subject": "Construction Activity: Building Envelope Installation",
     "predicate": "contains",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Roofing membranes are contained within the envelope system for weather protection.",
@@ -279154,7 +278868,7 @@
     "id": "cc051ce9-6545-4edc-adf5-c6c671c0e6bc",
     "subject": "Basement Stories",
     "predicate": "contains",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Load-bearing columns supporting upper floors are commonly located in basement levels.",
@@ -281990,28 +281704,8 @@
     "created_at": "2026-06-29T16:59:11.202041"
   },
   {
-    "id": "35024295-d12f-4e36-897e-51b7da6c0b6a",
-    "subject": "Structural Columns",
-    "predicate": "requires",
-    "object": "Foundation",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "Structural columns must be supported by a foundation system to transfer loads to the soil.",
-    "applicability": [
-      "all building types"
-    ],
-    "conditions": [
-      "to transfer vertical loads to ground"
-    ],
-    "exceptions": [
-      "Columns can also transfer lateral loads (wind, seismic) to foundations, not just vertical loads. The condition 'to transfer vertical loads' is incomplete."
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T16:59:15.069039"
-  },
-  {
     "id": "efaba29f-361f-4965-b854-3d38684b4720",
-    "subject": "Structural Columns",
+    "subject": "Structural Column",
     "predicate": "requires",
     "object": "Concrete",
     "confidence": 0.95,
@@ -282032,7 +281726,7 @@
   },
   {
     "id": "49495a93-d383-429c-8888-361751918e88",
-    "subject": "Structural Columns",
+    "subject": "Structural Column",
     "predicate": "depends_on",
     "object": "Beam",
     "confidence": 0.9,
@@ -282053,7 +281747,7 @@
   },
   {
     "id": "386e3f17-3013-4ba2-bb0b-30d9524d7296",
-    "subject": "Structural Columns",
+    "subject": "Structural Column",
     "predicate": "supports",
     "object": "Floor Slab",
     "confidence": 0.95,
@@ -282068,24 +281762,6 @@
     "exceptions": [
       "Some columns may support a beam or girder that in turn supports the floor slab, meaning the column does not directly support the slab. Additionally, in waffle slab or ribbed slab systems, columns support wider column capitals or drop panels, not the slab directly at a single point."
     ],
-    "status": "accepted",
-    "created_at": "2026-06-29T16:59:15.069039"
-  },
-  {
-    "id": "8b8b6a32-f14d-4ba8-88c6-3e02624de416",
-    "subject": "Structural Columns",
-    "predicate": "supports",
-    "object": "Roof Structure",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "Columns support the roof framing and roofing materials.",
-    "applicability": [
-      "all building types"
-    ],
-    "conditions": [
-      "at the topmost level"
-    ],
-    "exceptions": [],
     "status": "accepted",
     "created_at": "2026-06-29T16:59:15.069039"
   },
@@ -285599,7 +285275,7 @@
     "id": "de08fd58-29ca-4169-a78c-94024e3559c9",
     "subject": "Entry and Exit Driveways",
     "predicate": "requires",
-    "object": "Signage / Wayfinding",
+    "object": "Wayfinding Signage",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "Signage identifying entry/exit points, directional arrows, and speed limits supports safe traffic flow.",
@@ -286889,7 +286565,7 @@
     "id": "89163346-afdc-4f12-bffd-065e25981124",
     "subject": "Deck",
     "predicate": "contains",
-    "object": "Railing/Guardrail System",
+    "object": "Railing and Guard System",
     "confidence": 0.95,
     "knowledge_origin": "architectural",
     "rationale": "Guardrails are required by building codes for safety on elevated decks.",
@@ -290986,7 +290662,7 @@
     "id": "c469a369-5e18-4711-99e0-4dc188cae335",
     "subject": "Canopy Installation",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "To shed water and provide weather resistance, a canopy typically needs a roofing or waterproof membrane.",
@@ -292924,7 +292600,7 @@
     "id": "dcbf1117-b4ba-45c2-a229-90796c6a9c45",
     "subject": "Entry Canopy Installation",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "The top of the canopy must be waterproofed with a membrane to shed water.",
@@ -293999,7 +293675,7 @@
     "id": "eda618d2-bd68-4f6f-9f52-c19716d3556c",
     "subject": "Arcade",
     "predicate": "requires",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "An arcade is a covered walkway formed by a series of arches supported by columns or piers; structural columns are fundamental to its definition.",
@@ -295721,7 +295397,7 @@
     "id": "f03e1ef0-7ffa-40cb-babf-2caf3c118d7a",
     "subject": "Install Step Roof Decking",
     "predicate": "supports",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "In some systems, step roof decking provides the surface onto which roofing membranes are applied.",
@@ -295753,7 +295429,7 @@
     "id": "5c48f30c-a98c-4c3a-8ff4-b777ceb822fb",
     "subject": "Construct Cascade Roof Framing",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Waterproofing membranes are required on top of the roof deck to protect against water infiltration.",
@@ -296530,7 +296206,7 @@
   },
   {
     "id": "e2652c74-ab29-4301-a371-97b88f01e9c5",
-    "subject": "Roof Access / Hatch",
+    "subject": "Roof Access Hatch",
     "predicate": "requires",
     "object": "Roof Structure",
     "confidence": 0.95,
@@ -296545,27 +296221,6 @@
       "structural opening must be provided"
     ],
     "exceptions": [],
-    "status": "accepted",
-    "created_at": "2026-06-29T17:32:43.293833"
-  },
-  {
-    "id": "c48a4e1f-9c28-40db-bad8-1522c7896c0e",
-    "subject": "Roof Access / Hatch",
-    "predicate": "requires",
-    "object": "Insulation",
-    "confidence": 0.85,
-    "knowledge_origin": "engineering",
-    "rationale": "To prevent thermal bridging and heat loss at the roof opening.",
-    "applicability": [
-      "conditioned buildings"
-    ],
-    "conditions": [
-      "thermal break must be maintained around hatch"
-    ],
-    "exceptions": [
-      "unconditioned buildings",
-      "The assertion has an existing exception for unconditioned buildings, but roof hatches in semi-conditioned spaces (e.g., uninsulated attics above conditioned spaces, buffer zones, sunrooms) may also not require insulation around the hatch since the thermal boundary is elsewhere."
-    ],
     "status": "accepted",
     "created_at": "2026-06-29T17:32:43.293833"
   },
@@ -300074,7 +299729,7 @@
     "id": "0219ee20-2e1f-4c4a-a8ee-4e7cebd933bd",
     "subject": "Blind arcade",
     "predicate": "requires",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "A blind arcade is typically a series of arches applied to a wall surface. When structural, it requires a load-bearing wall to support the arches.",
@@ -309172,7 +308827,7 @@
     "id": "dd6950d6-159a-403a-a38e-8b34cca9b81f",
     "subject": "Entrance Canopy / Portico",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "The canopy top requires a waterproof roofing membrane to protect against rain and snow infiltration.",
@@ -313456,7 +313111,7 @@
     "id": "eb6bc38b-9783-45c8-abf4-537242ad32af",
     "subject": "Private Toilet Compartment",
     "predicate": "requires",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.85,
     "knowledge_origin": "architectural",
     "rationale": "Wall finishes protect the structure from moisture and are easy to clean.",
@@ -317901,7 +317556,7 @@
     "id": "06355ecb-d12a-4b02-83a8-fedf7dbf5005",
     "subject": "Headwall Panel",
     "predicate": "supports",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Headwall panels support and provide a termination point for roofing membranes at the roof-to-parapet/headwall junction.",
@@ -323186,7 +322841,7 @@
     "id": "678504e6-8551-4b9d-a939-697d1ffce0c3",
     "subject": "Office Partition System",
     "predicate": "connects_to",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.8,
     "knowledge_origin": "engineering",
     "rationale": "Partition walls may connect to structural columns for lateral stability.",
@@ -327283,25 +326938,6 @@
     "created_at": "2026-06-29T19:09:40.015946"
   },
   {
-    "id": "1da85c4e-f938-4d78-b09a-70e80464a47d",
-    "subject": "Kitchen Cabinet Installation",
-    "predicate": "requires",
-    "object": "Kitchen Base Cabinets",
-    "confidence": 0.95,
-    "knowledge_origin": "engineering",
-    "rationale": "Base cabinets form the foundation structure that supports countertops and provides storage",
-    "applicability": [
-      "residential",
-      "commercial kitchens"
-    ],
-    "conditions": [
-      "prior to countertop installation"
-    ],
-    "exceptions": [],
-    "status": "accepted",
-    "created_at": "2026-06-29T19:09:49.812499"
-  },
-  {
     "id": "4648fdf5-3764-4dc2-b583-78a20dcdec44",
     "subject": "Fit Sanitary Ware",
     "predicate": "requires",
@@ -327628,7 +327264,7 @@
     "id": "3d19194a-5ced-4a67-80b5-60833521fb0d",
     "subject": "Skillion Roof",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "A skillion roof is a single-sloped roof that requires a roofing membrane (or weatherproof cladding) to shed water effectively.",
@@ -329765,7 +329401,7 @@
     "id": "d3341d8b-6935-41e6-84de-8cf937dcb884",
     "subject": "Cantilevered Open Stair",
     "predicate": "depends_on",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "The cantilevered treads are typically embedded into a masonry or concrete load-bearing wall for stability.",
@@ -330977,7 +330613,7 @@
     "id": "52454a91-b23d-41a4-b457-563cb9b9e2bb",
     "subject": "Edge of Slab",
     "predicate": "connects_to",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "Edge of Slab transfers loads to the supporting wall at the building perimeter.",
@@ -331472,7 +331108,7 @@
     "id": "900d7423-5c6d-4676-85a5-27a41e3c3079",
     "subject": "Install Edge Flashing",
     "predicate": "supports",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Edge flashing mechanically secures the roofing membrane termination at roof edges, preventing uplift.",
@@ -346835,28 +346471,6 @@
     "created_at": "2026-06-29T20:12:29.782022"
   },
   {
-    "id": "54349b62-2ac8-4afd-9e99-0019b490b212",
-    "subject": "Railing/Guardrail System",
-    "predicate": "requires",
-    "object": "Handrail",
-    "confidence": 0.9,
-    "knowledge_origin": "engineering",
-    "rationale": "Guardrails often incorporate a handrail component for user grasp and safety.",
-    "applicability": [
-      "All building types",
-      "The assertion 'Railing/Guardrail System requires Handrail' is misleading because guardrails (fall protection barriers) and handrails (graspable supports) serve distinct functions per building codes (e.g., IBC, OSHA). A guardrail is required for fall protection at open-sided walking surfaces regardless of whether a handrail is needed. Handrail requirements are tied to stairways and ramps, independent of guardrail requirements. The statement conflates two separate code requirements."
-    ],
-    "conditions": [
-      "Required where railing is on stairs or ramps",
-      "For graspable support along the top"
-    ],
-    "exceptions": [
-      "Some barrier-only guardrails without handrail function"
-    ],
-    "status": "accepted",
-    "created_at": "2026-06-29T20:12:50.261698"
-  },
-  {
     "id": "8015365a-077c-45bc-8b0f-66a5e401c42a",
     "subject": "Sitting Circle Floor Finish",
     "predicate": "requires",
@@ -349428,7 +349042,7 @@
     "id": "701a2b5b-1e0d-404c-9b35-b167e9734c5e",
     "subject": "Sawtooth Ceiling",
     "predicate": "connects_to",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "A sawtooth ceiling is directly connected to the roofing system above it, typically a metal or membrane roof covering.",
@@ -352545,7 +352159,7 @@
     "id": "6a84f904-9991-4ee0-ae82-16d8356018ec",
     "subject": "Borrowed Light Window",
     "predicate": "connects_to",
-    "object": "Interior Partition Wall",
+    "object": "Interior Partition Walls",
     "confidence": 0.95,
     "knowledge_origin": "architectural",
     "rationale": "The borrowed light window is installed within an interior wall or partition, physically connecting to the wall structure.",
@@ -354860,7 +354474,7 @@
     "id": "c37498e7-77ef-45e6-badd-fb376792e0ff",
     "subject": "Thick Wall Foundation",
     "predicate": "supports",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "The primary function of thick wall foundation is to support the load-bearing wall above",
@@ -356661,7 +356275,7 @@
     "id": "e2beaafd-412a-4bea-b1d1-82dcfc069076",
     "subject": "Floating Shelf Installation",
     "predicate": "depends_on",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "Proper load transfer requires the wall to support the weight of the shelf and its contents.",
@@ -358502,7 +358116,7 @@
     "id": "8fea592d-c4ef-4d5f-bc90-9bb5f11033b4",
     "subject": "Reception / Welcome Desk",
     "predicate": "depends_on",
-    "object": "Signage / Wayfinding",
+    "object": "Wayfinding Signage",
     "confidence": 0.85,
     "knowledge_origin": "architectural",
     "rationale": "Clear signage helps visitors find the reception area.",
@@ -362436,7 +362050,7 @@
     "id": "244feaec-4114-4dfa-ad74-5a3f2b067f31",
     "subject": "Skylight Installation (Activity)",
     "predicate": "connects_to",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Skylight flashing must integrate with and connect to the roof membrane to maintain waterproofing.",
@@ -362893,7 +362507,7 @@
   },
   {
     "id": "9a6c8b49-f71d-4ec2-8024-675abc3da092",
-    "subject": "Floor Drain & Trench",
+    "subject": "Floor Drain / Trench Drain",
     "predicate": "depends_on",
     "object": "Waterproof Membrane",
     "confidence": 0.88,
@@ -368781,7 +368395,7 @@
     "id": "3230f6b2-28ab-4c60-837f-7fec70361e4f",
     "subject": "Perimeter Beam Installation",
     "predicate": "requires",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "Perimeter beams typically span between columns and transfer loads to them.",
@@ -368816,7 +368430,7 @@
     "id": "97895ea7-5ab5-4c75-818c-9f55f6752915",
     "subject": "Perimeter Beam Installation",
     "predicate": "connects_to",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Perimeter beams are connected at each end to columns, forming the perimeter frame.",
@@ -371054,7 +370668,7 @@
     "id": "2332d210-a8c3-4791-8637-876ccc09ed98",
     "subject": "Vault Edge / Wall Connections",
     "predicate": "requires",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Vault edges typically bear on or connect to load-bearing walls that transfer the vault's vertical and horizontal forces to the foundation.",
@@ -373630,7 +373244,7 @@
     "id": "4a8a6960-65cc-40f0-ac60-434b2540866e",
     "subject": "Low Doorway Arch",
     "predicate": "depends_on",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "A low doorway arch depends on the surrounding load-bearing wall to transfer vertical loads around the opening.",
@@ -375111,7 +374725,7 @@
     "id": "02fac7e7-3fb1-4716-ad7c-a7e296fd449c",
     "subject": "Column Grid Line",
     "predicate": "depends_on",
-    "object": "Structural Columns",
+    "object": "Structural Column",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "Column grid lines define the spatial layout that structural columns physically occupy; columns must be placed on these grid intersections for structural integrity.",
@@ -377835,7 +377449,7 @@
     "id": "d42f0185-8b54-48f4-95a1-fad7fab1d65f",
     "subject": "Dormer Roof Deck",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "A waterproof membrane is essential to protect the dormer roof deck from water ingress.",
@@ -378390,7 +378004,7 @@
     "id": "8aea6b7d-bd27-403b-a5bc-25c92b305f22",
     "subject": "Dormer Construction Activity",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.9,
     "knowledge_origin": "engineering",
     "rationale": "A waterproof membrane is needed to prevent water ingress at dormer-to-roof junctions.",
@@ -378683,7 +378297,7 @@
     "id": "a077592e-86df-40a3-aa6c-995c2f5b5538",
     "subject": "Flat-Roof Dormer",
     "predicate": "requires",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "A flat-roof dormer typically requires load-bearing walls or structural framing to transfer loads to the foundation.",
@@ -378856,7 +378470,7 @@
     "id": "823b7c9f-a6af-49e2-af0e-55857e8f0cb4",
     "subject": "Dormer Valley",
     "predicate": "requires",
-    "object": "Roofing Membrane",
+    "object": "Roof Membrane",
     "confidence": 0.95,
     "knowledge_origin": "engineering",
     "rationale": "A dormer valley is the intersection where a dormer roof meets the main roof; it requires waterproofing via roofing membrane to prevent leaks.",
@@ -381222,7 +380836,7 @@
   },
   {
     "id": "e35ff843-fa08-4cc8-91ff-d94a1a42bc00",
-    "subject": "Interior Partition Wall",
+    "subject": "Interior Partition Walls",
     "predicate": "requires",
     "object": "Insulation",
     "confidence": 0.85,
@@ -381244,7 +380858,7 @@
   },
   {
     "id": "31d4ebe1-6b7c-41f8-b0cb-e279da78ebfc",
-    "subject": "Interior Partition Wall",
+    "subject": "Interior Partition Walls",
     "predicate": "depends_on",
     "object": "Structural Frame",
     "confidence": 0.85,
@@ -381265,7 +380879,7 @@
   },
   {
     "id": "668dced6-5e56-467f-9ec0-8ccbc824142a",
-    "subject": "Interior Partition Wall",
+    "subject": "Interior Partition Walls",
     "predicate": "supports",
     "object": "Door Frame",
     "confidence": 0.95,
@@ -381282,7 +380896,7 @@
   },
   {
     "id": "361604ab-18dc-4362-a5dc-7f6014c2f2d0",
-    "subject": "Interior Partition Wall",
+    "subject": "Interior Partition Walls",
     "predicate": "connects_to",
     "object": "Floor Slab",
     "confidence": 0.95,
@@ -388777,7 +388391,7 @@
     "id": "c80d0a83-bee9-4e4e-9bf4-8caba569d71e",
     "subject": "Brick Laying Activity",
     "predicate": "supports",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.85,
     "knowledge_origin": "engineering",
     "rationale": "Proper brick laying supports structural load-bearing walls.",
@@ -389263,7 +388877,7 @@
     "id": "956fb7e1-9499-45d4-8551-a8fb6c3b5438",
     "subject": "Ornamental Column & Pilaster",
     "predicate": "requires",
-    "object": "Load-Bearing Wall",
+    "object": "Load-Bearing Walls",
     "confidence": 0.9,
     "knowledge_origin": "architectural",
     "rationale": "Pilasters are engaged columns attached to a wall surface and require the wall as their backing structure.",
@@ -390533,7 +390147,7 @@
     "id": "ee7c5330-3a63-481d-b20a-40f1398ca846",
     "subject": "Installation of Built-in Bench Seating",
     "predicate": "connects_to",
-    "object": "Wall Finish",
+    "object": "Wall Finishes",
     "confidence": 0.85,
     "knowledge_origin": "architectural",
     "rationale": "The bench connects to wall finishes, requiring caulking, trim, or backing to create a clean transition.",
