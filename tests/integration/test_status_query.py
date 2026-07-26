@@ -5,7 +5,7 @@ from typer.testing import CliRunner
 from sqlmodel import Session
 from bsos.cli.main import app
 from bsos.persistence.database import create_db_engine, create_views
-from bsos.persistence.models import EntityRow, AssertionRow
+from bsos.persistence.models import EntityRow, AssertionRow, ConstraintRow
 
 runner = CliRunner()
 NOW = datetime.now(timezone.utc)
@@ -108,6 +108,38 @@ def test_query_entity_not_found(tmp_path):
     result = runner.invoke(app, ["query", "nonexistent", "--db", db])
     assert result.exit_code == 1
     assert "not found" in result.output
+
+
+def test_query_default_type_surfaces_other_knowledge(tmp_path):
+    db = _init_db(tmp_path)
+    engine = create_db_engine(db)
+    with Session(engine) as session:
+        session.add(EntityRow(
+            id="e-kitchen", name="kitchen", entity_type="space", status="accepted",
+            source_model="test", source_prompt="p", created_at=NOW,
+        ))
+        session.add(ConstraintRow(
+            id="c1", subject_id="e-kitchen", subject_type="space",
+            rule="must have ventilation", constraint_type="must",
+            confidence=0.9, status="accepted", knowledge_origin="physical",
+            source_model="test", source_prompt="p", created_at=NOW,
+            conditions="[]", exceptions="[]", applicability="[]",
+        ))
+        session.commit()
+
+    # No -t flag: zero assertions, but a constraint exists -- should not read as "nothing here".
+    result = runner.invoke(app, ["query", "kitchen", "--db", db])
+    assert result.exit_code == 0, result.output
+    assert "No assertions found" in result.output
+    assert "Also found: 1 constraint" in result.output
+
+    # Explicit -t assertion opts out of the other-types summary.
+    result_explicit = runner.invoke(app, ["query", "kitchen", "--db", db, "-t", "assertion"])
+    assert "Also found" not in result_explicit.output
+
+    result_json = runner.invoke(app, ["query", "kitchen", "--db", db, "--json"])
+    assert '"also_found"' in result_json.output
+    assert '"constraint": 1' in result_json.output
 
 
 def test_query_case_insensitive(tmp_path):

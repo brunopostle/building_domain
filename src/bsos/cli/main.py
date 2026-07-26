@@ -71,6 +71,30 @@ def cmd_status(
         run_status(session, json_out)
 
 
+def _other_type_counts(engine, entity: str, min_confidence: float, include_proposed: bool) -> dict[str, int]:
+    """Count non-assertion knowledge items for an entity, keyed by CLI type name."""
+    from bsos.mcp_server.server import (
+        get_constraints_tool, get_failure_modes_tool, get_forces_tool,
+        get_patterns_tool, get_spatial_relations_tool,
+    )
+    from sqlmodel import Session as _Session
+
+    kw = dict(min_confidence=min_confidence, include_proposed=include_proposed)
+    counters = {
+        "constraint": (get_constraints_tool, "constraints"),
+        "pattern": (get_patterns_tool, "patterns"),
+        "antipattern": (get_failure_modes_tool, "failure_modes"),
+        "force": (get_forces_tool, "forces"),
+        "spatial": (get_spatial_relations_tool, "spatial_relations"),
+    }
+    counts = {}
+    with _Session(engine) as s:
+        for type_name, (tool, key) in counters.items():
+            r = tool(s, entity, **kw)
+            counts[type_name] = len(r.get(key, []))
+    return counts
+
+
 @app.command("query")
 def cmd_query(
     entity: str = typer.Argument(..., help="Entity name to query"),
@@ -100,6 +124,7 @@ def cmd_query(
     _, session = open_db(db)
     engine = create_db_engine(resolve_db_path(db))
 
+    used_default_types = not type_filter
     types = set(type_filter) if type_filter else {"assertion"}
 
     with session:
@@ -117,6 +142,16 @@ def cmd_query(
                 typer.echo(json.dumps(results, indent=2))
             else:
                 typer.echo(format_assertions(results, entity))
+
+            if used_default_types and not results:
+                other_counts = _other_type_counts(engine, entity, min_confidence, include_proposed)
+                nonzero = {k: v for k, v in other_counts.items() if v}
+                if nonzero:
+                    summary = ", ".join(f"{v} {k}" for k, v in nonzero.items())
+                    if json_out:
+                        typer.echo(json.dumps({"also_found": nonzero}, indent=2))
+                    else:
+                        typer.echo(f"Also found: {summary} -- pass -t to see them.")
 
     kw = dict(min_confidence=min_confidence, include_proposed=include_proposed)
 
