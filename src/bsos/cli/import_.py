@@ -395,9 +395,11 @@ def _import_process_relations(
 
 
 def _import_abstraction_nodes(session, rows: list[dict], replace: bool) -> tuple[int, int]:
-    from bsos.persistence.models import AbstractionNodeRow
+    from bsos.persistence.models import AbstractionNodeRow, AssertionRow
     skip_ids = set() if replace else _existing_ids(session, AbstractionNodeRow)
+    valid_assertion_ids = _existing_ids(session, AssertionRow)
     added = skipped = 0
+    dropped_children = 0
     for r in rows:
         eid = r.get("id") or ""
         if not eid:
@@ -406,11 +408,15 @@ def _import_abstraction_nodes(session, rows: list[dict], replace: bool) -> tuple
         if eid in skip_ids:
             skipped += 1
             continue
-        # child_ids are not exported (only child_count); restored as empty.
+        # Older exports only stored child_count; treat those as empty.
+        raw_children = r.get("child_ids")
+        children = raw_children if isinstance(raw_children, list) else []
+        kept = [cid for cid in children if cid in valid_assertion_ids]
+        dropped_children += len(children) - len(kept)
         session.merge(AbstractionNodeRow(
             id=eid,
             statement=r.get("statement", ""),
-            child_ids="[]",
+            child_ids=_enc(kept),
             abstraction_rationale=r.get("abstraction_rationale", ""),
             source_model=_IMPORT_SOURCE,
             created_at=_parse_dt(r.get("created_at")),
@@ -419,6 +425,12 @@ def _import_abstraction_nodes(session, rows: list[dict], replace: bool) -> tuple
             rationale=r.get("rationale") or None,
         ))
         added += 1
+    if dropped_children:
+        typer.echo(
+            f"  note: {dropped_children} abstraction node child reference(s) "
+            "pointed at assertions not present in this import and were dropped.",
+            err=True,
+        )
     return added, skipped
 
 
@@ -620,12 +632,6 @@ def import_cmd(
             parts.append(f"{skipped} skipped")
         typer.echo(f"  {name}: {', '.join(parts)}")
     typer.echo(f"Total: {total_added} records imported, {total_skipped} skipped")
-    if "abstraction_nodes" in counts and counts["abstraction_nodes"][0] > 0:
-        typer.echo(
-            "  note: abstraction node child_ids are not stored in the export "
-            "and were reset to [] — re-run pass 11 to rebuild them.",
-            err=True,
-        )
 
     if not skip_index:
         entity_count = counts.get("entities", (0, 0))[0] + counts.get("entities", (0, 0))[1]

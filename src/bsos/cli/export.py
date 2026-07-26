@@ -225,7 +225,7 @@ def _export_abstraction_nodes(session, status_filter) -> list[dict]:
         result.append({
             "id": r.id,
             "statement": r.statement,
-            "child_count": len(_decode(r.child_ids)),
+            "child_ids": _decode(r.child_ids),
             "abstraction_rationale": r.abstraction_rationale,
             "confidence": r.confidence,
             "status": r.status,
