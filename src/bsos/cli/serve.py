@@ -30,7 +30,13 @@ def serve(
 
     if count == 0:
         typer.echo(
-            "No entities in database. Run 'bsos extract' first to populate the knowledge base.",
+            "No entities in database. Restore the checked-in snapshot first:\n"
+            "  bsos init && bsos import -i data/snapshot/\n"
+            "(or run 'bsos extract' to populate a fresh knowledge base from scratch — see "
+            "README.md/CLAUDE.md).\n"
+            "Note: import and serve both load a local sentence-transformers model; on a "
+            "machine without proprietary NVIDIA CUDA drivers this can hang or error — set "
+            'CUDA_VISIBLE_DEVICES="" first if so.',
             err=True,
         )
         raise typer.Exit(1)

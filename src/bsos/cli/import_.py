@@ -612,6 +612,10 @@ def import_cmd(
     Refuses to import into a non-empty database unless --force is given.
     The LLM response cache is never exported or imported and is always preserved.
     After import, builds entity embeddings for search_entities (use --skip-index to disable).
+
+    GPU note: embedding uses a local sentence-transformers model; PyTorch will try a GPU
+    if it detects one, which can hang or fail (HIP error) on machines without proprietary
+    NVIDIA CUDA drivers. If so, export CUDA_VISIBLE_DEVICES="" before running this command.
     """
     from bsos.cli.db_context import open_db
     from bsos.persistence.models import EntityRow

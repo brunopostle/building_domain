@@ -96,7 +96,7 @@ cd building_domain
 pip install -e .
 bsos init
 bsos import --input data/snapshot
-bsos query "Kitchen"   # verify: should show ~20 assertions
+bsos query "Wall"      # verify: should show dozens of assertions
 ```
 
 `bsos import` accepts either a directory of per-table files (as above) or a single
@@ -104,6 +104,24 @@ combined `.json` file.
 
 The snapshot contains entities, assertions, and patterns.
 It does **not** contain the LLM response cache or embeddings — those stay local.
+`bsos import` builds the local embedding index (`sentence-transformers`) at the end;
+see the GPU note below if that step errors or hangs.
+
+> **GPU / PyTorch note:** `bsos import` and `bsos serve` both load a local
+> `sentence-transformers` model for the entity search index, and PyTorch will try to
+> use a GPU if it detects one. On machines without proprietary NVIDIA CUDA drivers —
+> e.g. Linux distros where the packaged `torch` is a ROCm/HIP build (AMD GPU) that
+> doesn't support your specific card — this can hang indefinitely or fail with
+> `AcceleratorError: HIP error: invalid device function`. If you hit this, force
+> CPU-only inference:
+> ```bash
+> export CUDA_VISIBLE_DEVICES=""
+> export ROCR_VISIBLE_DEVICES=""
+> export HIP_VISIBLE_DEVICES=""
+> ```
+> Set these before `bsos import` and before `bsos serve` (or export them in your
+> shell profile). CPU-only embedding of the full snapshot (~23k entities) takes
+> roughly 20+ minutes depending on hardware — that's normal, not a hang.
 
 ### 2. Connect to an AI agent via MCP
 

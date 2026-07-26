@@ -15,7 +15,30 @@ from bsos.cli.seed_psets import app as seed_psets_app
 from bsos.cli.seed_ifc_classes import app as seed_ifc_classes_app
 from bsos.cli.db_context import open_db
 
-app = typer.Typer(name="bsos", help="Building Semantic Ontology System", no_args_is_help=True)
+app = typer.Typer(
+    name="bsos",
+    help="Building Semantic Ontology System",
+    no_args_is_help=True,
+    epilog=(
+        "First-time setup from a fresh clone — the DB is git-ignored, restore it from the "
+        "checked-in snapshot:\n\n"
+        "1. bsos init\n\n"
+        "2. bsos import -i data/snapshot/\n\n"
+        '3. bsos query "Wall"  (verify: should print assertions)\n\n'
+        "MCP server — this is how AI agents actually use BSOS. 'bsos serve' refuses to start "
+        "against an empty database, so do the import above first. Example .mcp.json entry:\n\n"
+        '{"bsos": {"command": "python3", "args": ["-m", "bsos", "serve"], '
+        '"env": {"CUDA_VISIBLE_DEVICES": ""}}}\n\n'
+        "GPU note — 'bsos import' and 'bsos serve' both load a local sentence-transformers "
+        "model, and PyTorch will try to use a GPU if it detects one. On machines without "
+        "proprietary NVIDIA CUDA drivers (e.g. a distro-packaged ROCm/HIP torch build that "
+        "doesn't support the installed AMD GPU) this can hang indefinitely or fail with "
+        "'AcceleratorError: HIP error: invalid device function'. Fix: export "
+        'CUDA_VISIBLE_DEVICES="" before running either command (already set in the .mcp.json '
+        "example above).\n\n"
+        "See README.md for the full walkthrough."
+    ),
+)
 
 app.add_typer(init_app, name="init", help="Initialise the BSOS database")
 app.add_typer(extract.app, name="extract", help="Run extraction pipeline")

@@ -226,6 +226,7 @@ Unlike Groq/Llama-70B (which give sparse 1-2 assertions per entity and are unusa
 - **Undo bad pass 2 merges:** `UPDATE entities SET status='proposed' WHERE status='merged'; DELETE FROM entity_aliases;` then re-run pass 2.
 - **Groq provider:** Set `OPENAI_API_KEY=gsk_...` and `OPENAI_BASE_URL=https://api.groq.com/openai/v1` then use `--models llama-3.3-70b-versatile`. Quality is significantly lower than Haiku for complex structured output schemas — use Haiku or Sonnet for production runs.
 - **Open-weight models (Llama, Groq):** Produce very sparse assertions (1-2 per entity vs 10-20 for Haiku). Not suitable for pass 3+.
+- **GPU/PyTorch hang or `HIP error: invalid device function`:** Any code path that loads `sentence-transformers` (`bsos import`'s embedding index, `bsos serve`'s `search_entities`, passes 2/3/5, normalization 10a/b/c, `conflict_detection.py`, `compress.py`, `curate.py`) lets PyTorch auto-detect a GPU. On machines without proprietary NVIDIA CUDA drivers — e.g. a distro-packaged ROCm/HIP `torch` build that doesn't support the installed AMD GPU — this hangs indefinitely or raises `AcceleratorError: HIP error: invalid device function`, and has caused a full machine lockup during `bsos import`. Fix: `export CUDA_VISIBLE_DEVICES="" ROCR_VISIBLE_DEVICES="" HIP_VISIBLE_DEVICES=""` before running any of the above — forces clean CPU-only inference (~17.5 embeddings/sec on an 8-core CPU; a full 23k-entity index build takes ~20+ minutes, which is normal, not a hang).
 
 ### Recovering from a hard crash mid-pass (extraction passes 3–9)
 
