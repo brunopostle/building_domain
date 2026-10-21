@@ -29,3 +29,6 @@ compliance_report.txt
 # path). Like bsos.db itself, this goes stale the moment the DB changes, so
 # it is never committed — regenerate locally with `bsos build-graph`.
 bsos_graph.pkl
+
+# beads gate lock (runtime)
+.beads.gate.lock
